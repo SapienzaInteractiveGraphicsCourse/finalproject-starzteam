@@ -620,11 +620,11 @@ class Car {
     this.group.position.x += speed;
     this.referenceX += speed;
     //to find these values:
-    //dobbiamo trovare un BoxGeometry che racchiude tutto l'oggetto ed estrarne il centro. Da quello si può valutare che due oggetti si toccano
+    //dobbiamo trovare un BoxGeometry che racchiude tutto l'oggetto ed estrarne il centro. Da quello si può valutare se due oggetti si toccano
     //se abs(c1 - c2) <= l1/2  + l2/2 sia per x che z (and)
-    if( (Math.abs(this.referenceX - animal.referenceX) <= this.sideX + animal.sideX) &&
-        (Math.abs(this.referenceY - animal.referenceY) <= this.sideY + animal.sideY) &&
-        (Math.abs(this.referenceZ - animal.referenceZ) <= this.sideZ + animal.sideZ) ){
+    if( (Math.abs(this.referenceX - this.animalReference.referenceX) <= this.sideX + this.animalReference.sideX) &&
+        (Math.abs(this.referenceY - this.animalReference.referenceY) <= this.sideY + this.animalReference.sideY) &&
+        (Math.abs(this.referenceZ - this.animalReference.referenceZ) <= this.sideZ + this.animalReference.sideZ) ){
           crash = true;
           window.alert("CRASH");
         }
