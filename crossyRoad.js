@@ -10,10 +10,13 @@ var scene,
 
 var animal,
     terrain,
-    sky;
+    sky,
+    car;
 
 var width,
     height;
+
+var crash = false;
 
 function init() {
   width = window.innerWidth,
@@ -37,6 +40,7 @@ function init() {
   drawAnimal();
   drawTerrain();
   drawSky();
+  drawCar();
 
   world = document.querySelector('.world');
   world.appendChild(renderer.domElement);
@@ -62,9 +66,14 @@ function addLights() {
 }
 
 function drawAnimal() {
-  //animal = new Sheep();
-  animal = new Chicken();
+  animal = new Sheep();
+  //animal = new Chicken();
   scene.add(animal.group);
+}
+
+function drawCar(){
+  car = new Car(animal);
+  scene.add(car.group);
 }
 
 function drawTerrain() {
@@ -106,7 +115,11 @@ function animate() {
 }
 
 function render() {
-  animal.jumponKeyWDown();
+  if(!crash){
+    animal.jumponKeyWDown();
+    car.goForward(0.01);
+    //car.goForward(0);
+  }
   renderer.render(scene, camera);
 }
 
@@ -122,6 +135,22 @@ class Sheep {
   constructor() {
     this.group = new THREE.Group();
     this.group.position.y = 0.4;
+
+    /*
+    const boxReferenceGeometry = new THREE.BoxGeometry(3, 3, 3.3);
+    var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    const boxReference = new THREE.Mesh(boxReferenceGeometry, material);
+    boxReference.position.set(0, 0.3, 0.25);
+    scene.add(boxReference);
+    */
+
+    this.referenceX = 0;
+    this.referenceY = 0.3;
+    this.referenceZ = 0.25;
+
+    this.sideX = 1.5;
+    this.sideY = 1.5;
+    this.sideZ = 1.65;
 
     this.woolMaterial = new THREE.MeshStandardMaterial({
       color: 0xffffff,
@@ -233,6 +262,7 @@ class Sheep {
   jump(speed) {
     this.vAngle += speed;
     this.group.position.y = Math.sin(this.vAngle) + 1.38;
+    this.referenceY = Math.sin(this.vAngle) + 1.3;
 
     const legRotation = Math.sin(this.vAngle) * Math.PI / 6 + 0.4;
 
@@ -242,6 +272,7 @@ class Sheep {
     this.backLeftLeg.rotation.x = -legRotation;
 
     this.group.position.z = this.group.position.z + 0.025;
+    this.referenceZ += 0.025;
 
     const earRotation = Math.sin(this.vAngle) * Math.PI / 3 + 1.5;
     this.rightEar.rotation.z = earRotation;
@@ -264,7 +295,23 @@ class Sheep {
 class Chicken{
   constructor(){
     this.group = new THREE.Group();
-    this.group.position.y = 0.4; //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
+    this.group.position.y = -0.55; //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
+
+    /*
+    const boxReferenceGeometry = new THREE.BoxGeometry(0, 0, 0);
+    var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    const boxReference = new THREE.Mesh(boxReferenceGeometry, material);
+    boxReference.position.set(0, 0, 0);
+    scene.add(boxReference);
+    */
+
+    this.referenceX = 0;
+    this.referenceY = 0;
+    this.referenceZ = 0;
+
+    this.sideX = 0;
+    this.sideY = 0;
+    this.sideZ = 0;
 
     this.skinMaterial = new THREE.MeshStandardMaterial({
       color: 0xffffff,
@@ -428,6 +475,161 @@ class Chicken{
 //########################################################################################################
 //END
 //########################################################################################################
+
+class Car {
+  constructor(animal) {
+    this.animalReference = animal; //needed to check if car runs over the animal
+
+    /*
+    const boxReferenceGeometry = new THREE.BoxGeometry(3.9, 2.2, 2.1);
+    var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    const boxReference = new THREE.Mesh(boxReferenceGeometry, material);
+    boxReference.position.set(-8.25, -0.2, 9.35);
+    scene.add(boxReference);
+    */
+
+    this.referenceX = -8.25;
+    this.referenceY = -0.2;
+    this.referenceZ = 9.35;
+
+    this.sideX = 1.95;
+    this.sideY = 1.1;
+    this.sideZ = 1.05;
+
+    this.group = new THREE.Group();
+    this.group.position.set(-10, -0.4, 10); //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
+    this.group.rotation.set(0, rad(90), 0);
+
+    this.whiteMaterial = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      roughness: 1,
+      shading: THREE.FlatShading
+    });
+    this.redMaterial = new THREE.MeshStandardMaterial({
+      color: 0xff0000,
+      roughness: 1,
+      shading: THREE.FlatShading
+    });
+    this.blackMaterial = new THREE.MeshStandardMaterial({
+      color: 0x4b4553,
+      roughness: 1,
+      shading: THREE.FlatShading
+    });
+
+    this.vAngle = 0;
+    this.drawBody();
+    this.drawWindscreen();
+  }
+  drawBody(){ //ruote e specchietti
+    var length = 1.3, width = 0.35; //lenght++ right, width++ up
+
+    var shape = new THREE.Shape();
+    shape.moveTo( 0,0 );
+    shape.lineTo( 0, width );
+    shape.lineTo( length, width );
+    shape.lineTo( length, 0 );
+    shape.lineTo( 0, 0 );
+
+    var extrudeSettings = {
+    	steps: 2,
+    	depth: 3.5, //depth++ closer
+    	bevelEnabled: true,
+    	bevelThickness: 0.2,
+    	bevelSize: 0.2,
+    	bevelOffset: 0.1,
+    	bevelSegments: 5
+    };
+
+    var bodyGeometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+    var body = new THREE.Mesh( bodyGeometry, this.redMaterial ) ;
+    body.castShadow = true;
+    body.receiveShadow = true;
+    //body.position.set(0.175, -0.425, 0);
+    this.group.add(body);
+
+    const backRightTireGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.2, 16);
+    const backRightTire = new THREE.Mesh(backRightTireGeometry, this.blackMaterial);
+    backRightTire.castShadow = true;
+    backRightTire.receiveShadow = true;
+    backRightTire.position.set(-0.3, -0.425, 0.5);
+    backRightTire.rotation.set(0, 0, rad(90)); //x,y,z are the axe with respect there is the rotation
+    this.group.add(backRightTire);
+
+    const backLeftTireGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.2, 16);
+    const backLeftTire = new THREE.Mesh(backLeftTireGeometry, this.blackMaterial);
+    backLeftTire.castShadow = true;
+    backLeftTire.receiveShadow = true;
+    backLeftTire.position.set(1.6, -0.425, 0.5);
+    backLeftTire.rotation.set(0, 0, rad(90)); //x,y,z are the axe with respect there is the rotation
+    this.group.add(backLeftTire);
+
+    const frontRightTireGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.2, 16);
+    const frontRightTire = new THREE.Mesh(frontRightTireGeometry, this.blackMaterial);
+    frontRightTire.castShadow = true;
+    frontRightTire.receiveShadow = true;
+    frontRightTire.position.set(-0.3, -0.425, 3);
+    frontRightTire.rotation.set(0, 0, rad(90)); //x,y,z are the axe with respect there is the rotation
+    this.group.add(frontRightTire);
+
+    const frontLeftTireGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.2, 16);
+    const frontLeftTire = new THREE.Mesh(frontLeftTireGeometry, this.blackMaterial);
+    frontLeftTire.castShadow = true;
+    frontLeftTire.receiveShadow = true;
+    frontLeftTire.position.set(1.6, -0.425, 3);
+    frontLeftTire.rotation.set(0, 0, rad(90)); //x,y,z are the axe with respect there is the rotation
+    this.group.add(frontLeftTire);
+
+  }
+  drawWindscreen(){
+
+    var length = 1.2, width = 0.4; //lenght++ right, width++ up
+
+    var shape = new THREE.Shape();
+    shape.moveTo( 0,0 );
+    shape.lineTo( 0, width );
+    shape.lineTo( length, width );
+    shape.lineTo( length, 0 );
+    shape.lineTo( 0, 0 );
+
+    var extrudeSettings = {
+    	steps: 2,
+    	depth: 2, //depth++ closer
+    	bevelEnabled: true,
+    	bevelThickness: 0.2,
+    	bevelSize: 0.1,
+    	bevelOffset: 0.05,
+    	bevelSegments: 5
+    };
+
+    var windscreenGeometry = new THREE.ExtrudeGeometry( shape, extrudeSettings );
+    var windscreen = new THREE.Mesh( windscreenGeometry, this.redMaterial ) ;
+    windscreen.castShadow = true;
+    windscreen.receiveShadow = true;
+    windscreen.position.set(0.07, 0.75, 0.3);
+    this.group.add(windscreen);
+
+    /*
+    const windscreenGeometry = new THREE.BoxGeometry(1.2, 0.8, 2);
+    const windscreen = new THREE.Mesh(windscreenGeometry, this.redMaterial);
+    //windscreen.castShadow = true;
+    windscreen.receiveShadow = true;
+    windscreen.position.set(0.65, 0.9, 1.3);
+    this.group.add(windscreen);*/
+  }
+  goForward(speed){ //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
+    this.group.position.x += speed;
+    this.referenceX += speed;
+    //to find these values:
+    //dobbiamo trovare un BoxGeometry che racchiude tutto l'oggetto ed estrarne il centro. Da quello si può valutare che due oggetti si toccano
+    //se abs(c1 - c2) <= l1/2  + l2/2 sia per x che z (and)
+    if( (Math.abs(this.referenceX - animal.referenceX) <= this.sideX + animal.sideX) &&
+        (Math.abs(this.referenceY - animal.referenceY) <= this.sideY + animal.sideY) &&
+        (Math.abs(this.referenceZ - animal.referenceZ) <= this.sideZ + animal.sideZ) ){
+          crash = true;
+          window.alert("CRASH");
+        }
+  }
+}
 
 class Terrain {
   constructor() {
