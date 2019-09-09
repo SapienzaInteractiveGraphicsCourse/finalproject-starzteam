@@ -9,11 +9,9 @@ var scene,
     night = false;
 
 var animal,
-    terrain,
-    river,
-    three,
-    sky,
-    car;
+    sky;
+
+var tracks = [];
 
 var width,
     height;
@@ -37,12 +35,11 @@ function init() {
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableZoom = false;
-  
+
   addLights();
   drawAnimal();
   drawTerrain();
   drawSky();
-  drawCar();
 
   world = document.querySelector('.world');
   world.appendChild(renderer.domElement);
@@ -73,19 +70,18 @@ function drawAnimal() {
   scene.add(animal.group);
 }
 
-function drawCar(){
-  car = new Car(animal);
-  scene.add(car.group);
-}
-
 function drawTerrain() {
-  //terrain = new Terrain();
-  terrain = new Road();
-  scene.add(terrain.group);
-  river = new River();
-  scene.add(river.group);
-  three = new Three();
-  scene.add(three.group);
+  var numLevels = 3;
+  var i;
+  var track;
+  for(i = 0; i < numLevels; i++){
+    if(Math.floor(Math.random()*2) == 0)
+      track = new Road(i);
+    else
+      track = new River(i);
+    scene.add(track.group);
+    tracks.push(track);
+  }
 }
 
 function drawSky() {
@@ -124,8 +120,17 @@ function animate() {
 function render() {
   if(!crash){
     animal.jumponKeyWDown();
-    car.goForward(0.01);
-    //car.goForward(0);
+    var length = tracks.length;
+    var lengthVehicles;
+    var i, j;
+    var vehicles;
+    for(i = 0; i < length; i++){
+      vehicles = tracks[i].vehicles;
+      lengthVehicles = vehicles.length;
+      for(j = 0; j < lengthVehicles; j++){
+        vehicles[j].goForward(0.01);
+      }
+    }
   }
   renderer.render(scene, camera);
 }
@@ -142,22 +147,20 @@ class Sheep {
   constructor() {
     this.group = new THREE.Group();
     this.group.position.y = 0.4;
+    this.group.position.z = -6;
 
-    /*
-    const boxReferenceGeometry = new THREE.BoxGeometry(3, 3, 3.3);
+
+    const boxReferenceGeometry = new THREE.BoxGeometry(2.2, 2.4, 2.5);
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-    const boxReference = new THREE.Mesh(boxReferenceGeometry, material);
-    boxReference.position.set(0, 0.3, 0.25);
-    scene.add(boxReference);
-    */
+    this.boxReference = new THREE.Mesh(boxReferenceGeometry, material);
+    this.boxReference.position.set(0, 0, 0.15);
+    this.group.add(this.boxReference);
 
-    this.referenceX = 0;
-    this.referenceY = 0.3;
-    this.referenceZ = 0.25;
+    this.boxReference.visible = false;
 
-    this.sideX = 1.5;
-    this.sideY = 1.5;
-    this.sideZ = 1.65;
+    this.sideX = 1.1; //lato box / 2
+    this.sideY = 1.2;
+    this.sideZ = 1.25;
 
     this.woolMaterial = new THREE.MeshStandardMaterial({
       color: 0xffffff,
@@ -269,7 +272,6 @@ class Sheep {
   jump(speed) {
     this.vAngle += speed;
     this.group.position.y = Math.sin(this.vAngle) + 1.38;
-    this.referenceY = Math.sin(this.vAngle) + 1.3;
 
     const legRotation = Math.sin(this.vAngle) * Math.PI / 6 + 0.4;
 
@@ -279,7 +281,6 @@ class Sheep {
     this.backLeftLeg.rotation.x = -legRotation;
 
     this.group.position.z = this.group.position.z + 0.025;
-    this.referenceZ += 0.025;
 
     const earRotation = Math.sin(this.vAngle) * Math.PI / 3 + 1.5;
     this.rightEar.rotation.z = earRotation;
@@ -305,20 +306,20 @@ class Chicken{
     this.group.position.y = -0.55; //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
 
     /*
-    const boxReferenceGeometry = new THREE.BoxGeometry(0, 0, 0);
+    const boxReferenceGeometry = new THREE.BoxGeometry(0.8, 1.2, 0.9);
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
     const boxReference = new THREE.Mesh(boxReferenceGeometry, material);
-    boxReference.position.set(0, 0, 0);
+    boxReference.position.set(0, -0.5, 0.05);
     scene.add(boxReference);
     */
 
     this.referenceX = 0;
-    this.referenceY = 0;
-    this.referenceZ = 0;
+    this.referenceY = -0.5;
+    this.referenceZ = 0.05;
 
-    this.sideX = 0;
-    this.sideY = 0;
-    this.sideZ = 0;
+    this.sideX = 0.4;
+    this.sideY = 0.6;
+    this.sideZ = 0.45;
 
     this.skinMaterial = new THREE.MeshStandardMaterial({
       color: 0xffffff,
@@ -469,6 +470,16 @@ class Chicken{
     rightPaw.add(rightNail2);
 
   }
+
+  jump(speed) {
+    this.vAngle += speed;
+    this.group.position.y = Math.sin(this.vAngle) + 1.38;
+    this.referenceY = Math.sin(this.vAngle) + 1.3;
+
+    this.group.position.z = this.group.position.z + 0.025;
+    this.referenceZ += 0.025;
+
+  }
   jumponKeyWDown() {
     //fai come il cavallo che cammina
     //alterni le due gambe se una va indietro l'altra va in avanti (puoi usare sin e cos)
@@ -476,6 +487,12 @@ class Chicken{
 
     //puoi fare dei ponti levaoti al posto delle navi che si muovono
 
+    if (keyWDown) {
+      this.jump(0.06);
+    } else {
+      if (this.group.position.y <= 0.4) return;
+      this.jump(0.08);
+    }
   }
 }
 
@@ -487,25 +504,36 @@ class Car {
   constructor(animal) {
     this.animalReference = animal; //needed to check if car runs over the animal
 
-    /*
-    const boxReferenceGeometry = new THREE.BoxGeometry(3.9, 2.2, 2.1);
-    var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-    const boxReference = new THREE.Mesh(boxReferenceGeometry, material);
-    boxReference.position.set(-8.25, -0.2, 9.35);
-    scene.add(boxReference);
-    */
-
-    this.referenceX = -8.25;
-    this.referenceY = -0.2;
-    this.referenceZ = 9.35;
-
-    this.sideX = 1.95;
-    this.sideY = 1.1;
-    this.sideZ = 1.05;
-
     this.group = new THREE.Group();
-    this.group.position.set(-10, -0.4, 10); //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
-    this.group.rotation.set(0, rad(90), 0);
+
+    var angle = 0;
+    var positionX = -1.9;
+    var positionZ = -7;
+    this.direction = 1;
+
+    if(Math.floor(Math.random()*2) == 0){
+      positionX = 1.9;
+      positionZ = 7;
+      angle = 180;
+      this.direction = -1;
+    }
+
+    this.group.position.set(positionX, 1, positionZ); //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
+    this.group.rotation.set(0, rad(angle), 0);
+
+
+    var boxReferenceGeometry = new THREE.BoxGeometry(1.8, 2, 3.47);
+    var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    this.boxReference = new THREE.Mesh(boxReferenceGeometry, material);
+    this.boxReference.position.set(0.65, 0.2, 1.75);
+    this.group.add(this.boxReference);
+
+    this.sideZ = 1.5*0.9; //lato box / 2 e occhio allo scaling
+    this.sideY = 1.5*1;
+    this.sideX = 1.5*1.735;
+
+    this.boxReference.visible = false;
+
 
     this.whiteMaterial = new THREE.MeshStandardMaterial({
       color: 0xffffff,
@@ -624,14 +652,20 @@ class Car {
     this.group.add(windscreen);*/
   }
   goForward(speed){ //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
-    this.group.position.x += speed;
-    this.referenceX += speed;
+    this.group.position.z += this.direction*speed;
+
     //to find these values:
     //dobbiamo trovare un BoxGeometry che racchiude tutto l'oggetto ed estrarne il centro. Da quello si può valutare se due oggetti si toccano
     //se abs(c1 - c2) <= l1/2  + l2/2 sia per x che z (and)
-    if( (Math.abs(this.referenceX - this.animalReference.referenceX) <= this.sideX + this.animalReference.sideX) &&
-        (Math.abs(this.referenceY - this.animalReference.referenceY) <= this.sideY + this.animalReference.sideY) &&
-        (Math.abs(this.referenceZ - this.animalReference.referenceZ) <= this.sideZ + this.animalReference.sideZ) ){
+    var referencePosition = new THREE.Vector3();
+    var referencePositionAnimal = new THREE.Vector3();
+    scene.updateMatrixWorld();
+
+    this.boxReference.getWorldPosition(referencePosition);
+    this.animalReference.boxReference.getWorldPosition(referencePositionAnimal);
+    if( (Math.abs(referencePosition.x - referencePositionAnimal.x) <= this.sideX + this.animalReference.sideX) &&
+        (Math.abs(referencePosition.y - referencePositionAnimal.y) <= this.sideY + this.animalReference.sideY) &&
+        (Math.abs(referencePosition.z - referencePositionAnimal.z) <= this.sideZ + this.animalReference.sideZ) ){
           crash = true;
           window.alert("CRASH");
         }
@@ -676,43 +710,44 @@ const depthGrass =  depthRoad/3;
 const distGrass = depthGrass;
 
 class Road {
-  constructor() {
+  constructor(positionZ) {
     this.group = new THREE.Group();
     this.group.position.y = -1.35;
-    this.group.position.z = 7.4;
+
+    this.group.position.z = positionZ*10.2;
     this.group.scale.set(1.5, 1.5, 1.5);
     this.group.rotation.y = rad(90);
-    
+
     this.materialAsphalt = new THREE.MeshPhongMaterial({
       color: 0x393D49,
       flatShading: true
     });
-    
+
     this.materialLine = new THREE.MeshPhongMaterial({
       color: 0x454A59,
       flatShading: true
     });
-    
+
     this.materialMiddle = new THREE.MeshPhongMaterial({
       color: 0xbaf455,
       flatShading: true
     });
-    
+
     this.materialLeft = new THREE.MeshPhongMaterial({
       color: 0x99C846,
       flatShading: true
     });
-    
+
     this.materialRight = new THREE.MeshPhongMaterial({
       color: 0x99C846,
       flatShading: true
     });
-    
+
     this.vAngle = 0;
-    
+
     this.drawParts();
   }
-  
+
   drawParts() {
     this.middle = new THREE.Mesh(new THREE.BoxBufferGeometry( widthRoad/4, hightRoad, depthRoad),  this.materialLine);
     this.middle.receiveShadow = true;
@@ -726,82 +761,106 @@ class Road {
     this.right.position.x = distRoad;
     this.middle.add(this.right);
     //this.right.add(new Grass(hightRoad, widthRoad, depthRoad));
-    
+
     this.middleGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( widthGrass, highGrass, depthGrass), this.materialMiddle);
     this.middleGrass.receiveShadow = true;
     this.middleGrass.position.x = widthRoad;
     this.right.add(this.middleGrass);
-    
+
     this.leftGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( widthGrass, highGrass, depthGrass), this.materialLeft);
     this.leftGrass.position.z = - distGrass;
     this.middleGrass.add(this.leftGrass);
-    
+
     this.rightGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( widthGrass, highGrass, depthGrass), this.materialRight);
     this.rightGrass.position.z = distGrass;
     this.middleGrass.add(this.rightGrass);
+
+    var car = new Car(animal);
+
+    this.vehicles = [];
+    this.vehicles.push(car);
+
+    var length = this.vehicles.length;
+    var i;
+    for(i = 0; i < length; i++){
+      this.group.add(this.vehicles[i].group);
+    }
+
+    this.three = new Three();
+    this.group.add(this.three.group);
   }
 }
 
 class River{
-  constructor() {
+  constructor(positionZ) {
     this.group = new THREE.Group();
     this.group.position.y = -1.35;
     this.group.scale.set(1.5, 1.5, 1.5);
     this.group.rotation.y = rad(90);
-    this.group.position.z = widthRoad*7.45;
-    
+    //this.group.position.z = widthRoad*7.45;
+    this.group.position.z = positionZ*10.2 - 1.56;
+
     this.materialRiver = new THREE.MeshPhongMaterial({
       color: 0x33CCFF,
       flatShading: true
     });
-    
+
     this.vAngle = 0;
-    
+
     this.drawParts();
   }
-  
+
   drawParts() {
-    this.river = new THREE.Mesh(new THREE.BoxBufferGeometry( widthRoad*3, hightRoad, depthRoad),  this.materialRiver);
+    this.river = new THREE.Mesh(new THREE.BoxBufferGeometry( 2.25*widthRoad + widthGrass, hightRoad, depthRoad),  this.materialRiver);
     this.river.receiveShadow = true;
     this.group.add(this.river);
+
+    this.vehicles = [];
+
+    var length = this.vehicles.length;
+    var i;
+    for(i = 0; i < length; i++){
+      this.group.add(this.vehicles[i].group);
+    }
   }
 }
 
 const threeHeights = [1.0,1.5,2.0,2.5,3.0];
+const threePositions = [-5.0,-3.0,3.0,5.0];
 
 class Three {
   constructor() {
     this.group = new THREE.Group();
-    this.group.position.y = 1.0;
-    this.group.position.x = -5.0;
-    this.group.position.z = 2.0
+    this.group.position.y = 2.3;
+    this.group.position.x = 3.4;
+    this.group.position.z = threePositions[Math.floor(Math.random()*threePositions.length)];
     this.group.scale.set(1.5, 1.5, 1.5);
     this.group.rotation.x = rad(-90);
-    
+
     this.materialThree = new THREE.MeshPhongMaterial({
       color: 0x4d2926,
       flatShading: true
     });
-    
+
     this.materialCrown = new THREE.MeshLambertMaterial({
       color: 0x7aa21d,
       flatShading: true
     });
-    
+
     this.vAngle = 0;
-    
+
     this.drawParts();
   }
-  
+
   drawParts() {
     this.trunk = new THREE.Mesh( new THREE.BoxBufferGeometry( 1.0, 1.0, 1.0 ), this.materialThree );
     this.trunk.position.z = -1.0;
     this.trunk.castShadow = true;
     this.trunk.receiveShadow = true;
     this.group.add(this.trunk);
-  
+
     this.height = threeHeights[Math.floor(Math.random()*threeHeights.length)];
-  
+
     this.crown = new THREE.Mesh( new THREE.BoxBufferGeometry( 1.5, 1.5, this.height), this.materialCrown);
     this.crown.position.z = (this.height/2-0.5);
     this.crown.castShadow = true;
@@ -819,36 +878,36 @@ class Grass {
     this.distGrass = this.depthGrass;
     this.group = new THREE.Group();
     this.group.position.y = -1.35;
-    
+
     this.materialMiddle = new THREE.MeshPhongMaterial({
       color: 0xbaf455,
       flatShading: true
     });
-    
+
     this.materialLeft = new THREE.MeshPhongMaterial({
       color: 0x99C846,
       flatShading: true
     });
-    
+
     this.materialRight = new THREE.MeshPhongMaterial({
       color: 0x99C846,
       flatShading: true
     });
-    
+
     this.vAngle = 0;
-    
+
     this.drawParts();
   }
-  
+
   drawParts() {
     this.middleGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( this.widthGrass, this.highGrass, this.depthGrass), this.materialMiddle);
     this.middleGrass.receiveShadow = true;
     this.middleGrass.position.x = this.widthGrass;
-    
+
     this.leftGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( this.widthGrass, this.highGrass, this.depthGrass), this.materialLeft);
     this.leftGrass.position.z = - this.distGrass;
     this.middleGrass.add(this.leftGrass);
-    
+
     this.rightGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( this.widthGrass, this.highGrass, this.depthGrass), this.materialRight);
     this.rightGrass.position.z = this.distGrass;
     this.middleGrass.add(this.rightGrass);
