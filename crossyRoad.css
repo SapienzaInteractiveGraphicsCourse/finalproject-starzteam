@@ -26,3 +26,8 @@ body {
   box-shadow: 0 4px 16px #626EC9;
   background: #00008B url('https://res.cloudinary.com/elliepooh/image/upload/v1491841746/star_u865qq.svg') center 46% / 60% no-repeat;
 }
+#header {
+    height: 48px;
+    width: 588px;
+    margin: 2em auto;
+    }
