@@ -183,7 +183,7 @@ class Chicken{
     this.referenceZ += 0.025;
 
   }
-  jumponKeyWDown() {
+  actionOnPressKey() {
     //fai come il cavallo che cammina
     //alterni le due gambe se una va indietro l'altra va in avanti (puoi usare sin e cos)
     //nota che appena clicchi l'animazione deve partire e finire in posizione di riposo (zampe sullo stesso livello)

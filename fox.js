@@ -266,7 +266,7 @@ jump(speed){
   jumpEnd();//tocca terra,accorcia gambe avanti,ruota corpo ----,
 }
 */
-jumponKeyWDown() {
+actionOnPressKey() {
     if (keyWDown) {
       this.jump(0.06);
     } else {

@@ -4,7 +4,10 @@ var scene,
     camera,
     renderer,
     controls,
-    keyWDown,
+    keyWDown = false,
+    keyADown = false,
+    keySDown = false,
+    keyDDown = false,
     world,
     night = false;
 
@@ -36,6 +39,7 @@ function init() {
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableZoom = false;
+  controls.enableKeys = false;
 
   addLights();
   drawAnimal();
@@ -45,8 +49,8 @@ function init() {
   world = document.querySelector('.world');
   world.appendChild(renderer.domElement);
 
-  document.addEventListener('keydown', onKeyWDown);
-  document.addEventListener('keyup', onKeyWUp);
+  document.addEventListener('keydown', onKeyDown, true);
+  document.addEventListener('keyup', onKeyUp, true);
 
   document.getElementById("ChangeToChicken").onclick = function(){
     pickedAnimal = "Chicken";
@@ -117,14 +121,42 @@ function onResize() {
   renderer.setSize(width, height);
 }
 
-function onKeyWDown(event) {
-  var keyCode = event.which;
-  if (keyCode == 87) keyWDown = true;
+function onKeyDown(event) {
+  switch(event.which) {
+    case 87:
+      keyWDown = true;
+      break;
+    case 65:
+      keyADown = true;
+      break;
+    case 83:
+      keySDown = true;
+      break;
+    case 68:
+      keyDDown = true;
+      break;      
+    default:
+      // Code block
+  }
 }
 
-function onKeyWUp(event) {
-  var keyCode = event.which;
-  if (keyCode == 87) keyWDown = false;
+function onKeyUp(event) {
+  switch(event.which) {
+    case 87:
+      keyWDown = false;
+      break;
+    case 65:
+      keyADown = false;
+      break;
+    case 83:
+      keySDown = false;
+      break;
+    case 68:
+      keyDDown = false;
+      break;      
+    default:
+      // Code block
+  }
 }
 
 function rad(degrees) {
@@ -138,7 +170,7 @@ function animate() {
 
 function render() {
   if(!crash){
-    animal.jumponKeyWDown();
+    animal.actionOnPressKey();
     var length = tracks.length;
     var lengthVehicles;
     var i, j;

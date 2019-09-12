@@ -1,13 +1,15 @@
 //#######################
 //SHEEP
 //#######################
-
+const dist = 0.095;
+const speedSheepUp = 0.12;
+const speedSheepDown = 0.16;
 class Sheep {
   constructor() {
+    this.selected = 0;
     this.group = new THREE.Group();
     this.group.position.y = 0.4;
     this.group.position.z = -6;
-
 
     const boxReferenceGeometry = new THREE.BoxGeometry(2.2, 2.4, 2.5);
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
@@ -128,7 +130,8 @@ class Sheep {
     this.backLeftLeg.rotation.x = -this.frontLeftLeg.rotation.x;
     this.group.add(this.backLeftLeg);
   }
-  jump(speed) {
+  jump(speed, dist, gradi, asse) {
+    this.group.rotation.y = rad(gradi);
     this.vAngle += speed;
     this.group.position.y = Math.sin(this.vAngle) + 1.38;
 
@@ -139,18 +142,53 @@ class Sheep {
     this.frontLeftLeg.rotation.x = -legRotation;
     this.backLeftLeg.rotation.x = -legRotation;
 
-    this.group.position.z = this.group.position.z + 0.025;
+    if(asse=='z') this.group.position.z = this.group.position.z + dist;
+    if(asse=='x') this.group.position.x = this.group.position.x + dist;
 
     const earRotation = Math.sin(this.vAngle) * Math.PI / 3 + 1.5;
     this.rightEar.rotation.z = earRotation;
     this.leftEar.rotation.z = -earRotation;
   }
-  jumponKeyWDown() {
-    if (keyWDown) {
-      this.jump(0.06);
-    } else {
-      if (this.group.position.y <= 0.4) return;
-      this.jump(0.08);
+  actionOnPressKey() {
+    if (keyWDown && this.selected == 0) {
+      this.jump(speedSheepUp, dist, 0, 'z');
+      this.selected = 1;
+    } else if(this.selected == 1){
+      if (this.group.position.y <= 0.4) {
+        this.selected = 0;
+        return;
+      }
+      this.jump(speedSheepDown, dist, 0, 'z');
+    }
+    if (keySDown && this.selected == 0) {
+      this.selected = 2;
+      this.jump(speedSheepUp, -dist, 180, 'z');
+    } else if(this.selected == 2){
+      if (this.group.position.y <= 0.4) {
+        this.selected = 0;
+        return;
+      }
+      this.jump(speedSheepDown, -dist, 180, 'z');
+    }
+    if (keyADown && this.selected == 0) {
+      this.selected = 3;
+      this.jump(speedSheepUp, dist, 90, 'x');
+    } else if(this.selected == 3){
+      if (this.group.position.y <= 0.4) {
+        this.selected = 0;
+        return;
+      }
+      this.jump(speedSheepDown, dist, 90, 'x');
+    }
+    if (keyDDown && this.selected == 0) {
+      this.selected = 4;
+      this.jump(speedSheepUp, -dist, 270, 'x');
+    } else if(this.selected == 4){
+      if (this.group.position.y <= 0.4) {
+        this.selected = 0;
+        return;
+      }
+      this.jump(speedSheepDown, -dist, 270, 'x');
     }
   }
 }

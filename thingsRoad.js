@@ -72,6 +72,11 @@ class Road {
     this.vAngle = 0;
 
     this.drawParts();
+    
+    this.group.traverse((part) => {
+      part.castShadow = true;
+      part.receiveShadow = true;
+    });
   }
 
   drawParts() {
@@ -134,6 +139,11 @@ class River{
     this.vAngle = 0;
 
     this.drawParts();
+    
+    this.group.traverse((part) => {
+      part.castShadow = true;
+      part.receiveShadow = true;
+    });
   }
 
   drawParts() {
@@ -223,6 +233,11 @@ class Grass {
     this.vAngle = 0;
 
     this.drawParts();
+    
+    this.group.traverse((part) => {
+      part.castShadow = true;
+      part.receiveShadow = true;
+    });
   }
 
   drawParts() {
@@ -238,4 +253,4 @@ class Grass {
     this.rightGrass.position.z = this.distGrass;
     this.middleGrass.add(this.rightGrass);
   }
-}R
+}
