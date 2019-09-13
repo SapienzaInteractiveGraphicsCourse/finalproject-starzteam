@@ -97,14 +97,28 @@ function drawTerrain() {
   var numLevels = 3;
   var i;
   var track;
+  var posAtt = -6;
+  var numLanes = [1,2,3,4];
+  var chosenLanes = 0;
   for(i = 0; i < numLevels; i++){
-    if(Math.floor(Math.random()*2) == 0)
-      track = new Road(i);
-    else
-      track = new River(i);
+    if(Math.floor(Math.random()*2) == 0){
+      track = new Road(posAtt, numLanes[Math.floor(Math.random()*numLanes.length)]);
+      posAtt += track.occupiedSpace*1.49;
+      console.log("track", track.occupiedSpace);
+    }
+    else{
+      track = new River(posAtt);
+      posAtt += track.occupiedSpace*1.49;
+    }
     scene.add(track.group);
     tracks.push(track);
   }
+  /*
+   * To test only the road or the river
+  var track = new Road(0,2);
+  scene.add(track.group);
+  tracks.push(track);
+  */
 }
 
 function drawSky() {
