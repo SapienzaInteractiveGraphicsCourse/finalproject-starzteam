@@ -79,7 +79,7 @@ function addLights() {
   scene.add(directLight2);
 }
 
-var pickedAnimal = "Sheep";
+var pickedAnimal = "Fox";
 function drawAnimal() {
   if(pickedAnimal == "Sheep"){
     animal = new Sheep();
@@ -148,7 +148,7 @@ function onKeyDown(event) {
       break;
     case 68:
       keyDDown = true;
-      break;      
+      break;
     default:
       // Code block
   }
@@ -167,7 +167,7 @@ function onKeyUp(event) {
       break;
     case 68:
       keyDDown = false;
-      break;      
+      break;
     default:
       // Code block
   }
@@ -203,16 +203,6 @@ function render() {
 //#########################################################################################################
 //ANIMAL CLASSES
 //#########################################################################################################
-
-
-
-//This simple function adds border lines to a given element "elem" which is made by a geometry element "geo"
-function addLines(geo, elem){
-  var edge = new THREE.EdgesGeometry( geo );
-  var lines = new THREE.LineSegments( edge, new THREE.LineBasicMaterial( { color: 0x000000 } ) );
-  elem.add(lines);
-}
-
 
 //########################################################################################################
 //END
