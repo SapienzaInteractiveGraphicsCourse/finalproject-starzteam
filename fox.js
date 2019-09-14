@@ -6,6 +6,10 @@ const size = 1.5;
 var inMotion = false;
 var descending = false;
 var state = "ahead";
+var contatore = 0;
+
+var legRotation = 0;
+
 class Fox{
   constructor(){
     this.group = new THREE.Group();
@@ -45,7 +49,6 @@ class Fox{
       shading: THREE.FlatShading
     });
 
-    this.vAngle = 0;
     this.drawBody();
     this.drawHead();
     this.drawLegs();
@@ -249,6 +252,7 @@ class Fox{
 }
 
 jump(speed, direction) {
+
     if(this.group.position.y >= 1.8 || descending){
       this.group.position.y-= Math.sin(speed)*1.5;
       descending = true;
@@ -256,19 +260,95 @@ jump(speed, direction) {
     else{
       this.group.position.y+= Math.sin(speed)*1.5;
     }
-    const legRotation = Math.sin(this.vAngle) * Math.PI / 6 + 0.4;
 
-    this.leftFrontLeg.rotation.x = -legRotation;
-    this.leftFrontDownLeg.rotation.x = -legRotation;
+    if(direction == "ahead"){
+      if(contatore == 0|| contatore == 34){
+        this.group.rotation.x = 0;
+        legRotation = 0;
+      }
+      else if (contatore <=16){
+        this.group.rotation.x-=Math.PI*(1/8)*(1/16) ;
+      }
+      else if(this.group.rotation.x < 0) {
+        this.group.rotation.x+=Math.PI*(1/8) *(1/16);
+      }
+    }
+    else if (direction == "behind"){
+      if(contatore == 0|| contatore == 34){
+        this.group.rotation.x = 0;
+        legRotation = 0;
+      }
+      else if (contatore <=16){
+        this.group.rotation.x+=Math.PI*(1/8)*(1/16) ;
+      }
+      else if(this.group.rotation.x > 0) {
+        this.group.rotation.x-=Math.PI*(1/8) *(1/16);
+      }
+    }
+    /*
+    else if (direction == "right"){
+      if(contatore == 0|| contatore == 34){
+        this.group.rotation.z = 0;
+        legRotation = 0;
+      }
+      else if (contatore <=16){
+        this.group.rotation.z+=Math.PI*(1/8)*(1/16) ;
+      }
+      else if(this.group.rotation.z > 0) {
+        this.group.rotation.z-=Math.PI*(1/8) *(1/16);
+      }
+    }
+    else{
+      if(contatore == 0|| contatore == 34){
+        //this.group.rotation.z = 0;
+        this.group.rotation.x = 0;
+        legRotation = 0;
+      }
+      else if (contatore <=16){
+        this.group.rotation.x+=Math.PI*(1/8)*(1/16) ;
+      }
+      else if(this.group.rotation.x > 0) {
+        this.group.rotation.x-=Math.PI*(1/8) *(1/16);
+      }
+    }
+    */
 
-    this.rightFrontLeg.rotation.x = -legRotation;
-    this.rightFrontDownLeg.rotation.x = -legRotation;
+    if(contatore == 0 || contatore >=33){
+      legRotation = 0;
+      //Since javascript despites floats, gotta reset manually
+      this.leftFrontLeg.rotation.x = 0;
+      this.leftFrontDownLeg.rotation.x = 0;
 
-    this.rightBackLeg.rotation.x = -legRotation;
-    this.rightBackDownLeg.rotation.x = -legRotation;
+      this.rightFrontLeg.rotation.x = 0;
+      this.rightFrontDownLeg.rotation.x = 0;
 
-    this.leftBackLeg.rotation.x = -legRotation;
-    this.leftBackDownLeg.rotation.x = -legRotation;
+      this.rightBackLeg.rotation.x = 0;
+      this.rightBackDownLeg.rotation.x = 0;
+
+      this.leftBackLeg.rotation.x = 0;
+      this.leftBackDownLeg.rotation.x = 0;
+    }
+    else if(contatore <=16){
+      legRotation = Math.PI*(1/4)*(1/16);
+
+    }
+    else{
+      legRotation = (-1)*Math.PI*(1/4)*(1/16);
+    }
+
+    contatore++;
+
+    this.leftFrontLeg.rotation.x += legRotation;
+    this.leftFrontDownLeg.rotation.x += legRotation;
+
+    this.rightFrontLeg.rotation.x += legRotation;
+    this.rightFrontDownLeg.rotation.x += legRotation;
+
+    this.rightBackLeg.rotation.x += legRotation;
+    this.rightBackDownLeg.rotation.x += legRotation;
+
+    this.leftBackLeg.rotation.x += legRotation;
+    this.leftBackDownLeg.rotation.x += legRotation;
 
     if(direction == "ahead"){
       this.group.position.z = this.group.position.z + 0.093;
@@ -283,7 +363,7 @@ jump(speed, direction) {
       this.group.position.x = this.group.position.x + 0.093;
     }
 
-    //resets the postion, since we are using a periodic function that does not totally "return" on our initial value for the elevation of the animal
+    //resets the postion, since js and floats are not great friends
     if(this.group.position.y <= 0.3){
       this.group.position.y = 0.3;
       inMotion = false;
@@ -308,24 +388,28 @@ actionOnPressKey() {
         inMotion = true;
         this.group.rotation.y = 0;
         state = "ahead";
+        contatore = 0;
         this.jump(0.06, state);
       }
       else if (keyDDown){
           state = "right";
           inMotion = true;
           this.group.rotation.y = Math.PI*3/2;
+          contatore = 0;
           this.jump(0.06, state);
         }
       else if (keyADown){
         inMotion = true;
         state = "left";
         this.group.rotation.y = Math.PI/2;
+        contatore = 0;
         this.jump(0.06, state);
       }
     else if (keySDown){
           inMotion = true;
           this.group.rotation.y = Math.PI;
           state = "behind";
+          contatore = 0;
           this.jump(0.06, state);
     }
   }
