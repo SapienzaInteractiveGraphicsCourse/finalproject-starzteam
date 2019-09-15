@@ -2,18 +2,19 @@
 //FOX
 //#######################
 
-const size = 1.5;
+const size = 1;
 var inMotion = false;
 var descending = false;
 var state = "ahead";
 var contatore = 0;
-
+var currentScore = 0;
+var highestScore = 0;
 var legRotation = 0;
 
 class Fox{
   constructor(){
     this.group = new THREE.Group();
-    this.group.position.y = 0.3;
+    this.group.position.y = -0.31;
     this.group.position.z = -6;
 
     const boxReferenceGeometry = new THREE.BoxGeometry(2.2, 2.4, 2.5);
@@ -48,7 +49,6 @@ class Fox{
       roughness: 1,
       shading: THREE.FlatShading
     });
-
     this.drawBody();
     this.drawHead();
     this.drawLegs();
@@ -167,7 +167,7 @@ class Fox{
     this.rightBackLeg = new THREE.Mesh(rightBackLegGeometry, this.skinMaterial);
     this.rightBackLeg.receiveShadow = true;
     this.rightBackLeg.castShadow = true;
-    this.rightBackLeg.position.set(-0.35*size, -0.3*size, -0.45*size);
+    this.rightBackLeg.position.set(-0.25*size, -0.3*size, -0.45*size);
     this.group.add(this.rightBackLeg);
 
     const rightBackDownLegGeometry = new THREE.BoxGeometry(0.2*size, 0.4*size, 0.2*size);
@@ -189,7 +189,7 @@ class Fox{
     this.rightFrontLeg = new THREE.Mesh(rightFrontLegGeometry, this.skinMaterial);
     this.rightFrontLeg.receiveShadow = true;
     this.rightFrontLeg.castShadow = true;
-    this.rightFrontLeg.position.set(-0.35*size, -0.3*size, +0.45*size);
+    this.rightFrontLeg.position.set(-0.25*size, -0.3*size, +0.45*size);
     this.group.add(this.rightFrontLeg);
 
     const rightFrontDownLegGeometry = new THREE.BoxGeometry(0.2*size, 0.4*size, 0.2*size);
@@ -211,7 +211,7 @@ class Fox{
     this.leftBackLeg = new THREE.Mesh(leftBackLegGeometry, this.skinMaterial);
     this.leftBackLeg.receiveShadow = true;
     this.leftBackLeg.castShadow = true;
-    this.leftBackLeg.position.set(0.35*size, -0.3*size, -0.45*size);
+    this.leftBackLeg.position.set(0.25*size, -0.3*size, -0.45*size);
     this.group.add(this.leftBackLeg);
 
     const leftBackDownLegGeometry = new THREE.BoxGeometry(0.2*size, 0.4*size, 0.2*size);
@@ -233,7 +233,7 @@ class Fox{
     this.leftFrontLeg = new THREE.Mesh(leftFrontLegGeometry, this.skinMaterial);
     this.leftFrontLeg.receiveShadow = true;
     this.leftFrontLeg.castShadow = true;
-    this.leftFrontLeg.position.set(0.35*size, -0.3*size, +0.45*size);
+    this.leftFrontLeg.position.set(0.25*size, -0.3*size, +0.45*size);
     this.group.add(this.leftFrontLeg);
 
     const leftFrontDownLegGeometry = new THREE.BoxGeometry(0.2*size, 0.4*size, 0.2*size);
@@ -253,7 +253,7 @@ class Fox{
 
 jump(speed, direction) {
 
-    if(this.group.position.y >= 1.8 || descending){
+    if(this.group.position.y >= 1.2 || descending){
       this.group.position.y-= Math.sin(speed)*1.5;
       descending = true;
     }
@@ -264,6 +264,7 @@ jump(speed, direction) {
     if(direction == "ahead"){
       if(contatore == 0|| contatore == 34){
         this.group.rotation.x = 0;
+        this.group.rotation.z = 0;
         legRotation = 0;
       }
       else if (contatore <=16){
@@ -276,6 +277,8 @@ jump(speed, direction) {
     else if (direction == "behind"){
       if(contatore == 0|| contatore == 34){
         this.group.rotation.x = 0;
+        this.group.rotation.z = 0;
+
         legRotation = 0;
       }
       else if (contatore <=16){
@@ -285,33 +288,19 @@ jump(speed, direction) {
         this.group.rotation.x-=Math.PI*(1/8) *(1/16);
       }
     }
-    /*
-    else if (direction == "right"){
+    else if (direction == "right" || direction == "left"){
       if(contatore == 0|| contatore == 34){
         this.group.rotation.z = 0;
-        legRotation = 0;
-      }
-      else if (contatore <=16){
-        this.group.rotation.z+=Math.PI*(1/8)*(1/16) ;
-      }
-      else if(this.group.rotation.z > 0) {
-        this.group.rotation.z-=Math.PI*(1/8) *(1/16);
-      }
-    }
-    else{
-      if(contatore == 0|| contatore == 34){
-        //this.group.rotation.z = 0;
         this.group.rotation.x = 0;
         legRotation = 0;
       }
       else if (contatore <=16){
-        this.group.rotation.x+=Math.PI*(1/8)*(1/16) ;
+        this.group.rotateOnAxis(new THREE.Vector3(1,0,0) , -Math.PI*(1/8)*(1/16));
       }
-      else if(this.group.rotation.x > 0) {
-        this.group.rotation.x-=Math.PI*(1/8) *(1/16);
+      else if(this.group.rotation.x < 0) {
+        this.group.rotateOnAxis(new THREE.Vector3(1,0,0) , +Math.PI*(1/8)*(1/16))
       }
     }
-    */
 
     if(contatore == 0 || contatore >=33){
       legRotation = 0;
@@ -330,7 +319,6 @@ jump(speed, direction) {
     }
     else if(contatore <=16){
       legRotation = Math.PI*(1/4)*(1/16);
-
     }
     else{
       legRotation = (-1)*Math.PI*(1/4)*(1/16);
@@ -364,8 +352,8 @@ jump(speed, direction) {
     }
 
     //resets the postion, since js and floats are not great friends
-    if(this.group.position.y <= 0.3){
-      this.group.position.y = 0.3;
+    if(this.group.position.y <= -0.31){
+      this.group.position.y = -0.31;
       inMotion = false;
       descending = false;
     }
@@ -379,12 +367,21 @@ jump(speed){
   jumpEnd();//tocca terra,accorcia gambe avanti,ruota corpo ----,
 }
 */
+
 actionOnPressKey() {
+
+    //document.getElementById("demo").innerHTML = 5 + 6;
     if(inMotion){
       this.jump(0.06, state);  //keep it going till the jump is complete, we don't want the animation to stop mid-air, neither the user to press too many buttons together
     }
     else{
       if (keyWDown){
+        currentScore++;
+        document.getElementById("cScore").innerHTML = currentScore;
+        if(currentScore > highestScore){
+          highestScore = currentScore;
+          document.getElementById("hScore").innerHTML = highestScore;
+        }
         inMotion = true;
         this.group.rotation.y = 0;
         state = "ahead";
@@ -406,11 +403,13 @@ actionOnPressKey() {
         this.jump(0.06, state);
       }
     else if (keySDown){
-          inMotion = true;
-          this.group.rotation.y = Math.PI;
-          state = "behind";
-          contatore = 0;
-          this.jump(0.06, state);
+        currentScore--;
+        document.getElementById("cScore").innerHTML = currentScore;
+        inMotion = true;
+        this.group.rotation.y = Math.PI;
+        state = "behind";
+        contatore = 0;
+        this.jump(0.06, state);
     }
   }
 }
