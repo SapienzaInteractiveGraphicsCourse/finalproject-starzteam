@@ -11,6 +11,11 @@ var scene,
     world,
     night = false;
 
+var mappingTracks = [];
+var actualTrack = 0;
+var actualListTracks = [];
+var limit = -6;
+
 var animal,
     sky;
 
@@ -79,7 +84,7 @@ function addLights() {
   scene.add(directLight2);
 }
 
-var pickedAnimal = "Fox";
+var pickedAnimal = "Sheep";
 function drawAnimal() {
   if(pickedAnimal == "Sheep"){
     animal = new Sheep();
@@ -94,7 +99,7 @@ function drawAnimal() {
 }
 
 function drawTerrain() {
-  var numLevels = 3;
+  var numLevels = 4;
   var i;
   var track;
   var posAtt = -6;
@@ -103,15 +108,17 @@ function drawTerrain() {
   for(i = 0; i < numLevels; i++){
     if(Math.floor(Math.random()*2) == 0){
       track = new Road(posAtt, numLanes[Math.floor(Math.random()*numLanes.length)]);
-      posAtt += track.occupiedSpace*1.49;
+      posAtt += track.occupiedSpace*1.5;
       console.log("track", track.occupiedSpace);
     }
     else{
       track = new River(posAtt);
-      posAtt += track.occupiedSpace*1.49;
+      posAtt += track.occupiedSpace*1.5;
     }
     scene.add(track.group);
     tracks.push(track);
+    mappingTracks.push(posAtt);
+    actualListTracks.slice(0, 2);
   }
   /*
    * To test only the road or the river
@@ -184,13 +191,26 @@ function animate() {
 
 function render() {
   if(!crash){
+    var referencePositionAnimal = new THREE.Vector3();
+    scene.updateMatrixWorld();
+    animal.boxReference.getWorldPosition(referencePositionAnimal);
+    if(referencePositionAnimal.z > limit){
+      limit = mappingTracks[actualTrack];
+      if(actualTrack == 0)
+        actualListTracks = tracks.slice(actualTrack, actualTrack + 2);
+      else
+        actualListTracks = tracks.slice(actualTrack - 1, actualTrack + 2);
+      actualTrack++;
+    }
+
     animal.actionOnPressKey();
-    var length = tracks.length;
     var lengthVehicles;
     var i, j;
     var vehicles;
+    var length = actualListTracks.length;
     for(i = 0; i < length; i++){
-      vehicles = tracks[i].vehicles;
+      actualListTracks[i].doCheck();
+      vehicles = actualListTracks[i].vehicles;
       lengthVehicles = vehicles.length;
       for(j = 0; j < lengthVehicles; j++){
         vehicles[j].goForward(0.01);
@@ -199,14 +219,6 @@ function render() {
   }
   renderer.render(scene, camera);
 }
-
-//#########################################################################################################
-//ANIMAL CLASSES
-//#########################################################################################################
-
-//########################################################################################################
-//END
-//########################################################################################################
 
 class Sky {
   constructor() {

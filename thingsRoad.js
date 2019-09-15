@@ -73,7 +73,7 @@ class Road {
     this.vAngle = 0;
 
     this.drawParts(numLanes);
-    
+
     this.group.traverse((part) => {
       part.castShadow = true;
       part.receiveShadow = true;
@@ -84,22 +84,22 @@ class Road {
     this.middleGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( widthGrass, highGrass, depthGrass), this.materialMiddle);
     this.middleGrass.receiveShadow = true;
     this.group.add(this.middleGrass);
-    
+
     this.leftGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( widthGrass, highGrass, depthGrass), this.materialLeft);
     this.leftGrass.position.z = - distGrass;
     this.middleGrass.receiveShadow = true;
     this.middleGrass.add(this.leftGrass);
-    
+
     this.rightGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( widthGrass, highGrass, depthGrass), this.materialRight);
     this.rightGrass.position.z = distGrass;
     this.middleGrass.receiveShadow = true;
     this.middleGrass.add(this.rightGrass);
-    
+
     this.occupiedSpace += widthGrass;
-    
+
     this.prec = this.middleGrass;
     var road = null;
-    
+
     for(var i = 0; i < (num*2)-1; i++){
       if(i%2 == 0){
         var road = new THREE.Mesh(new THREE.BoxBufferGeometry( widthRoad, hightRoad, depthRoad),  this.materialAsphalt);
@@ -118,23 +118,27 @@ class Road {
         this.occupiedSpace += widthRoad/4;
       }
     }
-    
+
     this.three = new Three();
     this.rightGrass.add(this.three.group);
-    
+
     this.three = new Three();
     this.leftGrass.add(this.three.group);
-    
+
     var car = new Car(animal);
-    
+
     this.vehicles = [];
     this.vehicles.push(car);
-    
+
     var length = this.vehicles.length;
     var i;
     for(i = 0; i < length; i++){
       this.prec.add(this.vehicles[i].group);
     }
+  }
+
+  doCheck(){
+
   }
 }
 
@@ -156,21 +160,21 @@ class River{
       color: 0xbaf455,
       flatShading: true
     });
-    
+
     this.materialLeft = new THREE.MeshPhongMaterial({
       color: 0x99C846,
       flatShading: true
     });
-    
+
     this.materialRight = new THREE.MeshPhongMaterial({
       color: 0x99C846,
       flatShading: true
     });
-    
+
     this.vAngle = 0;
 
     this.drawParts();
-    
+
     this.group.traverse((part) => {
       part.castShadow = true;
       part.receiveShadow = true;
@@ -181,31 +185,124 @@ class River{
     this.middleGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( widthGrass, highGrass, depthGrass), this.materialMiddle);
     this.middleGrass.receiveShadow = true;
     this.group.add(this.middleGrass);
-    
+
     this.leftGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( widthGrass, highGrass, depthGrass), this.materialLeft);
     this.leftGrass.position.z = - distGrass;
     this.middleGrass.receiveShadow = true;
     this.middleGrass.add(this.leftGrass);
-    
+
     this.rightGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( widthGrass, highGrass, depthGrass), this.materialRight);
     this.rightGrass.position.z = distGrass;
     this.middleGrass.receiveShadow = true;
     this.middleGrass.add(this.rightGrass);
-    
+
     this.occupiedSpace += widthGrass;
-    
+
     this.river = new THREE.Mesh(new THREE.BoxBufferGeometry( 2.25*widthRoad + widthGrass, hightRoad, depthRoad),  this.materialRiver);
     this.river.receiveShadow = true;
     this.river.position.x = -2.12*widthRoad;
+    this.river.position.y = -0.1;
     this.middleGrass.add(this.river);
     this.occupiedSpace += 2.25*widthRoad + widthGrass;
+
+    this.sideX = 1.5*depthRoad/2;
+    this.sideZ = 1.5*(2.25*widthRoad + widthGrass)/2;
+
+    this.isWood = false;
+
     this.vehicles = [];
+    var trunk = new Wood(this);
+    this.vehicles.push(trunk);
 
     var length = this.vehicles.length;
     var i;
     for(i = 0; i < length; i++){
-      this.group.add(this.vehicles[i].group);
+      this.river.add(this.vehicles[i].group);
     }
+
+  }
+
+  doCheck(){
+
+    var referencePosition = new THREE.Vector3();
+    var referencePositionAnimal = new THREE.Vector3();
+    scene.updateMatrixWorld();
+
+    this.river.getWorldPosition(referencePosition);
+    animal.boxReference.getWorldPosition(referencePositionAnimal);
+
+    if( (Math.abs(referencePosition.x - referencePositionAnimal.x) <= this.sideX) &&
+        (Math.abs(referencePosition.z - referencePositionAnimal.z) <= this.sideZ) &&
+        referencePositionAnimal.y <= animal.restHeight && !this.isWood){
+          crash = true;
+          window.alert("SPLASH");
+    }
+
+  }
+}
+
+class Wood{
+  constructor(river){
+
+    this.riverReference = river;
+
+    this.group = new THREE.Group();
+    this.group.position.set(2, 0, 0);
+
+    this.materialWoodLight = new THREE.MeshPhongMaterial({
+      color: 0x7b5d33,
+      flatShading: true
+    });
+
+    this.materialWoodDark = new THREE.MeshPhongMaterial({
+      color: 0x4f3d21,
+      flatShading: true
+    });
+
+    this.vAngle = 0;
+
+    this.direction = 1;
+
+    if(Math.floor(Math.random()*2) == 0){
+      //positionX = 1.9;
+      //positionZ = 7;
+      this.direction = -1;
+    }
+
+    this.drawParts();
+  }
+
+  drawParts() {
+
+    this.trunk = new THREE.Mesh( new THREE.BoxBufferGeometry( widthRoad, 3*hightRoad, 5.0 ), this.materialWoodLight );
+    this.trunk.castShadow = true;
+    this.trunk.receiveShadow = true;
+    this.group.add(this.trunk);
+
+    this.sideX = 1.5*2.5;
+    this.sideZ = 1.5*widthRoad/2;
+
+  }
+
+  goForward(speed){
+    this.group.position.z += this.direction*speed;
+
+    var referencePosition = new THREE.Vector3();
+    var referencePositionAnimal = new THREE.Vector3();
+    scene.updateMatrixWorld();
+
+    this.trunk.getWorldPosition(referencePosition); //OCCHIO, il sistema di riferimento world e quello locale sono diversi!!! quindi dopo una rotazione cambiano x e z
+    //cambiano anche tra position.x e getWorldPosition.x
+    animal.boxReference.getWorldPosition(referencePositionAnimal);
+
+    if( (Math.abs(referencePosition.z - referencePositionAnimal.z) <= this.sideZ) &&
+        (Math.abs(referencePosition.x - referencePositionAnimal.x) <= this.sideX) ){
+          this.riverReference.isWood = true;
+    }
+    else {
+      this.riverReference.isWood = false;
+    }
+
   }
 }
 
@@ -280,7 +377,7 @@ class Grass {
     this.vAngle = 0;
 
     this.drawParts();
-    
+
     this.group.traverse((part) => {
       part.castShadow = true;
       part.receiveShadow = true;

@@ -43,6 +43,9 @@ class Sheep {
     this.drawBody();
     this.drawHead();
     this.drawLegs();
+
+    this.restHeight = this.group.position.y;
+
   }
   drawBody() {
     const bodyGeometry = new THREE.IcosahedronGeometry(1.45, 1);
