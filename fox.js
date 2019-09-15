@@ -16,6 +16,7 @@ class Fox{
     this.group = new THREE.Group();
     this.group.position.y = -0.31;
     this.group.position.z = -6;
+    this.restHeight = this.group.position.y;
 
     const boxReferenceGeometry = new THREE.BoxGeometry(2.2, 2.4, 2.5);
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
