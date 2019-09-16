@@ -111,7 +111,7 @@ class Road {
         this.prec.add(road);
         this.prec = road;
         this.occupiedSpace += widthRoad;
-        
+
         var car = new Car(animal);
         this.vehicles.push(car);
         this.prec.add(this.vehicles[j].group);

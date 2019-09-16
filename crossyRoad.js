@@ -20,7 +20,8 @@ var scene,
 var mappingTracks = [];
 var actualTrack = 0;
 var actualListTracks = [];
-var limit = -6;
+var limitMax = -6;
+var limitMin = -6;
 
 var animal,
     sky;
@@ -113,33 +114,66 @@ function drawAnimal() {
   scene.add(animal.group);
 }
 
+function getNewTerrain(){
+  var track;
+  var pos;
+  var numLanes = [1,2,3,4];
+  if(Math.floor(Math.random()*2) == 0)
+    track = new Road(posAtt, numLanes[Math.floor(Math.random()*numLanes.length)]);
+  else
+    track = new River(posAtt);
+  pos = track.occupiedSpace*1.5;
+  return {
+    track: track,
+    pos: pos
+  };
+}
+
 function drawTerrain() {
   var numLevels = 4;
   var i;
   var track;
-  var numLanes = [1,2,3,4];
-  var chosenLanes = 0;
-  for(i = 0; i < numLevels; i++){
-    if(Math.floor(Math.random()*2) == 0){
-      track = new Road(posAtt, numLanes[Math.floor(Math.random()*numLanes.length)]);
-      posAtt += track.occupiedSpace*1.5;
-      console.log("track", track.occupiedSpace);
-    }
-    else{
-      track = new River(posAtt);
-      posAtt += track.occupiedSpace*1.5;
-    }
+  var values;
+
+  values = getNewTerrain();
+  track = values.track;
+  posAtt += values.pos;
+  scene.add(track.group);
+  tracks.push(track);
+  mappingTracks.push(posAtt);
+  limitMax = posAtt;
+
+  for(i = 1; i < numLevels; i++){
+    values = getNewTerrain();
+    track = values.track;
+    posAtt += values.pos;
     scene.add(track.group);
     tracks.push(track);
     mappingTracks.push(posAtt);
-    actualListTracks.slice(0, 2);
   }
+  actualListTracks = tracks.slice(0, 2);
   /*
    * To test only the road or the river
   var track = new Road(0,2);
   scene.add(track.group);
   tracks.push(track);
   */
+}
+
+function addTerrain(numLevels){
+  var i;
+  var track;
+  var values;
+
+  for(i = 0; i < numLevels; i++){
+    values = getNewTerrain();
+    track = values.track;
+    posAtt += values.pos;
+    scene.add(track.group);
+    tracks.push(track);
+    mappingTracks.push(posAtt);
+  }
+
 }
 
 function drawSky() {
@@ -205,22 +239,36 @@ function animate() {
 
 function render() {
   if(!crash){
+    /*
     var dif =animal.boxReference.getWorldPosition(referencePositionAnimal).z +30-posAtt
     if(dif >= 0){
-      drawTerrain();
+      addTerrain(4); //please use addTerrain, not drawTerrain
     }
-    tot+=0.03*(1+ (animal.boxReference.getWorldPosition(referencePositionAnimal).z - tot)/4);
+    if(animal.boxReference.getWorldPosition(referencePositionAnimal).z - tot >= 0){
+      tot+=0.04*(1+ (animal.boxReference.getWorldPosition(referencePositionAnimal).z - tot)/4);
+    }
+    else{
+      tot+=0.04;
+    }
     camera.position.set(-10, 15, tot);
+    */
     var referencePositionAnimal = new THREE.Vector3();
     scene.updateMatrixWorld();
     animal.boxReference.getWorldPosition(referencePositionAnimal);
-    if(referencePositionAnimal.z > limit){
-      limit = mappingTracks[actualTrack];
+    if(referencePositionAnimal.z > limitMax){
+      actualTrack++;
+      limitMin = limitMax;
+      limitMax = mappingTracks[actualTrack];
+      actualListTracks = tracks.slice(actualTrack - 1, actualTrack + 2);
+      }
+    if(referencePositionAnimal.z <= limitMin && actualTrack > 0){
+      actualTrack--;
+      limitMax = limitMin;
+      limitMin = mappingTracks[actualTrack - 1];
       if(actualTrack == 0)
         actualListTracks = tracks.slice(actualTrack, actualTrack + 2);
       else
         actualListTracks = tracks.slice(actualTrack - 1, actualTrack + 2);
-      actualTrack++;
     }
 
     animal.actionOnPressKey();
