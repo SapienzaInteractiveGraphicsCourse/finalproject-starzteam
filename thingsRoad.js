@@ -126,11 +126,15 @@ class Road {
       }
     }
 
-    this.three = new Three();
-    this.rightGrass.add(this.three.group);
+    this.trees = [];
 
-    this.three = new Three();
-    this.leftGrass.add(this.three.group);
+    var tree = new Three();
+    this.rightGrass.add(tree.group);
+    this.trees.push(tree);
+
+    tree = new Three();
+    this.leftGrass.add(tree.group);
+    this.trees.push(tree)
   }
 
   doCheck(){
@@ -215,6 +219,8 @@ class River{
     for(i = 0; i < length; i++){
       this.river.add(this.vehicles[i].group);
     }
+
+    this.trees = [];
 
   }
 

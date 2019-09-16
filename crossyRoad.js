@@ -288,6 +288,13 @@ function render() {
   renderer.render(scene, camera);
 }
 
+function checkTrees(position){ //need to find a type for position
+  //ciclo su actualListTracks
+    //check di tutti gli alberi
+  //return false or true, per capire se può andare avanti o no
+  console.log("preso");
+}
+
 class Sky {
   constructor() {
     this.group = new THREE.Group();

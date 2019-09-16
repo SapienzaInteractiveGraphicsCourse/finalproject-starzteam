@@ -182,6 +182,8 @@ class Sheep {
     }
     else{
       if (keyWDown){
+        //check su checkTrees
+        
         currentScore++;
         document.getElementById("cScore").innerHTML = currentScore;
         if(currentScore > highestScore){
@@ -197,6 +199,8 @@ class Sheep {
         this.jump(speedSheepUp, dist, 0, 'z');
       }
       else if (keySDown){
+        //check su checkTrees
+
         currentScore--;
         document.getElementById("cScore").innerHTML = currentScore;
         inMotion = true;
@@ -207,6 +211,8 @@ class Sheep {
         this.jump(speedSheepUp, -dist, 180, 'z');
       }
       else if (keyADown) {
+        //check su checkTrees
+
         inMotion = true;
         last = 'x';
         sign = 1;
@@ -215,6 +221,8 @@ class Sheep {
         this.jump(speedSheepUp, dist, 90, 'x');
       }
       else if (keyDDown) {
+        //check su checkTrees
+
         inMotion = true;
         last = 'x';
         sign = -1;
