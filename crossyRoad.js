@@ -288,11 +288,27 @@ function render() {
   renderer.render(scene, camera);
 }
 
-function checkTrees(position){ //need to find a type for position
-  //ciclo su actualListTracks
-    //check di tutti gli alberi
-  //return false or true, per capire se può andare avanti o no
-  console.log("preso");
+function checkTrees(position){
+
+  var lengthTrees;
+  var i, j;
+  var trees;
+  var referencePosition = new THREE.Vector3();
+  var length = actualListTracks.length;
+  for(i = 0; i < length; i++){
+    trees = actualListTracks[i].trees;
+    lengthTrees = trees.length;
+    for(j = 0; j < lengthTrees; j++){
+      scene.updateMatrixWorld();
+      trees[j].trunk.getWorldPosition(referencePosition);
+      if( (Math.abs(referencePosition.x - position.x) <= animal.sideX + trees[j].sideX) &&
+          (Math.abs(referencePosition.z - position.z) <= animal.sideZ + trees[j].sideZ) ){
+            return true;
+          }
+    }
+  }
+  return false;
+
 }
 
 class Sky {

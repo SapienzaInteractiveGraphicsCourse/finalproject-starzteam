@@ -341,6 +341,9 @@ class Three {
     this.trunk.receiveShadow = true;
     this.group.add(this.trunk);
 
+    this.sideX = 0.5*1.5; //lato box / 2
+    this.sideZ = 0.5*1.5;
+
     this.height = threeHeights[Math.floor(Math.random()*threeHeights.length)];
 
     this.crown = new THREE.Mesh( new THREE.BoxBufferGeometry( 1.5, 1.5, this.height), this.materialCrown);

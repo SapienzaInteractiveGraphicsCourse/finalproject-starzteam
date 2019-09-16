@@ -181,54 +181,74 @@ class Sheep {
       this.jump(speedSheepDown, sign * dist, angle, last);
     }
     else{
+      var referencePosition = new THREE.Vector3();
+      scene.updateMatrixWorld();
+      this.boxReference.getWorldPosition(referencePosition);
       if (keyWDown){
         //check su checkTrees
-        
-        currentScore++;
-        document.getElementById("cScore").innerHTML = currentScore;
-        if(currentScore > highestScore){
-          highestScore = currentScore;
-          document.getElementById("hScore").innerHTML = highestScore;
+
+        referencePosition.z += 3.42;
+        if( !checkTrees(referencePosition) ){
+
+          currentScore++;
+          document.getElementById("cScore").innerHTML = currentScore;
+          if(currentScore > highestScore){
+            highestScore = currentScore;
+            document.getElementById("hScore").innerHTML = highestScore;
+          }
+          //Resetting stuff and preparing s.t. when going to inMotion i can keep on doing what i was doing till i'm done (shish)
+          inMotion = true;
+          last = 'z';
+          sign = 1;
+          angle = 0;
+          this.vAngle = 0;
+          this.jump(speedSheepUp, dist, 0, 'z');
         }
-        //Resetting stuff and preparing s.t. when going to inMotion i can keep on doing what i was doing till i'm done (shish)
-        inMotion = true;
-        last = 'z';
-        sign = 1;
-        angle = 0;
-        this.vAngle = 0;
-        this.jump(speedSheepUp, dist, 0, 'z');
       }
       else if (keySDown){
         //check su checkTrees
 
-        currentScore--;
-        document.getElementById("cScore").innerHTML = currentScore;
-        inMotion = true;
-        last = 'z';
-        sign = -1;
-        angle = 180;
-        this.vAngle = 0;
-        this.jump(speedSheepUp, -dist, 180, 'z');
+        referencePosition.z -= 3.72;
+        if( !checkTrees(referencePosition) ){
+
+          currentScore--;
+          document.getElementById("cScore").innerHTML = currentScore;
+          inMotion = true;
+          last = 'z';
+          sign = -1;
+          angle = 180;
+          this.vAngle = 0;
+          this.jump(speedSheepUp, -dist, 180, 'z');
+        }
       }
       else if (keyADown) {
         //check su checkTrees
 
-        inMotion = true;
-        last = 'x';
-        sign = 1;
-        angle = 90;
-        this.vAngle = 0;
-        this.jump(speedSheepUp, dist, 90, 'x');
+        referencePosition.x += 3.57;
+        if( !checkTrees(referencePosition) ){
+
+          inMotion = true;
+          last = 'x';
+          sign = 1;
+          angle = 90;
+          this.vAngle = 0;
+          this.jump(speedSheepUp, dist, 90, 'x');
+        }
       }
       else if (keyDDown) {
         //check su checkTrees
 
-        inMotion = true;
-        last = 'x';
-        sign = -1;
-        angle = 270;
-        this.vAngle = 0;
-        this.jump(speedSheepUp, -dist, 270, 'x');
+        referencePosition.x -= 3.57;
+        if( !checkTrees(referencePosition) ){
+
+
+          inMotion = true;
+          last = 'x';
+          sign = -1;
+          angle = 270;
+          this.vAngle = 0;
+          this.jump(speedSheepUp, -dist, 270, 'x');
+        }
       }
     }
 }
