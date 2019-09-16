@@ -98,7 +98,9 @@ class Road {
     this.occupiedSpace += widthGrass;
 
     this.prec = this.middleGrass;
+    this.vehicles = [];
     var road = null;
+    var j = 0;
 
     for(var i = 0; i < (num*2)-1; i++){
       if(i%2 == 0){
@@ -109,6 +111,11 @@ class Road {
         this.prec.add(road);
         this.prec = road;
         this.occupiedSpace += widthRoad;
+        
+        var car = new Car(animal);
+        this.vehicles.push(car);
+        this.prec.add(this.vehicles[j].group);
+        j++;
       }else{
         road = new THREE.Mesh(new THREE.BoxBufferGeometry( widthRoad/4, hightRoad, depthRoad),  this.materialLine);
         road.position.x = distRoad;
@@ -124,17 +131,6 @@ class Road {
 
     this.three = new Three();
     this.leftGrass.add(this.three.group);
-
-    var car = new Car(animal);
-
-    this.vehicles = [];
-    this.vehicles.push(car);
-
-    var length = this.vehicles.length;
-    var i;
-    for(i = 0; i < length; i++){
-      this.prec.add(this.vehicles[i].group);
-    }
   }
 
   doCheck(){

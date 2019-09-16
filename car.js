@@ -9,12 +9,12 @@ class Car {
     this.group = new THREE.Group();
 
     var angle = 0;
-    var positionX = -1.9;
+    var positionX = -0.65;
     var positionZ = -7;
     this.direction = 1;
 
     if(Math.floor(Math.random()*2) == 0){
-      positionX = 1.9;
+      positionX = 0.65;
       positionZ = 7;
       angle = 180;
       this.direction = -1;

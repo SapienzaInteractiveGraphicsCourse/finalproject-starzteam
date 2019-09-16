@@ -4,6 +4,13 @@
 const dist = 0.095;
 const speedSheepUp = 0.12;
 const speedSheepDown = 0.16;
+var last = 'x';
+var sign = +1;
+var angle = 0;
+var inMotion = false;
+var descending = false;
+var currentScore = 0;
+var highestScore = 0;
 class Sheep {
   constructor() {
     this.selected = 0;
@@ -136,62 +143,85 @@ class Sheep {
   jump(speed, dist, gradi, asse) {
     this.group.rotation.y = rad(gradi);
     this.vAngle += speed;
-    this.group.position.y = Math.sin(this.vAngle) + 1.38;
+
+    //check if i'm going up or down
+    if(this.group.position.y >= 3 || descending){
+      this.group.position.y-= Math.sin(speed)*1.5;
+      descending = true;
+    }
+    else{
+      this.group.position.y+= Math.sin(speed)*1.5;
+    }
 
     const legRotation = Math.sin(this.vAngle) * Math.PI / 6 + 0.4;
 
-    this.frontRightLeg.rotation.x = -legRotation;
-    this.backRightLeg.rotation.x = -legRotation;
-    this.frontLeftLeg.rotation.x = -legRotation;
-    this.backLeftLeg.rotation.x = -legRotation;
+    this.frontRightLeg.rotation.x = +legRotation;
+    this.backRightLeg.rotation.x = +legRotation;
+    this.frontLeftLeg.rotation.x = +legRotation;
+    this.backLeftLeg.rotation.x = +legRotation;
 
-    if(asse=='z') this.group.position.z = this.group.position.z + dist;
-    if(asse=='x') this.group.position.x = this.group.position.x + dist;
+    //had to speed up the movement since i'm using a different incremental function
+    if(asse=='z') this.group.position.z = this.group.position.z + 1.5*dist;
+    if(asse=='x') this.group.position.x = this.group.position.x + 1.5*dist;
 
     const earRotation = Math.sin(this.vAngle) * Math.PI / 3 + 1.5;
     this.rightEar.rotation.z = earRotation;
     this.leftEar.rotation.z = -earRotation;
+
+    //I'm close to the terriain and i don't want to compenetrate, let's stop stalling the keyboard presses
+    //and resetting to original height.
+    if(this.group.position.y <= 0.4){
+      inMotion = false;
+      descending = false;
+      this.group.position.y = 0.4;
+    }
   }
   actionOnPressKey() {
-    if (keyWDown && this.selected == 0) {
-      this.jump(speedSheepUp, dist, 0, 'z');
-      this.selected = 1;
-    } else if(this.selected == 1){
-      if (this.group.position.y <= 0.4) {
-        this.selected = 0;
-        return;
-      }
-      this.jump(speedSheepDown, dist, 0, 'z');
+    if(inMotion){
+      this.jump(speedSheepDown, sign * dist, angle, last);
     }
-    if (keySDown && this.selected == 0) {
-      this.selected = 2;
-      this.jump(speedSheepUp, -dist, 180, 'z');
-    } else if(this.selected == 2){
-      if (this.group.position.y <= 0.4) {
-        this.selected = 0;
-        return;
+    else{
+      if (keyWDown){
+        currentScore++;
+        document.getElementById("cScore").innerHTML = currentScore;
+        if(currentScore > highestScore){
+          highestScore = currentScore;
+          document.getElementById("hScore").innerHTML = highestScore;
+        }
+        //Resetting stuff and preparing s.t. when going to inMotion i can keep on doing what i was doing till i'm done (shish)
+        inMotion = true;
+        last = 'z';
+        sign = 1;
+        angle = 0;
+        this.vAngle = 0;
+        this.jump(speedSheepUp, dist, 0, 'z');
       }
-      this.jump(speedSheepDown, -dist, 180, 'z');
-    }
-    if (keyADown && this.selected == 0) {
-      this.selected = 3;
-      this.jump(speedSheepUp, dist, 90, 'x');
-    } else if(this.selected == 3){
-      if (this.group.position.y <= 0.4) {
-        this.selected = 0;
-        return;
+      else if (keySDown){
+        currentScore--;
+        document.getElementById("cScore").innerHTML = currentScore;
+        inMotion = true;
+        last = 'z';
+        sign = -1;
+        angle = 180;
+        this.vAngle = 0;
+        this.jump(speedSheepUp, -dist, 180, 'z');
       }
-      this.jump(speedSheepDown, dist, 90, 'x');
-    }
-    if (keyDDown && this.selected == 0) {
-      this.selected = 4;
-      this.jump(speedSheepUp, -dist, 270, 'x');
-    } else if(this.selected == 4){
-      if (this.group.position.y <= 0.4) {
-        this.selected = 0;
-        return;
+      else if (keyADown) {
+        inMotion = true;
+        last = 'x';
+        sign = 1;
+        angle = 90;
+        this.vAngle = 0;
+        this.jump(speedSheepUp, dist, 90, 'x');
       }
-      this.jump(speedSheepDown, -dist, 270, 'x');
+      else if (keyDDown) {
+        inMotion = true;
+        last = 'x';
+        sign = -1;
+        angle = 270;
+        this.vAngle = 0;
+        this.jump(speedSheepUp, -dist, 270, 'x');
+      }
     }
-  }
+}
 }
