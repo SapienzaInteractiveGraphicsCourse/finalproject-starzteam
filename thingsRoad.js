@@ -319,10 +319,27 @@ class Three {
     this.group.scale.set(1.5, 1.5, 1.5);
     this.group.rotation.x = rad(-90);
 
-    this.materialThree = new THREE.MeshPhongMaterial({
-      color: 0x4d2926,
-      flatShading: true
-    });
+    //load texture for the tree
+    this.materialThree = [
+        new THREE.MeshLambertMaterial({
+            map: THREE.ImageUtils.loadTexture('texture/treebark2.jpg')
+        }),
+        new THREE.MeshLambertMaterial({
+            map: THREE.ImageUtils.loadTexture('texture/treebark2.jpg')
+        }),
+        new THREE.MeshLambertMaterial({
+            map: THREE.ImageUtils.loadTexture('texture/treebark.jpg')
+        }),
+        new THREE.MeshLambertMaterial({
+            map: THREE.ImageUtils.loadTexture('texture/treebark.jpg')
+        }),
+        new THREE.MeshLambertMaterial({
+            map: THREE.ImageUtils.loadTexture('texture/treebark2.jpg')
+        }),
+        new THREE.MeshLambertMaterial({
+            map: THREE.ImageUtils.loadTexture('texture/treebark2.jpg')
+        })
+     ];
 
     this.materialCrown = new THREE.MeshLambertMaterial({
       color: 0x7aa21d,
@@ -354,6 +371,7 @@ class Three {
   }
 }
 
+/*
 // To define if this object is useful or not
 class Grass {
   constructor(hightRoad, widthRoad, depthRoad) {
@@ -363,6 +381,7 @@ class Grass {
     this.distGrass = this.depthGrass;
     this.group = new THREE.Group();
     this.group.position.y = -1.35;
+
 
     this.materialMiddle = new THREE.MeshPhongMaterial({
       color: 0xbaf455,
@@ -387,6 +406,13 @@ class Grass {
       part.castShadow = true;
       part.receiveShadow = true;
     });
+
+    // load a texture, set wrap mode to repeat
+    var texture = new THREE.TextureLoader().load( "grass.jpg" );
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set( 4, 4 );
+
   }
 
   drawParts() {
@@ -403,3 +429,4 @@ class Grass {
     this.middleGrass.add(this.rightGrass);
   }
 }
+*/
