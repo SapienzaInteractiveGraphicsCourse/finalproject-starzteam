@@ -1,4 +1,5 @@
 'use strict';
+var pickedAnimal = "Sheep";
 
 var scene,
     camera,
@@ -9,7 +10,12 @@ var scene,
     keySDown = false,
     keyDDown = false,
     world,
-    night = false;
+    night = false,
+    counter = 0,
+    posAtt = -6,
+    tot = -15,
+    foggyDay = false;
+
 
 var mappingTracks = [];
 var actualTrack = 0;
@@ -32,8 +38,19 @@ function init() {
   height = window.innerHeight;
 
   scene = new THREE.Scene();
+
+  if(foggyDay){
+  {
+    const near = 10;
+    const far = 50;
+    const color = '#e6e1e2';
+    scene.fog = new THREE.Fog(color, near, far);
+    scene.background = new THREE.Color(color);
+  }
+  }
   camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
   camera.lookAt(scene.position);
+  tot = -15;
   camera.position.set(-10, 15, -15);
 
   renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -50,7 +67,6 @@ function init() {
   drawAnimal();
   drawTerrain();
   drawSky();
-
   world = document.querySelector('.world');
   world.appendChild(renderer.domElement);
 
@@ -84,7 +100,6 @@ function addLights() {
   scene.add(directLight2);
 }
 
-var pickedAnimal = "Sheep";
 function drawAnimal() {
   if(pickedAnimal == "Sheep"){
     animal = new Sheep();
@@ -102,7 +117,6 @@ function drawTerrain() {
   var numLevels = 4;
   var i;
   var track;
-  var posAtt = -6;
   var numLanes = [1,2,3,4];
   var chosenLanes = 0;
   for(i = 0; i < numLevels; i++){
@@ -191,6 +205,12 @@ function animate() {
 
 function render() {
   if(!crash){
+    var dif =animal.boxReference.getWorldPosition(referencePositionAnimal).z +30-posAtt
+    if(dif >= 0){
+      drawTerrain();
+    }
+    tot+=0.03*(1+ (animal.boxReference.getWorldPosition(referencePositionAnimal).z - tot)/4);
+    camera.position.set(-10, 15, tot);
     var referencePositionAnimal = new THREE.Vector3();
     scene.updateMatrixWorld();
     animal.boxReference.getWorldPosition(referencePositionAnimal);
