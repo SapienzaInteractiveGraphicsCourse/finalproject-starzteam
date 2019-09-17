@@ -300,6 +300,8 @@ class Wood{
     if( (Math.abs(referencePosition.z - referencePositionAnimal.z) <= this.sideZ) &&
         (Math.abs(referencePosition.x - referencePositionAnimal.x) <= this.sideX) ){
           this.riverReference.isWood = true;
+          if(referencePositionAnimal.y <= animal.restHeight)
+            animal.group.position.x += 1.5*this.direction*speed;
     }
     else {
       this.riverReference.isWood = false;
