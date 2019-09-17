@@ -50,9 +50,11 @@ function init() {
   }
   }
   camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+  console.log(scene.position);
   camera.lookAt(scene.position);
+  camera.position.set(-2, 15, -15);
+
   tot = -15;
-  camera.position.set(-10, 15, -15);
 
   renderer = new THREE.WebGLRenderer({ alpha: true });
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -210,7 +212,7 @@ function onKeyDown(event) {
 }
 
 function onKeyUp(event) {
-  switch(event.which) {
+    switch(event.which) {
     case 87:
       keyWDown = false;
       break;

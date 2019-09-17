@@ -28,7 +28,7 @@ class Terrain {
 
 const hightRoad = 0.1;
 const widthRoad = 2.1;
-const depthRoad = 15;
+const depthRoad = 50;
 const distRoad = 1.30;
 const highGrass = hightRoad;
 const widthGrass = widthRoad;
