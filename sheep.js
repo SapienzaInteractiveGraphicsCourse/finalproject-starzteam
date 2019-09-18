@@ -4,7 +4,7 @@
 const dist = 0.095;
 const speedSheepUp = 0.12;
 const speedSheepDown = 0.16;
-var last = 'x';
+var last = 'z';
 var sign = +1;
 var angle = 0;
 var inMotion = false;
@@ -26,9 +26,9 @@ class Sheep {
 
     this.boxReference.visible = false;
 
-    this.sideX = 1.1; //lato box / 2
-    this.sideY = 1.2;
-    this.sideZ = 1.25;
+    this.sideX = this.boxReference.geometry.parameters.width/2; //lato box / 2
+    this.sideY = this.boxReference.geometry.parameters.height/2;
+    this.sideZ = this.boxReference.geometry.parameters.depth/2;
 
     this.woolMaterial = new THREE.MeshStandardMaterial({
       color: 0xffffff,
@@ -197,6 +197,11 @@ class Sheep {
           }
           //Resetting stuff and preparing s.t. when going to inMotion i can keep on doing what i was doing till i'm done (shish)
           inMotion = true;
+          if(last != 'z'){
+            var temp = this.sideX;
+            this.sideX = this.sideZ;
+            this.sideZ = temp;
+          }
           last = 'z';
           sign = 1;
           angle = 0;
@@ -213,6 +218,11 @@ class Sheep {
           currentScore--;
           document.getElementById("cScore").innerHTML = currentScore;
           inMotion = true;
+          if(last != 'z'){
+            var temp = this.sideX;
+            this.sideX = this.sideZ;
+            this.sideZ = temp;
+          }
           last = 'z';
           sign = -1;
           angle = 180;
@@ -227,6 +237,11 @@ class Sheep {
         if( !checkTrees(referencePosition) ){
 
           inMotion = true;
+          if(last != 'x'){
+            var temp = this.sideX;
+            this.sideX = this.sideZ;
+            this.sideZ = temp;
+          }
           last = 'x';
           sign = 1;
           angle = 90;
@@ -242,6 +257,11 @@ class Sheep {
 
 
           inMotion = true;
+          if(last != 'x'){
+            var temp = this.sideX;
+            this.sideX = this.sideZ;
+            this.sideZ = temp;
+          }
           last = 'x';
           sign = -1;
           angle = 270;
