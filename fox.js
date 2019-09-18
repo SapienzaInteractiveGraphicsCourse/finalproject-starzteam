@@ -253,7 +253,6 @@ class Fox{
 }
 
 jump(speed, direction) {
-
     if(this.group.position.y >= 1.2 || descending){
       this.group.position.y-= Math.sin(speed)*1.5;
       descending = true;
@@ -340,21 +339,34 @@ jump(speed, direction) {
     this.leftBackDownLeg.rotation.x += legRotation;
 
     if(direction == "ahead"){
-      this.group.position.z = this.group.position.z + 0.093;
+      this.group.position.z = this.group.position.z + 0.10058;
     }
     else if (direction == "behind"){
-      this.group.position.z = this.group.position.z - 0.093;
+      this.group.position.z = this.group.position.z - 0.10058;
     }
     else if(direction == "right"){
-      this.group.position.x = this.group.position.x - 0.093;
+      this.group.position.x = this.group.position.x - 0.10058;
     }
     else if (direction == "left"){
-      this.group.position.x = this.group.position.x + 0.093;
+      this.group.position.x = this.group.position.x + 0.10058;
     }
 
     //resets the postion, since js and floats are not great friends
     if(this.group.position.y <= -0.31){
       this.group.position.y = -0.31;
+      if(direction == "ahead"){
+        this.group.position.z = this.group.position.z + 0.00028;
+      }
+      else if (direction == "behind"){
+        this.group.position.z = this.group.position.z - 0.00028;
+      }
+      else if(direction == "right"){
+        this.group.position.x = this.group.position.x - 0.00028;
+      }
+      else if (direction == "left"){
+        this.group.position.x = this.group.position.x + 0.00028;
+      }
+
       inMotion = false;
       descending = false;
     }
@@ -376,7 +388,13 @@ actionOnPressKey() {
       this.jump(0.06, state);  //keep it going till the jump is complete, we don't want the animation to stop mid-air, neither the user to press too many buttons together
     }
     else{
+      var referencePosition = new THREE.Vector3();
+      scene.updateMatrixWorld();
+      this.boxReference.getWorldPosition(referencePosition);
       if (keyWDown){
+        referencePosition.z += 3.42;
+        if( !checkTrees(referencePosition) ){
+
         currentScore++;
         document.getElementById("cScore").innerHTML = currentScore;
         if(currentScore > highestScore){
@@ -388,22 +406,31 @@ actionOnPressKey() {
         state = "ahead";
         contatore = 0;
         this.jump(0.06, state);
+        }
       }
       else if (keyDDown){
+        referencePosition.x -= 3.57;
+        if( !checkTrees(referencePosition) ){
           state = "right";
           inMotion = true;
           this.group.rotation.y = Math.PI*3/2;
           contatore = 0;
           this.jump(0.06, state);
         }
+      }
       else if (keyADown){
-        inMotion = true;
-        state = "left";
-        this.group.rotation.y = Math.PI/2;
-        contatore = 0;
-        this.jump(0.06, state);
+        referencePosition.x += 3.57;
+        if( !checkTrees(referencePosition) ){
+          inMotion = true;
+          state = "left";
+          this.group.rotation.y = Math.PI/2;
+          contatore = 0;
+          this.jump(0.06, state);
+        }
       }
     else if (keySDown){
+      referencePosition.z -= 3.72;
+      if( !checkTrees(referencePosition) ){
         currentScore--;
         document.getElementById("cScore").innerHTML = currentScore;
         inMotion = true;
@@ -411,6 +438,7 @@ actionOnPressKey() {
         state = "behind";
         contatore = 0;
         this.jump(0.06, state);
+      }
     }
   }
 }

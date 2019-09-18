@@ -1,17 +1,28 @@
 //#######################
 //CHICKEN
 //#######################
-
+const speedUp = 0.12;
+const speedDown = 0.16;
+var last = 'x';
+var sign = +1;
+var inMotion = false;
+var descending = false;
+var currentScore = 0;
+var highestScore = 0;
+var contatore = 0;
+var tot = 0;
+var legRotation = 0;
 class Chicken{
   constructor(){
     this.group = new THREE.Group();
     this.group.position.y = -0.55; //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
+    this.group.position.z = -6;
 
     const boxReferenceGeometry = new THREE.BoxGeometry(0.8, 1.2, 0.9);
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
     this.boxReference = new THREE.Mesh(boxReferenceGeometry, material);
     this.boxReference.position.set(0, -0.5, 0.05);
-    scene.add(this.boxReference);//this.boxReference
+    this.group.add(this.boxReference);
 
     this.boxReference.visible = false;
 
@@ -46,6 +57,8 @@ class Chicken{
     });
 
     this.vAngle = 0;
+    this.restHeight = this.group.position.y;
+
     this.drawBody();
     this.drawHead();
     this.drawLegs();
@@ -58,18 +71,18 @@ class Chicken{
     this.group.add(body);
 
     const leftWingGeometry = new THREE.BoxGeometry(0.23, 0.16, 0.33);
-    const leftWing = new THREE.Mesh(leftWingGeometry, this.skinMaterial);
-    leftWing.castShadow = true;
-    leftWing.receiveShadow = true;
-    leftWing.position.set(0.4, 0, 0);
-    body.add(leftWing);
+    this.leftWing = new THREE.Mesh(leftWingGeometry, this.skinMaterial);
+    this.leftWing.castShadow = true;
+    this.leftWing.receiveShadow = true;
+    this.leftWing.position.set(0.4, 0, 0);
+    body.add(this.leftWing);
 
     const rightWingGeometry = new THREE.BoxGeometry(0.23, 0.16, 0.33);
-    const rightWing = new THREE.Mesh(rightWingGeometry, this.skinMaterial);
-    rightWing.castShadow = true;
-    rightWing.receiveShadow = true;
-    rightWing.position.set(-0.4, 0, 0);
-    body.add(rightWing);
+    this.rightWing = new THREE.Mesh(rightWingGeometry, this.skinMaterial);
+    this.rightWing.castShadow = true;
+    this.rightWing.receiveShadow = true;
+    this.rightWing.position.set(-0.4, 0, 0);
+    body.add(this.rightWing);
 
   }
   drawHead() {
@@ -117,18 +130,18 @@ class Chicken{
   }
   drawLegs() {
     const leftLegGeometry = new THREE.CylinderGeometry(0.06, 0.06, 0.35, 16);
-    const leftLeg = new THREE.Mesh(leftLegGeometry, this.orangeMaterial);
+    this.leftLeg = new THREE.Mesh(leftLegGeometry, this.orangeMaterial);
     //leftLeg.castShadow = true;
-    leftLeg.receiveShadow = true;
-    leftLeg.position.set(0.175, -0.425, 0);
-    this.group.add(leftLeg);
+    this.leftLeg.receiveShadow = true;
+    this.leftLeg.position.set(0.175, -0.425, 0);
+    this.group.add(this.leftLeg);
 
     const leftPawGeometry = new THREE.BoxGeometry(0.27, 0.07, 0.2);
     const leftPaw = new THREE.Mesh(leftPawGeometry, this.orangeMaterial);
     //leftPaw.castShadow = true;
     leftPaw.receiveShadow = true;
     leftPaw.position.set(0, -0.2125, 0);
-    leftLeg.add(leftPaw);
+    this.leftLeg.add(leftPaw);
 
     const leftNail1Geometry = new THREE.BoxGeometry(0.0675, 0.07, 0.1);
     const leftNail1 = new THREE.Mesh(leftNail1Geometry, this.orangeMaterial);
@@ -145,18 +158,18 @@ class Chicken{
     leftPaw.add(leftNail2);
 
     const rightLegGeometry = new THREE.CylinderGeometry(0.06, 0.06, 0.35, 16);
-    const rightLeg = new THREE.Mesh(rightLegGeometry, this.orangeMaterial);
+    this.rightLeg = new THREE.Mesh(rightLegGeometry, this.orangeMaterial);
     //rightLeg.castShadow = true;
-    rightLeg.receiveShadow = true;
-    rightLeg.position.set(-0.175, -0.425, 0);
-    this.group.add(rightLeg);
+    this.rightLeg.receiveShadow = true;
+    this.rightLeg.position.set(-0.175, -0.425, 0);
+    this.group.add(this.rightLeg);
 
     const rightPawGeometry = new THREE.BoxGeometry(0.27, 0.07, 0.2);
     const rightPaw = new THREE.Mesh(rightPawGeometry, this.orangeMaterial);
     //rightPaw.castShadow = true;
     rightPaw.receiveShadow = true;
     rightPaw.position.set(0, -0.2125, 0);
-    rightLeg.add(rightPaw);
+    this.rightLeg.add(rightPaw);
 
     const rightNail1Geometry = new THREE.BoxGeometry(0.0675, 0.07, 0.1);
     const rightNail1 = new THREE.Mesh(rightNail1Geometry, this.orangeMaterial);
@@ -174,27 +187,116 @@ class Chicken{
 
   }
 
-  jump(speed) {
+  jump(speed, dist, asse) {
     this.vAngle += speed;
-    this.group.position.y = Math.sin(this.vAngle) + 1.38;
-    this.referenceY = Math.sin(this.vAngle) + 1.3;
 
-    this.group.position.z = this.group.position.z + 0.025;
-    this.referenceZ += 0.025;
+    //check if i'm going up or down
+    if(this.group.position.y >= 3 || descending){
+      this.group.position.y-= Math.sin(speed)*1.2;
+      descending = true;
+      legRotation = -30 * Math.PI / 180 /19;
+    }
+    else{
+      console.log("here");
+      legRotation  = 30 * Math.PI / 180 /19;
+      this.group.position.y+= Math.sin(speed)*1.2;
+    }
 
-  }
-  actionOnPressKey() {
-    //fai come il cavallo che cammina
-    //alterni le due gambe se una va indietro l'altra va in avanti (puoi usare sin e cos)
-    //nota che appena clicchi l'animazione deve partire e finire in posizione di riposo (zampe sullo stesso livello)
 
-    //puoi fare dei ponti levaoti al posto delle navi che si muovono
+    this.rightLeg.rotation.x += legRotation;
+    console.log(this.rightLeg.rotation.x);
+    this.leftLeg.rotation.x += legRotation;
 
-    if (keyWDown) {
-      this.jump(0.06);
-    } else {
-      if (this.group.position.y <= 0.4) return;
-      this.jump(0.08);
+    //had to speed up the movement since i'm using a different incremental function
+    if(asse=='z') this.group.position.z = this.group.position.z + 0.9473*dist;
+    if(asse=='x') this.group.position.x = this.group.position.x + 0.9473*dist;
+
+    const wingRotation = Math.sin(this.vAngle) * Math.PI / 3 + 1.5;
+    this.rightWing.rotation.z = wingRotation;
+    this.leftWing.rotation.z = -wingRotation;
+
+    //I'm close to the terriain and i don't want to compenetrate, let's stop stalling the keyboard presses
+    //and resetting to original height.
+    if(this.group.position.y <= -0.55){
+      inMotion = false;
+      descending = false;
+      this.group.position.y = -0.55;
+      this.rightWing.rotation.z = 0;
+      this.leftWing.rotation.z = 0;
+      this.rightLeg.rotation.x = 0;
+      this.leftLeg.rotation.x = 0;
+      if(asse=='z') this.group.position.z += 0.000247;
+      if(asse=='x') this.group.position.x += 0.000247;
     }
   }
+  actionOnPressKey() {
+    if(inMotion){
+      this.jump(speedDown, sign * dist, last);
+    }
+    else{
+      var referencePosition = new THREE.Vector3();
+      scene.updateMatrixWorld();
+      this.boxReference.getWorldPosition(referencePosition);
+      if (keyWDown){
+        //check su checkTrees
+
+        referencePosition.z += 3.42;
+        if( !checkTrees(referencePosition) ){
+          currentScore++;
+          document.getElementById("cScore").innerHTML = currentScore;
+          if(currentScore > highestScore){
+            highestScore = currentScore;
+            document.getElementById("hScore").innerHTML = highestScore;
+          }
+          //Resetting stuff and preparing s.t. when going to inMotion i can keep on doing what i was doing till i'm done (shish)
+          inMotion = true;
+          last = 'z';
+          sign = 1;
+          this.vAngle = 0;
+          this.group.rotation.y = rad(0);
+          this.jump(speedUp, dist, 'z');
+        }
+      }
+      else if (keySDown){
+        //check su checkTrees
+
+        referencePosition.z -= 3.72;
+        if( !checkTrees(referencePosition) ){
+          currentScore--;
+          document.getElementById("cScore").innerHTML = currentScore;
+          inMotion = true;
+          last = 'z';
+          sign = -1;
+          this.vAngle = 0;
+          this.group.rotation.y = rad(180);
+          this.jump(speedUp, -dist, 'z');
+        }
+      }
+      else if (keyADown) {
+        //check su checkTrees
+        referencePosition.x += 3.57;
+        if( !checkTrees(referencePosition) ){
+          inMotion = true;
+          last = 'x';
+          sign = 1;
+          this.vAngle = 0;
+          this.group.rotation.y = rad(90);
+          this.jump(speedUp, dist, 'x');
+        }
+      }
+      else if (keyDDown) {
+        //check su checkTrees
+
+        referencePosition.x -= 3.57;
+        if( !checkTrees(referencePosition) ){
+          inMotion = true;
+          last = 'x';
+          sign = -1;
+          this.vAngle = 0;
+          this.group.rotation.y = rad(270);
+          this.jump(speedUp, -dist, 'x');
+        }
+      }
+    }
+}
 }
