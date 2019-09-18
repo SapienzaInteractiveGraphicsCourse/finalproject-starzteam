@@ -186,7 +186,6 @@ class Sheep {
       this.boxReference.getWorldPosition(referencePosition);
       if (keyWDown){
         //check su checkTrees
-
         referencePosition.z += 3.42;
         if( !checkTrees(referencePosition) ){
 
@@ -251,5 +250,5 @@ class Sheep {
         }
       }
     }
-}
+  }
 }

@@ -27,13 +27,16 @@ class Terrain {
 }
 
 const hightRoad = 0.1;
-const widthRoad = 2.1;
+const widthRoad = 2.0;
 const depthRoad = 50;
-const distRoad = 1.30;
+const distRoad = 1.25;
 const highGrass = hightRoad;
-const widthGrass = widthRoad;
+const widthGrass = widthRoad+0.1;
 const depthGrass =  depthRoad/3;
 const distGrass = depthGrass;
+const highRiver = hightRoad;
+const widthRiver = 2*widthRoad;
+const depthRiver = depthRoad;
 
 class Road {
   constructor(positionZ, numLanes) {
@@ -105,8 +108,8 @@ class Road {
     for(var i = 0; i < (num*2)-1; i++){
       if(i%2 == 0){
         var road = new THREE.Mesh(new THREE.BoxBufferGeometry( widthRoad, hightRoad, depthRoad),  this.materialAsphalt);
-        if(i>0) road.position.x = widthRoad-0.8;
-        else road.position.x = widthRoad;
+        if(i>0) road.position.x = widthRoad-0.75;
+        else road.position.x = widthRoad+0.05;
         road.receiveShadow = true;
         this.prec.add(road);
         this.prec = road;
@@ -198,20 +201,22 @@ class River{
 
     this.occupiedSpace += widthGrass;
 
-    this.river = new THREE.Mesh(new THREE.BoxBufferGeometry( 2.25*widthRoad + widthGrass, hightRoad, depthRoad),  this.materialRiver);
+    this.river = new THREE.Mesh(new THREE.BoxBufferGeometry( widthRiver, highRiver, depthRiver),  this.materialRiver);
     this.river.receiveShadow = true;
-    this.river.position.x = -2.12*widthRoad;
+    this.river.position.x = -0.75*widthRiver;
     this.river.position.y = -0.1;
     this.middleGrass.add(this.river);
-    this.occupiedSpace += 2.25*widthRoad + widthGrass;
+    this.occupiedSpace += widthRiver;
 
-    this.sideX = 1.5*depthRoad/2;
-    this.sideZ = 1.5*(2.25*widthRoad + widthGrass)/2;
+    this.sideX = 1.5*widthRiver/2;
+    this.sideZ = 1.5*widthRiver/2;
 
     this.isWood = false;
 
     this.vehicles = [];
-    var trunk = new Wood(this);
+    var trunk = new Wood(this, 1);
+    this.vehicles.push(trunk);
+    trunk = new Wood(this, -1);
     this.vehicles.push(trunk);
 
     var length = this.vehicles.length;
@@ -244,12 +249,12 @@ class River{
 }
 
 class Wood{
-  constructor(river){
+  constructor(river, posX){
 
     this.riverReference = river;
 
     this.group = new THREE.Group();
-    this.group.position.set(2, 0, 0);
+    this.group.position.set(posX, 0, 0);
 
     this.materialWoodLight = new THREE.MeshPhongMaterial({
       color: 0x7b5d33,
@@ -276,7 +281,7 @@ class Wood{
 
   drawParts() {
 
-    this.trunk = new THREE.Mesh( new THREE.BoxBufferGeometry( widthRoad, 3*hightRoad, 5.0 ), this.materialWoodLight );
+    this.trunk = new THREE.Mesh( new THREE.BoxBufferGeometry( widthRoad-widthRoad/4, 3*hightRoad, 5.0 ), this.materialWoodLight );
     this.trunk.castShadow = true;
     this.trunk.receiveShadow = true;
     this.group.add(this.trunk);
