@@ -283,7 +283,6 @@ class Car {
     //se abs(c1 - c2) <= l1/2  + l2/2 sia per x che z (and)
     var referencePosition = new THREE.Vector3();
     var referencePositionAnimal = new THREE.Vector3();
-    scene.updateMatrixWorld();
 
     this.boxReference.getWorldPosition(referencePosition);
     this.animalReference.boxReference.getWorldPosition(referencePositionAnimal);

@@ -343,7 +343,6 @@ function checkTrees(position){
     trees = actualListTracks[i].trees;
     lengthTrees = trees.length;
     for(j = 0; j < lengthTrees; j++){
-      scene.updateMatrixWorld();
       trees[j].trunk.getWorldPosition(referencePosition);
       if( (Math.abs(referencePosition.x - position.x) <= animal.sideX + trees[j].sideX) &&
           (Math.abs(referencePosition.z - position.z) <= animal.sideZ + trees[j].sideZ) ){

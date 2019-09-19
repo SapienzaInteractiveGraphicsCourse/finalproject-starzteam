@@ -272,7 +272,6 @@ class River{
 
     var referencePosition = new THREE.Vector3();
     var referencePositionAnimal = new THREE.Vector3();
-    scene.updateMatrixWorld();
 
     this.river.getWorldPosition(referencePosition);
     animal.boxReference.getWorldPosition(referencePositionAnimal);
@@ -340,7 +339,6 @@ class Wood{
 
     var referencePosition = new THREE.Vector3();
     var referencePositionAnimal = new THREE.Vector3();
-    scene.updateMatrixWorld();
 
     this.trunk.getWorldPosition(referencePosition); //OCCHIO, il sistema di riferimento world e quello locale sono diversi!!! quindi dopo una rotazione cambiano x e z
     //cambiano anche tra position.x e getWorldPosition.x
