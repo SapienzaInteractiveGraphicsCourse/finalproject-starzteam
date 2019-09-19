@@ -125,8 +125,9 @@ function getNewTerrain(posZ = -1){
   var numLanes = [1,2,3,4];
   if(posZ == -1){
     if(Math.floor(Math.random()*2) == 0){
-      track = new Road(posAtt, numLanes[Math.floor(Math.random()*numLanes.length)]);
-      numberOfJumps+=2;
+      var n = Math.floor(Math.random()*numLanes.length);
+      track = new Road(posAtt, numLanes[n]);
+      numberOfJumps+=n+2;
     }
     else {
       track = new River(posAtt);
@@ -267,7 +268,7 @@ function render() {
       }
 
     }
-    //camera.position.set(0, 15, tot); //TO UNCOMMENT
+    camera.position.set(0, 15, tot); //TO UNCOMMENT
 
     var referencePositionAnimal = new THREE.Vector3();
     animal.boxReference.getWorldPosition(referencePositionAnimal);
