@@ -12,7 +12,8 @@ const depthRiver = depthRoad;
 const highWood = 3*hightRoad;
 const widthWood = widthRoad-widthRoad/4;
 const numWood = 6;
-const depthWood = 5.0
+const numCar = 2;
+const depthWood = 5.0;
 var splash = false;
 
 class Road {
@@ -82,6 +83,17 @@ class Road {
     var road = null;
     var j = 0;
 
+    var listSpeed = [0.02, 0.05, 0.1, 0.2];
+    var listInitial = [-10, -20, -30, -40];
+    var listDistance = [5, 10, 15];
+    var newSpeed;
+    var newInitial;
+    var newDirection;
+    var totalDistance = 0;
+
+    var k;
+    var car;
+
     for(var i = 0; i < (num*2)-1; i++){
       if(i%2 == 0){
         var road = new THREE.Mesh(new THREE.BoxBufferGeometry( widthRoad, hightRoad, depthRoad),  this.materialAsphalt);
@@ -95,10 +107,25 @@ class Road {
         this.prec = road;
         this.occupiedSpace += widthRoad;
 
-        var car = new Car(animal);
-        this.vehicles.push(car);
-        this.prec.add(this.vehicles[j].group);
-        j++;
+        newSpeed = listSpeed[Math.floor(Math.random()*listSpeed.length)];
+        newInitial = listInitial[Math.floor(Math.random()*listInitial.length)];
+        if(Math.floor(Math.random()*2))
+          newDirection = 1;
+        else
+          newDirection = -1
+
+        for(k = 0; k < numCar; k++){
+
+          totalDistance += listDistance[Math.floor(Math.random()*listDistance.length)];
+
+          car = new Car(animal, newSpeed, newInitial + totalDistance, newDirection);
+          this.vehicles.push(car);
+          this.prec.add(this.vehicles[j].group);
+          j++;
+
+        }
+
+        totalDistance = 0;
       }else{
         road = new THREE.Mesh(new THREE.PlaneGeometry(widthRoad/4, depthRoad),  this.materialLine);
         road.position.x = distRoad;
@@ -245,7 +272,6 @@ class River{
 
     var referencePosition = new THREE.Vector3();
     var referencePositionAnimal = new THREE.Vector3();
-    scene.updateMatrixWorld();
 
     this.river.getWorldPosition(referencePosition);
     animal.boxReference.getWorldPosition(referencePositionAnimal);
@@ -313,7 +339,6 @@ class Wood{
 
     var referencePosition = new THREE.Vector3();
     var referencePositionAnimal = new THREE.Vector3();
-    scene.updateMatrixWorld();
 
     this.trunk.getWorldPosition(referencePosition); //OCCHIO, il sistema di riferimento world e quello locale sono diversi!!! quindi dopo una rotazione cambiano x e z
     //cambiano anche tra position.x e getWorldPosition.x
@@ -479,27 +504,27 @@ class Bush{
     else this.group.position.z = positionZ
       this.group.scale.set(1.5, 1.5, 1.5);
     this.group.rotation.x = rad(-90);
-    
+
     this.materialCrown = new THREE.MeshLambertMaterial({
       color: 0x7aa21d,
       flatShading: true
     });
-    
+
     var texture = new THREE.TextureLoader().load( 'texture/bush.jpg' );
     this.material = new THREE.MeshBasicMaterial( { map: texture });
     console.log("texture loaded");
-    
+
     this.vAngle = 0;
-    
+
     this.drawParts();
   }
-  
+
   drawParts() {
     this.sideX = 0.5*1.5; //lato box / 2
     this.sideZ = 0.5*1.5;
-    
+
     this.height = bushHeights[Math.floor(Math.random()*bushHeights.length)];
-    
+
     this.trunk = new THREE.Mesh( new THREE.DodecahedronGeometry(this.height/3, 1), this.material);
     this.trunk.position.z = -this.height/2;
     this.trunk.castShadow = true;

@@ -247,7 +247,6 @@ class Chicken{
     }
     else{
       var referencePosition = new THREE.Vector3();
-      scene.updateMatrixWorld();
       this.boxReference.getWorldPosition(referencePosition);
       if (keyWDown){
         //check su checkTrees
