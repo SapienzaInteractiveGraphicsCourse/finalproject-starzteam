@@ -14,7 +14,11 @@ var scene,
     counter = 0,
     posAtt = -9.75,
     tot = -15,
-    foggyDay = false;
+    foggyDay = false,
+    numberOfJumps = 0,
+    added = false,
+    outrun = false,
+    sp = [];
 
 
 var mappingTracks = [];
@@ -51,7 +55,7 @@ function init() {
   }
   camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
   camera.lookAt(scene.position);
-  camera.position.set(-2, 15, -15);
+  camera.position.set(0, 20, -15);
 
   tot = -15;
 
@@ -120,10 +124,19 @@ function getNewTerrain(posZ = -1){
   var pos;
   var numLanes = [1,2,3,4];
   if(posZ == -1){
-    if(Math.floor(Math.random()*2) == 0)
+    if(Math.floor(Math.random()*2) == 0){
       track = new Road(posAtt, numLanes[Math.floor(Math.random()*numLanes.length)]);
-    else track = new River(posAtt);
-  } else track = new GrassStart(posAtt);
+      numberOfJumps+=2;
+    }
+    else {
+      track = new River(posAtt);
+      numberOfJumps+=3;
+    }
+  }
+  else {
+    track = new GrassStart(posAtt);
+    numberOfJumps+=1;
+  }
   pos = track.occupiedSpace*1.5;
   return {
     track: track,
@@ -136,7 +149,7 @@ function drawTerrain() {
   var i;
   var track;
   var values;
-  
+
   values = getNewTerrain(0);
   track = values.track;
   posAtt += values.pos;
@@ -234,20 +247,26 @@ function animate() {
 }
 
 function render() {
+
   if(!crash){
-    /*
-    var dif =animal.boxReference.getWorldPosition(referencePositionAnimal).z +30-posAtt
-    if(dif >= 0){
-      addTerrain(4); //please use addTerrain, not drawTerrain
+    if ((tot > animal.boxReference.getWorldPosition(referencePositionAnimal).z + 0.2) ||
+      animal.boxReference.getWorldPosition(referencePositionAnimal).x >30 ||
+      animal.boxReference.getWorldPosition(referencePositionAnimal).x <-30){
+      crash = true;
+      outrun = true;
+      window.alert("Outrunned!");
     }
-    if(animal.boxReference.getWorldPosition(referencePositionAnimal).z - tot >= 0){
-      tot+=0.04*(1+ (animal.boxReference.getWorldPosition(referencePositionAnimal).z - tot)/4);
+    else if(highestScore != 0){
+      if((animal.boxReference.getWorldPosition(referencePositionAnimal).z - tot >= 0) && (highestScore < numberOfJumps)){
+        tot+=0.04*(1+ (animal.boxReference.getWorldPosition(referencePositionAnimal).z - tot)/4);
+      }
+      else if (highestScore < numberOfJumps){
+        tot+=0.04;
+      }
+
     }
-    else{
-      tot+=0.04;
-    }
-    camera.position.set(-10, 15, tot);
-    */
+    camera.position.set(0, 15, tot);
+
     var referencePositionAnimal = new THREE.Vector3();
     scene.updateMatrixWorld();
     animal.boxReference.getWorldPosition(referencePositionAnimal);
@@ -281,7 +300,34 @@ function render() {
       }
     }
   }
+  else if(!splash){
+    if(!outrun) animal.crashAnimation();
+  }
+  else{
+    animal.sunkAnimation();
+    activateSplash(animal.boxReference.getWorldPosition(referencePositionAnimal).z, animal.boxReference.getWorldPosition(referencePositionAnimal).x,150);
+  }
   renderer.render(scene, camera);
+}
+
+var sign1 = 1;
+var sign2 = 1;
+function activateSplash(posZ,posX,howMany){
+  if(!added){
+    for(var i = 0; i < howMany; i++){
+      sp.push(new splashParticles(posZ, posX, sign1, sign2));
+      sign2 = sign1*sign2;
+      sign1 = sign1 * -1;
+      console.log(sign1, sign2);
+      scene.add(sp[i].group);
+    }
+    added = true;
+  }
+  else{
+    for(var i = 0; i < howMany; i++){
+      sp[i].animateParticles();
+    }
+  }
 }
 
 function checkTrees(position){

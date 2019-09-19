@@ -12,6 +12,7 @@ var descending = false;
 var currentScore = 0;
 var highestScore = 0;
 var oldPos = 0;
+var crashSpeed = 0.2;
 class Sheep {
   constructor() {
     this.selected = 0;
@@ -141,6 +142,7 @@ class Sheep {
     this.backLeftLeg.rotation.x = -this.frontLeftLeg.rotation.x;
     this.group.add(this.backLeftLeg);
   }
+
   jump(speed, dist, gradi, asse) {
     this.group.rotation.y = rad(gradi);
     this.vAngle += speed;
@@ -285,4 +287,20 @@ class Sheep {
       }
     }
   }
+  crashAnimation(){
+    this.group.position.y+=crashSpeed;
+    crashSpeed+=(1/8)*crashSpeed;
+    this.group.rotation.y += rad(15 );
+    this.group.rotation.z += rad(10);
+    if(this.group.position.y > 20){
+      window.alert("Hit by a car!\n GAME OVER!");
+    }
+  }
+  sunkAnimation(){
+    this.group.position.y-=4*crashSpeed;
+    if(this.group.position.y < -35){
+      window.alert("Felt in the river!\n GAME OVER!");
+    }
+  }
+
 }

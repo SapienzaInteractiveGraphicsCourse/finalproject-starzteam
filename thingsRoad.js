@@ -1,6 +1,6 @@
 const hightRoad = 0.1;
 const widthRoad = 2.5;
-const depthRoad = 50;
+const depthRoad = 90;
 const distRoad = 1.3;
 const highGrass = hightRoad;
 const widthGrass = widthRoad;
@@ -13,6 +13,7 @@ const highWood = 3*hightRoad;
 const widthWood = widthRoad-widthRoad/4;
 const numWood = 8;
 const depthWood = 5.0
+var splash = false;
 
 class Road {
   constructor(positionZ, numLanes) {
@@ -111,7 +112,7 @@ class Road {
 
     this.trees = [];
 
-    
+
     var tree = new Three();
     this.rightGrass.add(tree.group);
     this.trees.push(tree);
@@ -193,12 +194,12 @@ class River{
     this.sideZ = 1.5*this.river.geometry.parameters.width/2;
 
     this.vehicles = [];
-    
+
     var pos = -depthRoad/2;
     var posRand = Math.round(Math.random()*3);
     var dir = 1;
     if(Math.floor(Math.random()*2) == 0) dir = -1;
-    
+
     for(var i = 0; i < numWood; i++){
       console.log(i, pos);
       var trunk = new Wood(1.2, dir);
@@ -207,7 +208,7 @@ class River{
       trunk = new Wood(-1.2, -dir);
       trunk.group.position.z = pos;
       pos += depthWood+depthWood/2;
-      this.vehicles.push(trunk); 
+      this.vehicles.push(trunk);
     }
 
     var length = this.vehicles.length;
@@ -217,28 +218,28 @@ class River{
     }
 
     this.trees = [];
-    
+
     var now = -depthGrass/2+1.5;
     var tree = null;
     while(now <= depthGrass/3){
       if(Math.floor(Math.random()*2) == 0){
         tree = new Three();
         this.rightGrass.add(tree.group);
-        this.trees.push(tree); 
+        this.trees.push(tree);
       }
       now+=4;
     }
-    
+
     now = -depthGrass/3;
     while(now <= depthGrass/2+1.5){
       if(Math.floor(Math.random()*2) == 0){
         tree = new Three();
         this.leftGrass.add(tree.group);
-        this.trees.push(tree); 
+        this.trees.push(tree);
       }
       now+=4;
     }
-    
+
   }
 
   doCheck(){
@@ -261,7 +262,7 @@ class River{
         (Math.abs(referencePosition.z - referencePositionAnimal.z) <= this.sideZ) &&
         referencePositionAnimal.y <= animal.restHeight && !checkIsWood){
           crash = true;
-          window.alert("SPLASH");
+          splash = true;
     }
 
   }
@@ -393,8 +394,6 @@ class Three {
   }
 }
 
-
-// To define if this object is useful or not
 class GrassStart {
   constructor(positionZ) {
     this.occupiedSpace = 0;
@@ -408,7 +407,7 @@ class GrassStart {
       color: 0xbaf455,
       flatShading: true
     });
-    
+
     this.materialLeft = new THREE.MeshPhongMaterial({
       color: 0x99C846,
       flatShading: true
@@ -437,21 +436,21 @@ class GrassStart {
     this.middleGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( 2*widthGrass, highGrass, depthGrass), this.materialMiddle);
     this.middleGrass.receiveShadow = true;
     this.group.add(this.middleGrass);
-    
+
     this.leftGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( 2*widthGrass, highGrass, depthGrass), this.materialLeft);
     this.leftGrass.position.z = - distGrass;
     this.middleGrass.receiveShadow = true;
     this.middleGrass.add(this.leftGrass);
-    
+
     this.rightGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( 2*widthGrass, highGrass, depthGrass), this.materialLeft);
     this.rightGrass.position.z = distGrass;
     this.middleGrass.receiveShadow = true;
     this.middleGrass.add(this.rightGrass);
-    
+
     this.occupiedSpace += widthGrass;
-    
+
     this.trees = [];
-    
+
     var now = -depthGrass*2-(depthGrass-1.8)/2;
     var tree = null;
     while(now < (depthGrass-1.5)/2){
@@ -462,8 +461,52 @@ class GrassStart {
       now+=2.5;
     }
   }
-  
+
   doCheck(){
-    
-  }  
+
+  }
 }
+class splashParticles{
+  constructor(positionZ,positionX, signX, signZ) {
+    this.group = new THREE.Group();
+
+    this.group.position.y = Math.log(0.36);
+    //console.log("z");
+    //console.log(positionZ);
+    //console.log("x");
+    //console.log(positionX);
+    this.group.position.z = positionZ;
+    this.group.position.x = positionX;
+    this.mySpeed =Math.random() * 0.7 + 0.3;
+    this.signX = signX ;
+    this.signZ = signZ ;
+
+    this.group.scale.set(1.5, 1.5, 1.5);
+    this.materialRiver = new THREE.MeshPhongMaterial({
+      color: 0x33CCFF,
+      flatShading: true
+    });
+
+    this.drawParts();
+  }
+
+  drawParts() {
+      const particleGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+      this.particle = new THREE.Mesh( particleGeometry, this.materialRiver );
+      this.particle.position.z = this.signZ * Math.random()*3;
+      this.particle.position.x = this.signX * Math.random()*3;
+      this.particle.castShadow = true;
+      this.particle.receiveShadow = true;
+      this.group.add(this.particle);
+    }
+
+
+  animateParticles(){
+      if(this.group.position.y > 5){
+        this.mySpeed = -this.mySpeed;
+      }
+      this.group.position.y += this.mySpeed;
+      this.group.position.x += 0.1*this.signX/3;
+      this.group.position.z += 0.1*this.signZ/3;
+    }
+  }

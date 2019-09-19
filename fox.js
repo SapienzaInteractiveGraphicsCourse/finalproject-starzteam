@@ -446,4 +446,19 @@ actionOnPressKey() {
     }
   }
 }
+crashAnimation(){
+  this.group.position.y+=crashSpeed;
+  crashSpeed+=(1/8)*crashSpeed;
+  this.group.rotation.y += rad(15 );
+  this.group.rotation.z += rad(10);
+  if(this.group.position.y > 20){
+    window.alert("Hit by a car!\n GAME OVER!");
+  }
+}
+sunkAnimation(){
+  this.group.position.y-=4*crashSpeed;
+  if(this.group.position.y < -35){
+    window.alert("Felt in the river!\n GAME OVER!");
+  }
+}
 }
