@@ -122,8 +122,7 @@ function getNewTerrain(){
   var numLanes = [1,2,3,4];
   if(Math.floor(Math.random()*2) == 0)
     track = new Road(posAtt, numLanes[Math.floor(Math.random()*numLanes.length)]);
-  else
-    track = new River(posAtt);
+  else track = new River(posAtt);
   pos = track.occupiedSpace*1.5;
   return {
     track: track,

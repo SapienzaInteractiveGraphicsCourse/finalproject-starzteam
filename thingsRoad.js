@@ -27,11 +27,11 @@ class Terrain {
 }
 
 const hightRoad = 0.1;
-const widthRoad = 2.0;
+const widthRoad = 2.5;
 const depthRoad = 50;
-const distRoad = 1.25;
+const distRoad = 1.3;
 const highGrass = hightRoad;
-const widthGrass = widthRoad+0.1;
+const widthGrass = widthRoad;
 const depthGrass =  depthRoad/3;
 const distGrass = depthGrass;
 const highRiver = hightRoad;
@@ -108,8 +108,11 @@ class Road {
     for(var i = 0; i < (num*2)-1; i++){
       if(i%2 == 0){
         var road = new THREE.Mesh(new THREE.BoxBufferGeometry( widthRoad, hightRoad, depthRoad),  this.materialAsphalt);
-        if(i>0) road.position.x = widthRoad-0.75;
-        else road.position.x = widthRoad+0.05;
+        if(i>0){
+          road.position.x = widthRoad/2-0.05;
+          road.rotateX(rad(90));
+          road.position.z = -0.07;
+        } else road.position.x = widthRoad;
         road.receiveShadow = true;
         this.prec.add(road);
         this.prec = road;
@@ -120,12 +123,13 @@ class Road {
         this.prec.add(this.vehicles[j].group);
         j++;
       }else{
-        road = new THREE.Mesh(new THREE.BoxBufferGeometry( widthRoad/4, hightRoad, depthRoad),  this.materialLine);
+        road = new THREE.Mesh(new THREE.PlaneGeometry(widthRoad/4, depthRoad),  this.materialLine);
         road.position.x = distRoad;
+        road.position.y = 0.07;
+        road.rotateX(rad(-90));
         road.receiveShadow = true;
         this.prec.add(road);
         this.prec = road;
-        this.occupiedSpace += widthRoad/4;
       }
     }
 
