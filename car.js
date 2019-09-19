@@ -9,23 +9,25 @@ class Car {
     this.group = new THREE.Group();
 
     var angle = 0;
-    //var positionX = -0.65;
-    var positionX = 0;
-    var positionZ = -7;
+
+    var initialPositions = [-7, -10, -15, -20, -25, -30];
+    //var initialPositions = [-45];
+
+    var positionZ = initialPositions[Math.floor(Math.random()*initialPositions.length)];
     this.direction = 1;
 
     if(Math.floor(Math.random()*2) == 0){
-      positionX = 0;
-      positionZ = 7;
+      positionZ = -positionZ;
       angle = 180;
       this.direction = -1;
     }
 
-    var speedList = [0.01, 0.05, 0.1];
+    var speedList = [0.02, 0.05, 0.1, 0.2];
+    //var speedList = [0.2];
 
     this.speed = speedList[Math.floor(Math.random()*speedList.length)];
 
-    this.group.position.set(positionX, 1, positionZ); //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
+    this.group.position.set(0, 1, positionZ); //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
     this.group.rotation.set(0, rad(angle), 0);
 
     var boxReferenceGeometry = new THREE.BoxGeometry(1.6, 2, 3.5);
@@ -277,6 +279,8 @@ class Car {
   }
   goForward(){ //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
     this.group.position.z += this.direction*this.speed;
+    if(Math.abs(this.group.position.z) > depthRoad/2) //I can use the abs because the position is relative to the Road (not global in world coords)
+      this.group.position.z = -this.group.position.z;
 
     //to find these values:
     //dobbiamo trovare un BoxGeometry che racchiude tutto l'oggetto ed estrarne il centro. Da quello si può valutare se due oggetti si toccano

@@ -1,5 +1,5 @@
 'use strict';
-var pickedAnimal = "Chicken";
+var pickedAnimal = "Sheep";
 
 var scene,
     camera,

@@ -11,7 +11,7 @@ const widthRiver = 2*widthRoad;
 const depthRiver = depthRoad;
 const highWood = 3*hightRoad;
 const widthWood = widthRoad-widthRoad/4;
-const numWood = 4;
+const numWood = 6;
 const depthWood = 5.0
 var splash = false;
 
@@ -198,14 +198,13 @@ class River{
     var pos = -depthRoad/2;
     var posRand = Math.round(Math.random()*3);
     var dir = 1;
-    if(Math.floor(Math.random()*2) == 0) dir = -1;
 
     for(var i = 0; i < numWood; i++){
       console.log(i, pos);
-      var trunk = new Wood(1.2, dir);
+      var trunk = new Wood(1.2, -dir);
       trunk.group.position.z = -pos+posRand;
       this.vehicles.push(trunk);
-      trunk = new Wood(-1.2, -dir);
+      trunk = new Wood(-1.2, dir);
       trunk.group.position.z = pos;
       pos += depthWood+depthWood/2;
       this.vehicles.push(trunk);
@@ -288,7 +287,7 @@ class Wood{
 
     this.direction = dir;
 
-    var speedList = [0.01, 0.05, 0.1];
+    var speedList = [0.05];
 
     this.speed = speedList[Math.floor(Math.random()*speedList.length)];
 
