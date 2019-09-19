@@ -12,7 +12,7 @@ var scene,
     world,
     night = false,
     counter = 0,
-    posAtt = -6,
+    posAtt = -9.75,
     tot = -15,
     foggyDay = false;
 
@@ -50,7 +50,6 @@ function init() {
   }
   }
   camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-  console.log(scene.position);
   camera.lookAt(scene.position);
   camera.position.set(-2, 15, -15);
 
@@ -116,13 +115,15 @@ function drawAnimal() {
   scene.add(animal.group);
 }
 
-function getNewTerrain(){
+function getNewTerrain(posZ = -1){
   var track;
   var pos;
   var numLanes = [1,2,3,4];
-  if(Math.floor(Math.random()*2) == 0)
-    track = new Road(posAtt, numLanes[Math.floor(Math.random()*numLanes.length)]);
-  else track = new River(posAtt);
+  if(posZ == -1){
+    if(Math.floor(Math.random()*2) == 0)
+      track = new Road(posAtt, numLanes[Math.floor(Math.random()*numLanes.length)]);
+    else track = new River(posAtt);
+  } else track = new GrassStart(posAtt);
   pos = track.occupiedSpace*1.5;
   return {
     track: track,
@@ -131,12 +132,12 @@ function getNewTerrain(){
 }
 
 function drawTerrain() {
-  var numLevels = 4;
+  var numLevels = 5;
   var i;
   var track;
   var values;
-
-  values = getNewTerrain();
+  
+  values = getNewTerrain(0);
   track = values.track;
   posAtt += values.pos;
   scene.add(track.group);
@@ -153,12 +154,6 @@ function drawTerrain() {
     mappingTracks.push(posAtt);
   }
   actualListTracks = tracks.slice(0, 2);
-  /*
-   * To test only the road or the river
-  var track = new Road(0,2);
-  scene.add(track.group);
-  tracks.push(track);
-  */
 }
 
 function addTerrain(numLevels){
