@@ -20,10 +20,9 @@ class Chicken{
     this.group.position.y = -0.55; //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
     this.group.position.z = -6;
 
-    const boxReferenceGeometry = new THREE.BoxGeometry(0.8, 1.2, 0.9);
+    const boxReferenceGeometry = new THREE.BoxGeometry(0.8, 1.2, 1);
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
     this.boxReference = new THREE.Mesh(boxReferenceGeometry, material);
-    this.boxReference.position.set(0, -0.5, 0.05);
     this.group.add(this.boxReference);
 
     this.boxReference.visible = false;
@@ -32,9 +31,9 @@ class Chicken{
     this.referenceY = -0.5;
     this.referenceZ = 0.05;
 
-    this.sideX = 0.4;
-    this.sideY = 0.6;
-    this.sideZ = 0.45;
+    this.sideX = this.boxReference.geometry.parameters.width/2;
+    this.sideY = this.boxReference.geometry.parameters.width/2;
+    this.sideZ = this.boxReference.geometry.parameters.width/2;
 
 
     this.skinMaterial = new THREE.MeshStandardMaterial({

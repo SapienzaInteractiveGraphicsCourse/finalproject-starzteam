@@ -11,7 +11,7 @@ const widthRiver = 2*widthRoad;
 const depthRiver = depthRoad;
 const highWood = 3*hightRoad;
 const widthWood = widthRoad-widthRoad/4;
-const numWood = 8;
+const numWood = 4;
 const depthWood = 5.0
 var splash = false;
 
@@ -324,7 +324,7 @@ class Wood{
         (Math.abs(referencePosition.x - referencePositionAnimal.x) <= this.sideX) ){
           this.isWood = true;
           if(referencePositionAnimal.y <= animal.restHeight)
-            animal.group.position.x += 1.5*this.direction*speed;
+            animal.group.position.x += 1.5*this.direction*this.speed;
     }
     else {
       this.isWood = false;

@@ -19,17 +19,17 @@ class Fox{
     this.group.position.z = -6;
     this.restHeight = this.group.position.y;
 
-    const boxReferenceGeometry = new THREE.BoxGeometry(2.2, 2.4, 2.5);
+    const boxReferenceGeometry = new THREE.BoxGeometry(0.6*size, 1*size, 2*size);
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
     this.boxReference = new THREE.Mesh(boxReferenceGeometry, material);
-    this.boxReference.position.set(0, 0, 0.15);
+    this.boxReference.position.set(0, -0.2, 0);
     this.group.add(this.boxReference);
 
     this.boxReference.visible = false;
 
-    this.sideX = 1.1; //lato box / 2
-    this.sideY = 1.2;
-    this.sideZ = 1.25;
+    this.sideX = this.boxReference.geometry.parameters.width/2; //lato box / 2
+    this.sideY = this.boxReference.geometry.parameters.height/2;
+    this.sideZ = this.boxReference.geometry.parameters.depth/2;
 
     this.skinMaterial = new THREE.MeshStandardMaterial({
       color: 0xff4500,
