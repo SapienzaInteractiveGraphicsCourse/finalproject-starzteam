@@ -113,11 +113,11 @@ class Road {
     this.trees = [];
 
 
-    var tree = new Three();
+    var tree = new Tree();
     this.rightGrass.add(tree.group);
     this.trees.push(tree);
 
-    tree = new Three();
+    tree = new Tree();
     this.leftGrass.add(tree.group);
     this.trees.push(tree)
   }
@@ -222,7 +222,7 @@ class River{
     var tree = null;
     while(now <= depthGrass/3){
       if(Math.floor(Math.random()*2) == 0){
-        tree = new Three();
+        tree = new Tree();
         this.rightGrass.add(tree.group);
         this.trees.push(tree);
       }
@@ -232,7 +232,7 @@ class River{
     now = -depthGrass/3;
     while(now <= depthGrass/2+1.5){
       if(Math.floor(Math.random()*2) == 0){
-        tree = new Three();
+        tree = new Tree();
         this.leftGrass.add(tree.group);
         this.trees.push(tree);
       }
@@ -332,21 +332,21 @@ class Wood{
   }
 }
 
-const threeHeights = [1.0,1.5,2.0,2.5,3.0];
-//const threePositions = [1.0,1.2,1.4,1.6,1.8,-1.0,-1.2,-1.4,-1.6,-1.8,2.0,2.2,2.4,2.6,2.8,3.0,-2.0,-2.2,-2.4,-2.6,-2.8,-3.0];
-const threePositions = [1.0,1.4,1.8,-1.0,-1.4,-1.8,2.0,2.4,2.8,3.0,-2.0,-2.4,-2.8,-3.0];
+const treeHeights = [1.0,1.5,2.0,2.5,3.0];
+//const treePositions = [1.0,1.2,1.4,1.6,1.8,-1.0,-1.2,-1.4,-1.6,-1.8,2.0,2.2,2.4,2.6,2.8,3.0,-2.0,-2.2,-2.4,-2.6,-2.8,-3.0];
+const treePositions = [1.0,1.4,1.8,-1.0,-1.4,-1.8,2.0,2.4,2.8,3.0,-2.0,-2.4,-2.8,-3.0];
 
-class Three {
+class Tree {
   constructor(positionZ = -1) {
     this.group = new THREE.Group();
     this.group.position.y = 2.3;
-    if(positionZ == -1) this.group.position.z = threePositions[Math.floor(Math.random()*threePositions.length)];
+    if(positionZ == -1) this.group.position.z = treePositions[Math.floor(Math.random()*treePositions.length)];
     else this.group.position.z = positionZ
     this.group.scale.set(1.5, 1.5, 1.5);
     this.group.rotation.x = rad(-90);
 
     //load texture for the tree
-    this.materialThree = [
+    this.materialTree = [
         new THREE.MeshLambertMaterial({
             map: THREE.ImageUtils.loadTexture('texture/treebark2.jpg')
         }),
@@ -378,7 +378,7 @@ class Three {
   }
 
   drawParts() {
-    this.trunk = new THREE.Mesh( new THREE.BoxBufferGeometry( 1.0, 1.0, 1.0 ), this.materialThree );
+    this.trunk = new THREE.Mesh( new THREE.BoxBufferGeometry( 1.0, 1.0, 1.0 ), this.materialTree );
     this.trunk.position.z = -1.0;
     this.trunk.castShadow = true;
     this.trunk.receiveShadow = true;
@@ -387,7 +387,7 @@ class Three {
     this.sideX = 0.5*1.5; //lato box / 2
     this.sideZ = 0.5*1.5;
 
-    this.height = threeHeights[Math.floor(Math.random()*threeHeights.length)];
+    this.height = treeHeights[Math.floor(Math.random()*treeHeights.length)];
 
     this.crown = new THREE.Mesh( new THREE.BoxBufferGeometry( 1.5, 1.5, this.height), this.materialCrown);
     this.crown.position.z = (this.height/2-0.5);
@@ -457,11 +457,12 @@ class GrassStart {
     var now = -depthGrass*2-(depthGrass-1.8)/2;
     var tree = null;
     while(now < (depthGrass-1.5)/2){
-      tree = new Three(now);
-      tree.group.position.x = -1.25;
+      tree = new Bush(now);
+      tree.group.position.y = 3;
+      tree.group.position.x = -1;
       this.rightGrass.add(tree.group);
       this.trees.push(tree);
-      now+=2.5;
+      now+=4;
     }
   }
 
@@ -469,6 +470,44 @@ class GrassStart {
 
   }
 }
+
+const bushHeights = [3.0,3.2,3.5,3.8,4.0];
+class Bush{
+  constructor(positionZ = -1) {
+    this.group = new THREE.Group();
+    if(positionZ == -1) this.group.position.z = treePositions[Math.floor(Math.random()*treePositions.length)];
+    else this.group.position.z = positionZ
+      this.group.scale.set(1.5, 1.5, 1.5);
+    this.group.rotation.x = rad(-90);
+    
+    this.materialCrown = new THREE.MeshLambertMaterial({
+      color: 0x7aa21d,
+      flatShading: true
+    });
+    
+    var texture = new THREE.TextureLoader().load( 'texture/bush.jpg' );
+    this.material = new THREE.MeshBasicMaterial( { map: texture });
+    console.log("texture loaded");
+    
+    this.vAngle = 0;
+    
+    this.drawParts();
+  }
+  
+  drawParts() {
+    this.sideX = 0.5*1.5; //lato box / 2
+    this.sideZ = 0.5*1.5;
+    
+    this.height = bushHeights[Math.floor(Math.random()*bushHeights.length)];
+    
+    this.trunk = new THREE.Mesh( new THREE.DodecahedronGeometry(this.height/3, 1), this.material);
+    this.trunk.position.z = -this.height/2;
+    this.trunk.castShadow = true;
+    this.trunk.receiveShadow = false;
+    this.group.add(this.trunk);
+  }
+}
+
 class splashParticles{
   constructor(positionZ,positionX, signX, signZ) {
     this.group = new THREE.Group();

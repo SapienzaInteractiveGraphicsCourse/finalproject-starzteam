@@ -157,6 +157,7 @@ function drawTerrain() {
   tracks.push(track);
   mappingTracks.push(posAtt);
   limitMax = posAtt;
+  actualListTracks = tracks.slice(0, 2);
 
   for(i = 1; i < numLevels; i++){
     values = getNewTerrain();
