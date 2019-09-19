@@ -37,6 +37,17 @@ var width,
 
 var crash = false;
 
+function startGame(chosedAnimal, dayNight){
+  pickedAnimal = chosedAnimal;
+  night = (dayNight == 'true');
+  console.log(pickedAnimal, night);
+  init();
+  animate();
+  if(night != false){
+    toggleNight();
+  }
+}
+
 function init() {
   console.log("init");
   width = window.innerWidth,
@@ -78,16 +89,6 @@ function init() {
 
   document.addEventListener('keydown', onKeyDown, true);
   document.addEventListener('keyup', onKeyUp, true);
-
-  document.getElementById("ChangeToChicken").onclick = function(){
-    pickedAnimal = "Chicken";
-};
-  document.getElementById("ChangeToFox").onclick = function(){
-    pickedAnimal = "Fox";
-  };
-  document.getElementById("ChangeToSheep").onclick = function(){
-    pickedAnimal = "Sheep";
-};
   window.addEventListener('resize', onResize);
 }
 
@@ -412,5 +413,6 @@ function toggleNight() {
   world.classList.toggle('world-night');
   sky.showNightSky(night);
 }
+
 init();
 animate();
