@@ -3,29 +3,25 @@
 //#######################
 
 class Car {
-  constructor(animal) {
+  constructor(animal, speedCar, initialPosition, directionCar) {
     this.animalReference = animal; //needed to check if car runs over the animal
 
     this.group = new THREE.Group();
 
     var angle = 0;
 
-    var initialPositions = [-7, -10, -15, -20, -25, -30];
+
     //var initialPositions = [-45];
 
-    var positionZ = initialPositions[Math.floor(Math.random()*initialPositions.length)];
-    this.direction = 1;
+    var positionZ = initialPosition;
+    this.direction = directionCar;
 
-    if(Math.floor(Math.random()*2) == 0){
+    if(this.direction == -1){
       positionZ = -positionZ;
       angle = 180;
-      this.direction = -1;
     }
 
-    var speedList = [0.02, 0.05, 0.1, 0.2];
-    //var speedList = [0.2];
-
-    this.speed = speedList[Math.floor(Math.random()*speedList.length)];
+    this.speed = speedCar;
 
     this.group.position.set(0, 1, positionZ); //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
     this.group.rotation.set(0, rad(angle), 0);
@@ -48,7 +44,7 @@ class Car {
       shading: THREE.FlatShading
     });
 
-    var colors = [0xff0000, 0x00ff00, 0x0000ff];
+    var colors = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0x008080];
     var index = Math.floor(Math.random()*colors.length);
 
     this.bodyMaterial = new THREE.MeshStandardMaterial({
