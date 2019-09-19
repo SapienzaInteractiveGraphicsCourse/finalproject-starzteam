@@ -249,6 +249,7 @@ function animate() {
 function render() {
 
   if(!crash){
+    scene.updateMatrixWorld();
     if ((tot > animal.boxReference.getWorldPosition(referencePositionAnimal).z + 0.2) ||
       animal.boxReference.getWorldPosition(referencePositionAnimal).x >30 ||
       animal.boxReference.getWorldPosition(referencePositionAnimal).x <-30){
@@ -265,10 +266,9 @@ function render() {
       }
 
     }
-    //camera.position.set(0, 15, tot);
+    //camera.position.set(0, 15, tot); //TO UNCOMMENT
 
     var referencePositionAnimal = new THREE.Vector3();
-    scene.updateMatrixWorld();
     animal.boxReference.getWorldPosition(referencePositionAnimal);
     if(referencePositionAnimal.z > limitMax){
       actualTrack++;
