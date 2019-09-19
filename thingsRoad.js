@@ -288,6 +288,10 @@ class Wood{
 
     this.direction = dir;
 
+    var speedList = [0.01, 0.05, 0.1];
+
+    this.speed = speedList[Math.floor(Math.random()*speedList.length)];
+
     this.drawParts();
   }
 
@@ -305,8 +309,8 @@ class Wood{
 
   }
 
-  goForward(speed){
-    this.group.position.z += this.direction*speed;
+  goForward(){
+    this.group.position.z += this.direction*this.speed;
 
     var referencePosition = new THREE.Vector3();
     var referencePositionAnimal = new THREE.Vector3();

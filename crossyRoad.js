@@ -265,7 +265,7 @@ function render() {
       }
 
     }
-    camera.position.set(0, 15, tot);
+    //camera.position.set(0, 15, tot);
 
     var referencePositionAnimal = new THREE.Vector3();
     scene.updateMatrixWorld();
@@ -296,7 +296,7 @@ function render() {
       vehicles = actualListTracks[i].vehicles;
       lengthVehicles = vehicles.length;
       for(j = 0; j < lengthVehicles; j++){
-        vehicles[j].goForward(0.01);
+        vehicles[j].goForward();
       }
     }
   }
