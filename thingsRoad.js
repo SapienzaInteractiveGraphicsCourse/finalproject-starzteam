@@ -212,15 +212,13 @@ class River{
     this.middleGrass.add(this.river);
     this.occupiedSpace += widthRiver;
 
-    this.sideX = 1.5*widthRiver/2;
-    this.sideZ = 1.5*widthRiver/2;
-
-    this.isWood = false;
+    this.sideX = 1.5*this.river.geometry.parameters.depth/2;
+    this.sideZ = 1.5*this.river.geometry.parameters.width/2;
 
     this.vehicles = [];
-    var trunk = new Wood(this, 1);
+    var trunk = new Wood(1);
     this.vehicles.push(trunk);
-    trunk = new Wood(this, -1);
+    trunk = new Wood(-1);
     this.vehicles.push(trunk);
 
     var length = this.vehicles.length;
@@ -242,9 +240,16 @@ class River{
     this.river.getWorldPosition(referencePosition);
     animal.boxReference.getWorldPosition(referencePositionAnimal);
 
+    var checkIsWood = false;
+    var length = this.vehicles.length;
+    var i;
+    for(i = 0; i < length; i++){
+      checkIsWood = checkIsWood || this.vehicles[i].isWood;
+    }
+
     if( (Math.abs(referencePosition.x - referencePositionAnimal.x) <= this.sideX) &&
         (Math.abs(referencePosition.z - referencePositionAnimal.z) <= this.sideZ) &&
-        referencePositionAnimal.y <= animal.restHeight && !this.isWood){
+        referencePositionAnimal.y <= animal.restHeight && !checkIsWood){
           crash = true;
           window.alert("SPLASH");
     }
@@ -253,9 +258,7 @@ class River{
 }
 
 class Wood{
-  constructor(river, posX){
-
-    this.riverReference = river;
+  constructor(posX){
 
     this.group = new THREE.Group();
     this.group.position.set(posX, 0, 0);
@@ -290,8 +293,10 @@ class Wood{
     this.trunk.receiveShadow = true;
     this.group.add(this.trunk);
 
-    this.sideX = 1.5*2.5;
-    this.sideZ = 1.5*widthRoad/2;
+    this.sideX = 1.5*this.trunk.geometry.parameters.depth/2;
+    this.sideZ = 1.5*this.trunk.geometry.parameters.width/2;
+
+    this.isWood = false;
 
   }
 
@@ -308,12 +313,12 @@ class Wood{
 
     if( (Math.abs(referencePosition.z - referencePositionAnimal.z) <= this.sideZ) &&
         (Math.abs(referencePosition.x - referencePositionAnimal.x) <= this.sideX) ){
-          this.riverReference.isWood = true;
+          this.isWood = true;
           if(referencePositionAnimal.y <= animal.restHeight)
             animal.group.position.x += 1.5*this.direction*speed;
     }
     else {
-      this.riverReference.isWood = false;
+      this.isWood = false;
     }
 
   }
