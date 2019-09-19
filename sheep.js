@@ -11,6 +11,7 @@ var inMotion = false;
 var descending = false;
 var currentScore = 0;
 var highestScore = 0;
+var oldPos = 0;
 class Sheep {
   constructor() {
     this.selected = 0;
@@ -161,8 +162,11 @@ class Sheep {
     this.backLeftLeg.rotation.x = +legRotation;
 
     //had to speed up the movement since i'm using a different incremental function
-    if(asse=='z') this.group.position.z = this.group.position.z + 1.5*dist;
-    if(asse=='x') this.group.position.x = this.group.position.x + 1.5*dist;
+
+    if(asse=='z') this.group.position.z = this.group.position.z + 1.6445*dist;
+
+    if(asse=='x')this.group.position.x = this.group.position.x + 1.6445*dist;
+
 
     const earRotation = Math.sin(this.vAngle) * Math.PI / 3 + 1.5;
     this.rightEar.rotation.z = earRotation;
@@ -174,6 +178,12 @@ class Sheep {
       inMotion = false;
       descending = false;
       this.group.position.y = 0.4;
+      if(asse=='z') {
+        this.group.position.z =oldPos + 3.75*sign;
+      }
+      if(asse=='x') {
+        this.group.position.x =oldPos + 3.75*sign;
+      }
     }
   }
   actionOnPressKey() {
@@ -206,6 +216,7 @@ class Sheep {
           sign = 1;
           angle = 0;
           this.vAngle = 0;
+          oldPos = this.group.position.z;
           this.jump(speedSheepUp, dist, 0, 'z');
         }
       }
@@ -227,6 +238,7 @@ class Sheep {
           sign = -1;
           angle = 180;
           this.vAngle = 0;
+          oldPos = this.group.position.z;
           this.jump(speedSheepUp, -dist, 180, 'z');
         }
       }
@@ -246,6 +258,7 @@ class Sheep {
           sign = 1;
           angle = 90;
           this.vAngle = 0;
+          oldPos = this.group.position.x;
           this.jump(speedSheepUp, dist, 90, 'x');
         }
       }
@@ -266,6 +279,7 @@ class Sheep {
           sign = -1;
           angle = 270;
           this.vAngle = 0;
+          oldPos = this.group.position.x;
           this.jump(speedSheepUp, -dist, 270, 'x');
         }
       }

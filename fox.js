@@ -10,6 +10,7 @@ var contatore = 0;
 var currentScore = 0;
 var highestScore = 0;
 var legRotation = 0;
+var oldPos = 0;
 
 class Fox{
   constructor(){
@@ -339,47 +340,46 @@ jump(speed, direction) {
     this.leftBackDownLeg.rotation.x += legRotation;
 
     if(direction == "ahead"){
-      this.group.position.z = this.group.position.z + 0.10058;
+      this.group.position.z = this.group.position.z + 0.11;
     }
     else if (direction == "behind"){
-      this.group.position.z = this.group.position.z - 0.10058;
+      this.group.position.z = this.group.position.z - 0.11;
     }
     else if(direction == "right"){
-      this.group.position.x = this.group.position.x - 0.10058;
+      this.group.position.x = this.group.position.x - 0.11;
     }
     else if (direction == "left"){
-      this.group.position.x = this.group.position.x + 0.10058;
+      this.group.position.x = this.group.position.x + 0.11;
     }
 
     //resets the postion, since js and floats are not great friends
     if(this.group.position.y <= -0.31){
       this.group.position.y = -0.31;
       if(direction == "ahead"){
-        this.group.position.z = this.group.position.z + 0.00028;
+
+        this.group.position.z = oldPos + 3.75;
+        console.log(6+this.group.position.z);
+
       }
       else if (direction == "behind"){
-        this.group.position.z = this.group.position.z - 0.00028;
+        this.group.position.z = oldPos - 3.75;
+        console.log(6+this.group.position.z);
       }
       else if(direction == "right"){
-        this.group.position.x = this.group.position.x - 0.00028;
+        this.group.position.x = oldPos - 3.75;
+        console.log(this.group.position.x);
       }
       else if (direction == "left"){
-        this.group.position.x = this.group.position.x + 0.00028;
+
+        this.group.position.x = oldPos + 3.75;
+        console.log(this.group.position.x);
+
       }
 
       inMotion = false;
       descending = false;
     }
   }
-  //// TODO:
-/*
-jump(speed){
-  jumpStart();
-  //ruota verso alto corpo, tensione gambe dietro,allunga gambe davanti ///
-  flying();//allunga gambe dietro,ruota corpo posizione discesa \\\\
-  jumpEnd();//tocca terra,accorcia gambe avanti,ruota corpo ----,
-}
-*/
 
 actionOnPressKey() {
 
@@ -405,6 +405,7 @@ actionOnPressKey() {
         this.group.rotation.y = 0;
         state = "ahead";
         contatore = 0;
+        oldPos = this.group.position.z;
         this.jump(0.06, state);
         }
       }
@@ -415,6 +416,7 @@ actionOnPressKey() {
           inMotion = true;
           this.group.rotation.y = Math.PI*3/2;
           contatore = 0;
+          oldPos = this.group.position.x;
           this.jump(0.06, state);
         }
       }
@@ -425,6 +427,7 @@ actionOnPressKey() {
           state = "left";
           this.group.rotation.y = Math.PI/2;
           contatore = 0;
+          oldPos = this.group.position.x;
           this.jump(0.06, state);
         }
       }
@@ -437,6 +440,7 @@ actionOnPressKey() {
         this.group.rotation.y = Math.PI;
         state = "behind";
         contatore = 0;
+        oldPos = this.group.position.z;
         this.jump(0.06, state);
       }
     }

@@ -12,6 +12,8 @@ var highestScore = 0;
 var contatore = 0;
 var tot = 0;
 var legRotation = 0;
+var oldPos = 0;
+
 class Chicken{
   constructor(){
     this.group = new THREE.Group();
@@ -197,19 +199,24 @@ class Chicken{
       legRotation = -30 * Math.PI / 180 /19;
     }
     else{
-      console.log("here");
       legRotation  = 30 * Math.PI / 180 /19;
       this.group.position.y+= Math.sin(speed)*1.2;
     }
 
 
     this.rightLeg.rotation.x += legRotation;
-    console.log(this.rightLeg.rotation.x);
     this.leftLeg.rotation.x += legRotation;
 
     //had to speed up the movement since i'm using a different incremental function
-    if(asse=='z') this.group.position.z = this.group.position.z + 0.9473*dist;
-    if(asse=='x') this.group.position.x = this.group.position.x + 0.9473*dist;
+    if(asse=='z') {
+      this.group.position.z = this.group.position.z + 1.0387*dist;
+      console.log(6+this.group.position.z);
+    }
+    if(asse=='x') {
+      this.group.position.x = this.group.position.x + 1.0387*dist;
+      console.log(this.group.position.x);
+
+    }
 
     const wingRotation = Math.sin(this.vAngle) * Math.PI / 3 + 1.5;
     this.rightWing.rotation.z = wingRotation;
@@ -225,10 +232,16 @@ class Chicken{
       this.leftWing.rotation.z = 0;
       this.rightLeg.rotation.x = 0;
       this.leftLeg.rotation.x = 0;
-      if(asse=='z') this.group.position.z += 0.000247;
-      if(asse=='x') this.group.position.x += 0.000247;
-    }
+      if(asse=='z') {
+        this.group.position.z =oldPos + 3.75*sign;
+        console.log(6+this.group.position.z);
+      }
+      if(asse=='x') {
+        this.group.position.x =oldPos + 3.75*sign;
+        console.log(this.group.position.x);
+      }
   }
+}
   actionOnPressKey() {
     if(inMotion){
       this.jump(speedDown, sign * dist, last);
@@ -254,6 +267,7 @@ class Chicken{
           sign = 1;
           this.vAngle = 0;
           this.group.rotation.y = rad(0);
+          oldPos = this.group.position.z;
           this.jump(speedUp, dist, 'z');
         }
       }
@@ -269,6 +283,7 @@ class Chicken{
           sign = -1;
           this.vAngle = 0;
           this.group.rotation.y = rad(180);
+          oldPos = this.group.position.z;
           this.jump(speedUp, -dist, 'z');
         }
       }
@@ -281,6 +296,7 @@ class Chicken{
           sign = 1;
           this.vAngle = 0;
           this.group.rotation.y = rad(90);
+          oldPos = this.group.position.x;
           this.jump(speedUp, dist, 'x');
         }
       }
@@ -294,6 +310,7 @@ class Chicken{
           sign = -1;
           this.vAngle = 0;
           this.group.rotation.y = rad(270);
+          oldPos = this.group.position.x;
           this.jump(speedUp, -dist, 'x');
         }
       }
