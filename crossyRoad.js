@@ -137,7 +137,6 @@ function getNewTerrain(posZ = -1){
   }
   else {
     track = new GrassStart(posAtt);
-    numberOfJumps+=1;
   }
   pos = track.occupiedSpace*1.5;
   return {
