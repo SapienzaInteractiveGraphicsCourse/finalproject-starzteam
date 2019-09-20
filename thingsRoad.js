@@ -82,8 +82,7 @@ class Road {
     var road = null;
     var j = 0;
 
-    var newSpeed = [0.02, 0.05, 0.1, 0.2];
-    var listInitial = [-10, -20, -30, -40];
+    var listInitial = [-20, -25, -30, -35, -40]; //add 5 to every body if car are too close
     var listDistance = [5, 10, 15];
     var newSpeed;
     var newInitial;
@@ -113,14 +112,16 @@ class Road {
         else
           newDirection = -1
 
-        for(k = 0; k < listNumCar[Math.floor(Math.random()*listNumCar.length)]; k++){
+        var numCarPerStreet = listNumCar[Math.floor(Math.random()*listNumCar.length)];
 
-          totalDistance += listDistance[Math.floor(Math.random()*listDistance.length)];
+        for(k = 0; k < numCarPerStreet; k++){
 
           car = new Car(animal, newSpeed, newInitial + totalDistance, newDirection);
           this.vehicles.push(car);
           this.prec.add(this.vehicles[j].group);
           j++;
+
+          totalDistance += listDistance[Math.floor(Math.random()*listDistance.length)];
 
         }
 
@@ -221,18 +222,54 @@ class River{
 
     this.vehicles = [];
 
-    var pos = -depthRoad/2;
-    var posRand = Math.round(Math.random()*3);
-    var dir = 1;
+    var listInitial = [10];
+    var listDistance = [6, 7, 8, 9, 10, 11, 12];
+    var newSpeed;
+    var newInitial;
+    var newDirection;
+    var totalDistance = 0;
 
-    for(var i = 0; i < numWood; i++){
-      var trunk = new Wood(1.2, -dir);
-      trunk.group.position.z = -pos+posRand;
+    var trunk;
+
+    //First side
+    if(Math.floor(Math.random()*2))
+      newDirection = 1;
+    else
+      newDirection = -1
+
+    newSpeed = speedListWood[Math.floor(Math.random()*speedListWood.length)];
+    newInitial = newDirection*listInitial[Math.floor(Math.random()*listInitial.length)];
+
+    var i;
+    for(i = 0; i < numWood; i++){
+
+      trunk = new Wood(1.2, newDirection, newSpeed);
+      trunk.group.position.z = newInitial + totalDistance;
       this.vehicles.push(trunk);
-      trunk = new Wood(-1.2, dir);
-      trunk.group.position.z = pos;
-      pos += depthWood+depthWood/2;
+
+      totalDistance += -newDirection*listDistance[Math.floor(Math.random()*listDistance.length)];
+
+    }
+
+    totalDistance = 0;
+
+    //Second side
+    if(Math.floor(Math.random()*2))
+      newDirection = 1;
+    else
+      newDirection = -1
+
+    newSpeed = speedListWood[Math.floor(Math.random()*speedListWood.length)];
+    newInitial = newDirection*listInitial[Math.floor(Math.random()*listInitial.length)];
+
+    for(i = 0; i < numWood; i++){
+
+      trunk = new Wood(-1.2, newDirection, newSpeed);
+      trunk.group.position.z = newInitial + totalDistance;
       this.vehicles.push(trunk);
+
+      totalDistance += -newDirection*listDistance[Math.floor(Math.random()*listDistance.length)];
+
     }
 
     var length = this.vehicles.length;
@@ -289,7 +326,7 @@ class River{
 }
 
 class Wood{
-  constructor(posX, dir){
+  constructor(posX, dir, speed){
 
     this.group = new THREE.Group();
     this.group.position.set(posX, 0, 0);
@@ -308,9 +345,7 @@ class Wood{
 
     this.direction = dir;
 
-    var speedList = [0.05];
-
-    this.speed = speedList[Math.floor(Math.random()*speedList.length)];
+    this.speed = speed;
 
     this.drawParts();
   }
@@ -331,6 +366,8 @@ class Wood{
 
   goForward(referencePositionAnimal){
     this.group.position.z += this.direction*this.speed;
+    if(Math.abs(this.group.position.z) > depthRoad/2) //I can use the abs because the position is relative to the Road (not global in world coords)
+      this.group.position.z = -this.group.position.z;
 
     var referencePosition = new THREE.Vector3();
     this.trunk.getWorldPosition(referencePosition); //OCCHIO, il sistema di riferimento world e quello locale sono diversi!!! quindi dopo una rotazione cambiano x e z

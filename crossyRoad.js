@@ -23,7 +23,8 @@ var scene,
     diffModifier = 0.0,
     numLevels = 1,
     listNumCar = [],
-    listSpeed = [];
+    listSpeed = [],
+    speedListWood = [];
 
 
 var mappingTracks = [];
@@ -436,18 +437,21 @@ function setDifficulty(diff){
     numLevels = 6;
     listNumCar = [0,2,3];
     listSpeed = [0.04, 0.05, 0.06, 0.12];
+    speedListWood = [0.01, 0.02, 0.05, 0.1];
     diffModifier = 0.04;
   }
   else if (diff == "Normal"){
     numLevels = 10;
     listNumCar = [0,1,2,3];
     listSpeed = [0.06, 0.08, 0.15];
+    speedListWood = [0.03, 0.04, 0.1];
     diffModifier = 0.05;
   }
   else{
     numLevels = 16;
     listNumCar = [0,2,3];
     listSpeed = [0.15, 0.18, 0.25];
+    speedListWood = [0.05, 0.1, 0.2];
     diffModifier = 0.06;
   }
   /*else if (diff == "Insane"){
