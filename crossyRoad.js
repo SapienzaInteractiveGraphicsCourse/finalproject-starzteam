@@ -42,12 +42,12 @@ var width,
 
 var crash = false;
 
-function startGame(chosedAnimal, dayNight){
+function startGame(chosedAnimal, dayNight, difficult){
   pickedAnimal = chosedAnimal;
   night = (dayNight == 'true');
-  difficulty = "Easy";//"Easy", "Normal", "Hard"
-  setDifficulty(difficulty);
+  difficulty = difficult;//"Easy", "Normal", "Hard"
   console.log(pickedAnimal, night, difficulty);
+  setDifficulty(difficulty);
   init();
   animate();
   if(night != false){
