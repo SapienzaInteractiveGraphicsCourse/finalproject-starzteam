@@ -13,6 +13,7 @@ var currentScore = 0;
 var highestScore = 0;
 var oldPos = 0;
 var crashSpeed = 0.2;
+var goingFastSheep = 1.4;
 class Sheep {
   constructor() {
     this.selected = 0;
@@ -144,15 +145,14 @@ class Sheep {
 
   jump(speed, dist, gradi, asse) {
     this.group.rotation.y = rad(gradi);
-    this.vAngle += speed;
-
+    this.vAngle += speed*goingFastSheep;
     //check if i'm going up or down
     if(this.group.position.y >= 3 || descending){
-      this.group.position.y-= Math.sin(speed)*1.5;
+      this.group.position.y-= Math.sin(speed)*1.5*goingFastSheep;
       descending = true;
     }
     else{
-      this.group.position.y+= Math.sin(speed)*1.5;
+      this.group.position.y+= Math.sin(speed)*1.5*goingFastSheep;
     }
 
     const legRotation = Math.sin(this.vAngle) * Math.PI / 6 + 0.4;
@@ -164,9 +164,9 @@ class Sheep {
 
     //had to speed up the movement since i'm using a different incremental function
 
-    if(asse=='z') this.group.position.z = this.group.position.z + 1.6445*dist;
+    if(asse=='z') this.group.position.z = this.group.position.z + 1.6445*goingFastSheep*dist;
 
-    if(asse=='x')this.group.position.x = this.group.position.x + 1.6445*dist;
+    if(asse=='x')this.group.position.x = this.group.position.x + 1.6445*goingFastSheep*dist;
 
 
     const earRotation = Math.sin(this.vAngle) * Math.PI / 3 + 1.5;
@@ -217,6 +217,7 @@ class Sheep {
           angle = 0;
           this.vAngle = 0;
           oldPos = this.group.position.z;
+          var t0 = performance.now();
           this.jump(speedSheepUp, dist, 0, 'z');
         }
       }

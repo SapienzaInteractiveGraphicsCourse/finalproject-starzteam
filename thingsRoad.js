@@ -12,7 +12,6 @@ const depthRiver = depthRoad;
 const highWood = 3*hightRoad;
 const widthWood = widthRoad-widthRoad/4;
 const numWood = 6;
-const numCar = 2;
 const depthWood = 5.0;
 var splash = false;
 
@@ -83,8 +82,8 @@ class Road {
     var road = null;
     var j = 0;
 
-    var listSpeed = [0.02, 0.05, 0.1, 0.2];
-    var listInitial = [-20, -30, -40, -45];
+    var newSpeed = [0.02, 0.05, 0.1, 0.2];
+    var listInitial = [-10, -20, -30, -40];
     var listDistance = [5, 10, 15];
     var newSpeed;
     var newInitial;
@@ -114,7 +113,7 @@ class Road {
         else
           newDirection = -1
 
-        for(k = 0; k < numCar; k++){
+        for(k = 0; k < listNumCar[Math.floor(Math.random()*listNumCar.length)]; k++){
 
           totalDistance += listDistance[Math.floor(Math.random()*listDistance.length)];
 
@@ -545,7 +544,6 @@ class GrassEnd {
     this.trees = [];
     var prev = null;
     for(var i=0; i<2; i++){
-      console.log(i);
       this.middleGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( 2*widthGrass, highGrass, depthGrass), this.materialMiddle);
       if(i==0) this.middleGrass.position.x = -widthGrass/2;
       else this.middleGrass.position.x = -(2*widthGrass-widthGrass/2.25);
@@ -626,10 +624,6 @@ class splashParticles{
     this.group = new THREE.Group();
 
     this.group.position.y = Math.log(0.36);
-    //console.log("z");
-    //console.log(positionZ);
-    //console.log("x");
-    //console.log(positionX);
     this.group.position.z = positionZ;
     this.group.position.x = positionX;
     this.mySpeed =Math.random() * 0.7 + 0.3;

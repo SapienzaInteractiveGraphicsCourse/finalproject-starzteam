@@ -13,6 +13,7 @@ var contatore = 0;
 var tot = 0;
 var legRotation = 0;
 var oldPos = 0;
+var goingFastChicken = 2.2;
 
 class Chicken{
   constructor(){
@@ -189,17 +190,17 @@ class Chicken{
   }
 
   jump(speed, dist, asse) {
-    this.vAngle += speed;
+    this.vAngle += speed*goingFastChicken;
 
     //check if i'm going up or down
     if(this.group.position.y >= 3 || descending){
-      this.group.position.y-= Math.sin(speed)*1.2;
+      this.group.position.y-= Math.sin(speed)*1.2*goingFastChicken;
       descending = true;
-      legRotation = -30 * Math.PI / 180 /19;
+      legRotation = (-30 * Math.PI / 180 /19) * goingFastChicken;
     }
     else{
-      legRotation  = 30 * Math.PI / 180 /19;
-      this.group.position.y+= Math.sin(speed)*1.2;
+      legRotation  = (30 * Math.PI / 180 /19 )*goingFastChicken;
+      this.group.position.y+= Math.sin(speed)*1.2*goingFastChicken;
     }
 
 
@@ -207,15 +208,10 @@ class Chicken{
     this.leftLeg.rotation.x += legRotation;
 
     //had to speed up the movement since i'm using a different incremental function
-    if(asse=='z') {
-      this.group.position.z = this.group.position.z + 1.0387*dist;
-      console.log(6+this.group.position.z);
-    }
-    if(asse=='x') {
-      this.group.position.x = this.group.position.x + 1.0387*dist;
-      console.log(this.group.position.x);
+    if(asse=='z') this.group.position.z = this.group.position.z + 1.0387*dist*goingFastChicken;
 
-    }
+    if(asse=='x') this.group.position.x = this.group.position.x + 1.0387*dist*goingFastChicken;
+
 
     const wingRotation = Math.sin(this.vAngle) * Math.PI / 3 + 1.5;
     this.rightWing.rotation.z = wingRotation;
@@ -231,14 +227,8 @@ class Chicken{
       this.leftWing.rotation.z = 0;
       this.rightLeg.rotation.x = 0;
       this.leftLeg.rotation.x = 0;
-      if(asse=='z') {
-        this.group.position.z =oldPos + 3.75*sign;
-        console.log(6+this.group.position.z);
-      }
-      if(asse=='x') {
-        this.group.position.x =oldPos + 3.75*sign;
-        console.log(this.group.position.x);
-      }
+      if(asse=='z') this.group.position.z =oldPos + 3.75*sign;
+      if(asse=='x') this.group.position.x =oldPos + 3.75*sign;
   }
 }
   actionOnPressKey() {

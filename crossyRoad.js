@@ -1,5 +1,4 @@
 'use strict';
-var pickedAnimal = "Sheep";
 
 var scene,
     camera,
@@ -18,7 +17,13 @@ var scene,
     numberOfJumps = 0,
     added = false,
     outrun = false,
-    sp = [];
+    pickedAnimal = "Sheep",
+    sp = [],
+    difficulty = "Easy",
+    diffModifier = 0.0,
+    numLevels = 1,
+    listNumCar = [],
+    listSpeed = [];
 
 
 var mappingTracks = [];
@@ -40,7 +45,9 @@ var crash = false;
 function startGame(chosedAnimal, dayNight){
   pickedAnimal = chosedAnimal;
   night = (dayNight == 'true');
-  console.log(pickedAnimal, night);
+  difficulty = "Easy";//"Easy", "Normal", "Hard"
+  setDifficulty(difficulty);
+  console.log(pickedAnimal, night, difficulty);
   init();
   animate();
   if(night != false){
@@ -127,6 +134,7 @@ function getNewTerrain(posZ = -1){
 
   if(posZ == 0){
     track = new GrassStart(posAtt);
+    numberOfJumps+=1;
   }
   else if(posZ == 1){
     track = new GrassEnd(posAtt);
@@ -149,7 +157,6 @@ function getNewTerrain(posZ = -1){
 }
 
 function drawTerrain() {
-  var numLevels = 5;
   var i;
   var track;
   var values;
@@ -261,8 +268,7 @@ function animate() {
 function render() {
 
   if(!crash){
-    scene.updateMatrixWorld();
-    if ((tot > animal.boxReference.getWorldPosition(referencePositionAnimal).z + 0.2) ||
+    if ((tot > animal.boxReference.getWorldPosition(referencePositionAnimal).z + 1.5 ) ||
       animal.boxReference.getWorldPosition(referencePositionAnimal).x >30 ||
       animal.boxReference.getWorldPosition(referencePositionAnimal).x <-30){
       crash = true;
@@ -271,13 +277,14 @@ function render() {
     }
     else if(highestScore != 0){
       if((animal.boxReference.getWorldPosition(referencePositionAnimal).z - tot >= 0) && (highestScore < numberOfJumps)){
-        tot+=0.04*(1+ (animal.boxReference.getWorldPosition(referencePositionAnimal).z - tot)/4);
+        tot+=diffModifier*(1+ (animal.boxReference.getWorldPosition(referencePositionAnimal).z - tot)/4);
       }
       else if (highestScore < numberOfJumps){
-        tot+=0.04;
+        tot+=diffModifier;
       }
 
     }
+    scene.updateMatrixWorld();
     camera.position.set(0, 15, tot); //TO UNCOMMENT
 
     var referencePositionAnimal = new THREE.Vector3();
@@ -330,7 +337,6 @@ function activateSplash(posZ,posX,howMany){
       sp.push(new splashParticles(posZ, posX, sign1, sign2));
       sign2 = sign1*sign2;
       sign1 = sign1 * -1;
-      console.log(sign1, sign2);
       scene.add(sp[i].group);
     }
     added = true;
@@ -423,5 +429,33 @@ function toggleNight() {
   sky.showNightSky(night);
 }
 
-init();
-animate();
+function setDifficulty(diff){
+  if(diff == "Easy"){
+    numLevels = 6;
+    listNumCar = [0,2,3];
+    listSpeed = [0.04, 0.05, 0.06, 0.12];
+    diffModifier = 0.04;
+  }
+  else if (diff == "Normal"){
+    numLevels = 10;
+    listNumCar = [0,1,2,3];
+    listSpeed = [0.06, 0.08, 0.15];
+    diffModifier = 0.05;
+  }
+  else{
+    numLevels = 16;
+    listNumCar = [0,2,3];
+    listSpeed = [0.15, 0.18, 0.25];
+    diffModifier = 0.06;
+  }
+  /*else if (diff == "Insane"){
+    numLevels = 26;
+    listNumCar = [0,3,4,5];
+    listSpeed = [0.16, 0.2, 0.3];
+    diffModifier = 0.07;
+  }*/
+}
+
+//DECOMMENT these to skip the start page
+//init();
+//animate();

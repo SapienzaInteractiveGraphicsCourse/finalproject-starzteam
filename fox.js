@@ -11,7 +11,7 @@ var currentScore = 0;
 var highestScore = 0;
 var legRotation = 0;
 var oldPos = 0;
-
+var goingFastFox = 2;
 class Fox{
   constructor(){
     this.group = new THREE.Group();
@@ -255,11 +255,11 @@ class Fox{
 
 jump(speed, direction) {
     if(this.group.position.y >= 1.2 || descending){
-      this.group.position.y-= Math.sin(speed)*1.5;
+      this.group.position.y-= Math.sin(speed)*1.5*goingFastFox;
       descending = true;
     }
     else{
-      this.group.position.y+= Math.sin(speed)*1.5;
+      this.group.position.y+= Math.sin(speed)*1.5*goingFastFox;
     }
 
     if(direction == "ahead"){
@@ -269,10 +269,10 @@ jump(speed, direction) {
         legRotation = 0;
       }
       else if (contatore <=16){
-        this.group.rotation.x-=Math.PI*(1/8)*(1/16) ;
+        this.group.rotation.x-=Math.PI*(goingFastFox/8)*(1/16) ;
       }
       else if(this.group.rotation.x < 0) {
-        this.group.rotation.x+=Math.PI*(1/8) *(1/16);
+        this.group.rotation.x+=Math.PI*(goingFastFox/8) *(1/16);
       }
     }
     else if (direction == "behind"){
@@ -283,10 +283,10 @@ jump(speed, direction) {
         legRotation = 0;
       }
       else if (contatore <=16){
-        this.group.rotation.x+=Math.PI*(1/8)*(1/16) ;
+        this.group.rotation.x+=Math.PI*(goingFastFox/8)*(1/16) ;
       }
       else if(this.group.rotation.x > 0) {
-        this.group.rotation.x-=Math.PI*(1/8) *(1/16);
+        this.group.rotation.x-=Math.PI*(goingFastFox/8) *(1/16);
       }
     }
     else if (direction == "right" || direction == "left"){
@@ -296,10 +296,10 @@ jump(speed, direction) {
         legRotation = 0;
       }
       else if (contatore <=16){
-        this.group.rotateOnAxis(new THREE.Vector3(1,0,0) , -Math.PI*(1/8)*(1/16));
+        this.group.rotateOnAxis(new THREE.Vector3(1,0,0) , -Math.PI*(goingFastFox/8)*(1/16));
       }
       else if(this.group.rotation.x < 0) {
-        this.group.rotateOnAxis(new THREE.Vector3(1,0,0) , +Math.PI*(1/8)*(1/16))
+        this.group.rotateOnAxis(new THREE.Vector3(1,0,0) , +Math.PI*(goingFastFox/8)*(1/16))
       }
     }
 
@@ -319,15 +319,16 @@ jump(speed, direction) {
       this.leftBackDownLeg.rotation.x = 0;
     }
     else if(contatore <=16){
-      legRotation = Math.PI*(1/4)*(1/16);
+      legRotation = Math.PI*(1/4)*(1/16) * goingFastFox;
     }
     else{
-      legRotation = (-1)*Math.PI*(1/4)*(1/16);
+      legRotation = (-1)*Math.PI*(1/4)*(1/16) * goingFastFox;
     }
 
-    contatore++;
+    contatore+=2;
 
     this.leftFrontLeg.rotation.x += legRotation;
+    console.log(this.leftFrontLeg.rotation.x);
     this.leftFrontDownLeg.rotation.x += legRotation;
 
     this.rightFrontLeg.rotation.x += legRotation;
@@ -340,40 +341,32 @@ jump(speed, direction) {
     this.leftBackDownLeg.rotation.x += legRotation;
 
     if(direction == "ahead"){
-      this.group.position.z = this.group.position.z + 0.11;
+      this.group.position.z = this.group.position.z + 0.11*goingFastFox;
     }
     else if (direction == "behind"){
-      this.group.position.z = this.group.position.z - 0.11;
+      this.group.position.z = this.group.position.z - 0.11*goingFastFox;
     }
     else if(direction == "right"){
-      this.group.position.x = this.group.position.x - 0.11;
+      this.group.position.x = this.group.position.x - 0.11*goingFastFox;
     }
     else if (direction == "left"){
-      this.group.position.x = this.group.position.x + 0.11;
+      this.group.position.x = this.group.position.x + 0.11*goingFastFox;
     }
 
     //resets the postion, since js and floats are not great friends
     if(this.group.position.y <= -0.31){
       this.group.position.y = -0.31;
       if(direction == "ahead"){
-
         this.group.position.z = oldPos + 3.75;
-        console.log(6+this.group.position.z);
-
       }
       else if (direction == "behind"){
         this.group.position.z = oldPos - 3.75;
-        console.log(6+this.group.position.z);
       }
       else if(direction == "right"){
         this.group.position.x = oldPos - 3.75;
-        console.log(this.group.position.x);
       }
       else if (direction == "left"){
-
         this.group.position.x = oldPos + 3.75;
-        console.log(this.group.position.x);
-
       }
 
       inMotion = false;
