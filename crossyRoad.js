@@ -26,6 +26,11 @@ var scene,
     listSpeed = [],
     speedListWood = [];
 
+var numOfLevelVisible = 4,
+    numOfLevelPrec = 1,
+    indexRenderMax = numOfLevelPrec,
+    indexRenderMin = 0,
+    actualLevelCamera = 0;
 
 var mappingTracks = [];
 var actualTrack = 0;
@@ -90,8 +95,9 @@ function init() {
 
   addLights();
   drawAnimal();
-  drawTerrain();
   drawSky();
+  drawTerrain();
+
   world = document.querySelector('.world');
   world.appendChild(renderer.domElement);
 
@@ -160,22 +166,56 @@ function getNewTerrain(posZ = -1){
   };
 }
 
+function enableAllLevelObject(object){ //need a group or scene as parameter, object
+  var i;
+  object.traverse( function( child ) {
+    for(i = 0; i < 32; i++)
+      child.layers.enable( i );
+  } );
+}
+
+function addLayers(track){
+  track.group.traverse( function( child ) {
+    child.layers.disable(0);
+    for(var i = indexRenderMin; i <= indexRenderMax; i++)
+      child.layers.enable( i );
+  } );
+}
+
 function drawTerrain() {
   var i;
   var track;
   var values;
 
+  enableAllLevelObject(scene);
+
   values = getNewTerrain(0);
   track = values.track;
+  addLayers(track);
+  indexRenderMax++;
+  indexRenderMax = indexRenderMax % 32;
   posAtt += values.pos;
   scene.add(track.group);
   tracks.push(track);
   mappingTracks.push(posAtt);
   limitMax = posAtt;
 
+  var indexForInitialLeves = 0;
+
   for(i = 1; i < numLevels; i++){
     values = getNewTerrain();
     track = values.track;
+    addLayers(track);
+    if(indexForInitialLeves < numOfLevelVisible - 1){
+      indexForInitialLeves++;
+    }
+    else{
+      indexRenderMin++;
+      indexRenderMin = indexRenderMin % 32;
+    }
+    console.log(indexRenderMin);
+    indexRenderMax++;
+    indexRenderMax = indexRenderMax % 32;
     posAtt += values.pos;
     scene.add(track.group);
     tracks.push(track);
@@ -184,28 +224,13 @@ function drawTerrain() {
 
   values = getNewTerrain(1);
   track = values.track;
+  addLayers(track);
   posAtt += values.pos;
   scene.add(track.group);
   tracks.push(track);
   mappingTracks.push(posAtt);
 
   actualListTracks = tracks.slice(0, 2);
-}
-
-function addTerrain(numLevels){
-  var i;
-  var track;
-  var values;
-
-  for(i = 0; i < numLevels; i++){
-    values = getNewTerrain();
-    track = values.track;
-    posAtt += values.pos;
-    scene.add(track.group);
-    tracks.push(track);
-    mappingTracks.push(posAtt);
-  }
-
 }
 
 function drawSky() {
@@ -293,13 +318,16 @@ function render() {
       }
 
     }
-    //camera.position.set(0, 15, tot); //TO UNCOMMENT
+    camera.position.set(0, 15, tot); //TO UNCOMMENT
 
     if(referencePositionAnimal.z > limitMax){
       actualTrack++;
       limitMin = limitMax;
       limitMax = mappingTracks[actualTrack];
       actualListTracks = tracks.slice(actualTrack - 1, actualTrack + 2);
+      actualLevelCamera++;
+      actualLevelCamera = actualLevelCamera % 32;
+      camera.layers.set(actualLevelCamera);
       }
     if(referencePositionAnimal.z <= limitMin && actualTrack > 0){
       actualTrack--;
@@ -309,6 +337,10 @@ function render() {
         actualListTracks = tracks.slice(actualTrack, actualTrack + 2);
       else
         actualListTracks = tracks.slice(actualTrack - 1, actualTrack + 2);
+
+      actualLevelCamera--;
+      actualLevelCamera = actualLevelCamera % 32;
+      camera.layers.set(actualLevelCamera);
     }
 
     animal.actionOnPressKey(referencePositionAnimal);
@@ -338,9 +370,12 @@ function render() {
 var sign1 = 1;
 var sign2 = 1;
 function activateSplash(posZ,posX,howMany){
+  var splashParts;
   if(!added){
     for(var i = 0; i < howMany; i++){
-      sp.push(new splashParticles(posZ, posX, sign1, sign2));
+      splashParts = new splashParticles(posZ, posX, sign1, sign2);
+      enableAllLevelObject(splashParts.group);
+      sp.push(splashParts);
       sign2 = sign1*sign2;
       sign1 = sign1 * -1;
       scene.add(sp[i].group);
