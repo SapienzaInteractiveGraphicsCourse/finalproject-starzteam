@@ -14,6 +14,8 @@ const widthWood = widthRoad-widthRoad/4;
 const numWood = 6;
 const depthWood = 5.0;
 var splash = false;
+var texture;
+var texture1;
 
 class Road {
   constructor(positionZ, numLanes) {
@@ -331,15 +333,11 @@ class Wood{
     this.group = new THREE.Group();
     this.group.position.set(posX, 0, 0);
 
-    this.materialWoodLight = new THREE.MeshPhongMaterial({
-      color: 0x7b5d33,
-      flatShading: true
-    });
+    texture = new THREE.TextureLoader().load( 'texture/sidelog.png' );
+    texture1 = new THREE.TextureLoader().load( 'texture/sidelognormal.jpg' );
 
-    this.materialWoodDark = new THREE.MeshPhongMaterial({
-      color: 0x4f3d21,
-      flatShading: true
-    });
+    this.materialLog = new THREE.MeshStandardMaterial( { map: texture, normalMap: texture1 } );
+
 
     this.vAngle = 0;
 
@@ -352,7 +350,7 @@ class Wood{
 
   drawParts() {
 
-    this.trunk = new THREE.Mesh( new THREE.BoxBufferGeometry( widthWood, highWood, depthWood ), this.materialWoodLight );
+    this.trunk = new THREE.Mesh( new THREE.BoxBufferGeometry( widthWood, highWood, depthWood ), this.materialLog );
     this.trunk.castShadow = true;
     this.trunk.receiveShadow = true;
     this.group.add(this.trunk);
@@ -399,25 +397,36 @@ class Tree {
     this.group.scale.set(1.5, 1.5, 1.5);
     this.group.rotation.x = rad(-90);
 
+    var texture1 = new THREE.TextureLoader().load( 'texture/treebark.jpg' );
+    var texture1n = new THREE.TextureLoader().load( 'texture/treebarknormal.jpg' );
+    var texture2 = new THREE.TextureLoader().load( 'texture/treebark2.jpg' );
+    var texture2n = new THREE.TextureLoader().load( 'texture/treebark2normal.jpg' );
+
     //load texture for the tree
     this.materialTree = [
-        new THREE.MeshLambertMaterial({
-            map: THREE.ImageUtils.loadTexture('texture/treebark2.jpg')
+        new THREE.MeshStandardMaterial({
+            map: texture2,
+            normalMap : texture2n
         }),
-        new THREE.MeshLambertMaterial({
-            map: THREE.ImageUtils.loadTexture('texture/treebark2.jpg')
+        new THREE.MeshStandardMaterial({
+            map: texture2,
+            normalMap : texture2n
         }),
-        new THREE.MeshLambertMaterial({
-            map: THREE.ImageUtils.loadTexture('texture/treebark.jpg')
+        new THREE.MeshStandardMaterial({
+            map: texture1,
+            normalMap : texture1n
         }),
-        new THREE.MeshLambertMaterial({
-            map: THREE.ImageUtils.loadTexture('texture/treebark.jpg')
+        new THREE.MeshStandardMaterial({
+            map: texture1,
+            normalMap : texture1n
         }),
-        new THREE.MeshLambertMaterial({
-            map: THREE.ImageUtils.loadTexture('texture/treebark2.jpg')
+        new THREE.MeshStandardMaterial({
+            map: texture2,
+            normalMap : texture2n
         }),
-        new THREE.MeshLambertMaterial({
-            map: THREE.ImageUtils.loadTexture('texture/treebark2.jpg')
+        new THREE.MeshStandardMaterial({
+            map: texture2,
+            normalMap : texture2n
         })
      ];
 
@@ -625,13 +634,10 @@ class Bush{
       this.group.scale.set(1.5, 1.5, 1.5);
     this.group.rotation.x = rad(-90);
 
-    this.materialCrown = new THREE.MeshLambertMaterial({
-      color: 0x7aa21d,
-      flatShading: true
-    });
+    texture = new THREE.TextureLoader().load( 'texture/bush.jpg' );
+    texture1 = new THREE.TextureLoader().load( 'texture/bushnormal.jpg' );
 
-    var texture = new THREE.TextureLoader().load( 'texture/bush.jpg' );
-    this.material = new THREE.MeshBasicMaterial( { map: texture });
+    this.material = new THREE.MeshStandardMaterial( { map: texture, normalMap: texture1 });
 
     this.vAngle = 0;
 

@@ -50,7 +50,8 @@ class Car {
     this.bodyMaterial = new THREE.MeshStandardMaterial({
       color: colors[index],
       roughness: 1,
-      shading: THREE.FlatShading
+      shading: THREE.FlatShading,
+      metalness : 0.4
     });
     this.blackMaterial = new THREE.MeshStandardMaterial({
       color: 0x4b4553,

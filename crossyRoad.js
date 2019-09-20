@@ -43,10 +43,9 @@ var width,
 
 var crash = false;
 
-function startGame(chosedAnimal, dayNight, difficult){
+function startGame(chosedAnimal, dayNight, difficulty){
   pickedAnimal = chosedAnimal;
   night = (dayNight == 'true');
-  difficulty = difficult;//"Easy", "Normal", "Hard"
   console.log(pickedAnimal, night, difficulty);
   setDifficulty(difficulty);
   init();
@@ -104,7 +103,7 @@ function init() {
 function addLights() {
   var ambient = new THREE.AmbientLight( 0xffffff, 1.1 );
   scene.add( ambient );
-  
+
   var spotLight = new THREE.SpotLight( 0xffffff, 1 );
   spotLight.position.set( 60, 30, 80 );
   spotLight.angle = Math.PI / 4;
@@ -294,7 +293,7 @@ function render() {
       }
 
     }
-    camera.position.set(0, 15, tot); //TO UNCOMMENT
+    //camera.position.set(0, 15, tot); //TO UNCOMMENT
 
     if(referencePositionAnimal.z > limitMax){
       actualTrack++;
@@ -442,28 +441,22 @@ function setDifficulty(diff){
     listNumCar = [0,2,3];
     listSpeed = [0.04, 0.05, 0.06, 0.12];
     speedListWood = [0.01, 0.02, 0.05, 0.1];
-    diffModifier = 0.04;
+    diffModifier = 0.035;
   }
   else if (diff == "Normal"){
     numLevels = 10;
-    listNumCar = [0,1,2,3];
+    listNumCar = [1,2,3];
     listSpeed = [0.06, 0.08, 0.15];
     speedListWood = [0.03, 0.04, 0.1];
-    diffModifier = 0.05;
+    diffModifier = 0.04;
   }
   else{
     numLevels = 16;
-    listNumCar = [0,2,3];
+    listNumCar = [2,3,4];
     listSpeed = [0.15, 0.18, 0.25];
     speedListWood = [0.05, 0.1, 0.2];
-    diffModifier = 0.06;
+    diffModifier = 0.05;
   }
-  /*else if (diff == "Insane"){
-    numLevels = 26;
-    listNumCar = [0,3,4,5];
-    listSpeed = [0.16, 0.2, 0.3];
-    diffModifier = 0.07;
-  }*/
 }
 
 //DECOMMENT these to skip the start page
