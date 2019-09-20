@@ -266,13 +266,10 @@ class River{
 
   }
 
-  doCheck(){
+  doCheck(referencePositionAnimal){
 
     var referencePosition = new THREE.Vector3();
-    var referencePositionAnimal = new THREE.Vector3();
-
     this.river.getWorldPosition(referencePosition);
-    animal.boxReference.getWorldPosition(referencePositionAnimal);
 
     var checkIsWood = false;
     var length = this.vehicles.length;
@@ -332,15 +329,12 @@ class Wood{
 
   }
 
-  goForward(){
+  goForward(referencePositionAnimal){
     this.group.position.z += this.direction*this.speed;
 
     var referencePosition = new THREE.Vector3();
-    var referencePositionAnimal = new THREE.Vector3();
-
     this.trunk.getWorldPosition(referencePosition); //OCCHIO, il sistema di riferimento world e quello locale sono diversi!!! quindi dopo una rotazione cambiano x e z
     //cambiano anche tra position.x e getWorldPosition.x
-    animal.boxReference.getWorldPosition(referencePositionAnimal);
 
     if( (Math.abs(referencePosition.z - referencePositionAnimal.z) <= this.sideZ) &&
         (Math.abs(referencePosition.x - referencePositionAnimal.x) <= this.sideX) ){
@@ -417,6 +411,11 @@ class Tree {
     this.crown.castShadow = true;
     this.crown.receiveShadow = false;
     this.group.add(this.crown);
+
+    /*
+    this.worldPosition = new THREE.Vector3();
+    trees[j].trunk.getWorldPosition(this.worldPosition);
+    */
   }
 }
 

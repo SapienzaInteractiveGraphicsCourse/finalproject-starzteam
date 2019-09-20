@@ -273,7 +273,7 @@ class Car {
     frontLeftTire.add(frontLeftRim);
 
   }
-  goForward(){ //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
+  goForward(referencePositionAnimal){ //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
     this.group.position.z += this.direction*this.speed;
     if(Math.abs(this.group.position.z) > depthRoad/2) //I can use the abs because the position is relative to the Road (not global in world coords)
       this.group.position.z = -this.group.position.z;
@@ -282,10 +282,8 @@ class Car {
     //dobbiamo trovare un BoxGeometry che racchiude tutto l'oggetto ed estrarne il centro. Da quello si può valutare se due oggetti si toccano
     //se abs(c1 - c2) <= l1/2  + l2/2 sia per x che z (and)
     var referencePosition = new THREE.Vector3();
-    var referencePositionAnimal = new THREE.Vector3();
-
     this.boxReference.getWorldPosition(referencePosition);
-    this.animalReference.boxReference.getWorldPosition(referencePositionAnimal);
+    
     if( (Math.abs(referencePosition.x - referencePositionAnimal.x) <= this.sideX + this.animalReference.sideX) &&
         (Math.abs(referencePosition.y - referencePositionAnimal.y) <= this.sideY + this.animalReference.sideY) &&
         (Math.abs(referencePosition.z - referencePositionAnimal.z) <= this.sideZ + this.animalReference.sideZ) ){

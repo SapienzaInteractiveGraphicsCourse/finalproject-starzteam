@@ -267,28 +267,30 @@ function animate() {
 
 function render() {
 
+  scene.updateMatrixWorld();
+  var referencePositionAnimal = new THREE.Vector3();
+  animal.boxReference.getWorldPosition(referencePositionAnimal);
+
   if(!crash){
-    if ((tot > animal.boxReference.getWorldPosition(referencePositionAnimal).z + 1.5 ) ||
-      animal.boxReference.getWorldPosition(referencePositionAnimal).x >30 ||
-      animal.boxReference.getWorldPosition(referencePositionAnimal).x <-30){
+
+    if ((tot > referencePositionAnimal.z + 1.5 ) ||
+      referencePositionAnimal.x >30 ||
+      referencePositionAnimal.x <-30){
       crash = true;
       outrun = true;
       window.alert("Outrunned!");
     }
     else if(highestScore != 0){
-      if((animal.boxReference.getWorldPosition(referencePositionAnimal).z - tot >= 0) && (highestScore < numberOfJumps)){
-        tot+=diffModifier*(1+ (animal.boxReference.getWorldPosition(referencePositionAnimal).z - tot)/4);
+      if((referencePositionAnimal.z - tot >= 0) && (highestScore < numberOfJumps)){
+        tot+=diffModifier*(1+ (referencePositionAnimal.z - tot)/4);
       }
       else if (highestScore < numberOfJumps){
         tot+=diffModifier;
       }
 
     }
-    scene.updateMatrixWorld();
     camera.position.set(0, 15, tot); //TO UNCOMMENT
 
-    var referencePositionAnimal = new THREE.Vector3();
-    animal.boxReference.getWorldPosition(referencePositionAnimal);
     if(referencePositionAnimal.z > limitMax){
       actualTrack++;
       limitMin = limitMax;
@@ -305,17 +307,17 @@ function render() {
         actualListTracks = tracks.slice(actualTrack - 1, actualTrack + 2);
     }
 
-    animal.actionOnPressKey();
+    animal.actionOnPressKey(referencePositionAnimal);
     var lengthVehicles;
     var i, j;
     var vehicles;
     var length = actualListTracks.length;
     for(i = 0; i < length; i++){
-      actualListTracks[i].doCheck();
+      actualListTracks[i].doCheck(referencePositionAnimal);
       vehicles = actualListTracks[i].vehicles;
       lengthVehicles = vehicles.length;
       for(j = 0; j < lengthVehicles; j++){
-        vehicles[j].goForward();
+        vehicles[j].goForward(referencePositionAnimal);
       }
     }
   }
@@ -324,7 +326,7 @@ function render() {
   }
   else{
     animal.sunkAnimation();
-    activateSplash(animal.boxReference.getWorldPosition(referencePositionAnimal).z, animal.boxReference.getWorldPosition(referencePositionAnimal).x,150);
+    activateSplash(referencePositionAnimal.z, referencePositionAnimal.x, 150);
   }
   renderer.render(scene, camera);
 }

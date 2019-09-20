@@ -14,6 +14,9 @@ var highestScore = 0;
 var oldPos = 0;
 var crashSpeed = 0.2;
 var goingFastSheep = 1.4;
+
+var referencePosition = new THREE.Vector3();
+
 class Sheep {
   constructor() {
     this.selected = 0;
@@ -187,13 +190,12 @@ class Sheep {
       }
     }
   }
-  actionOnPressKey() {
+  actionOnPressKey(referencePositionAnimal) {
     if(inMotion){
       this.jump(speedSheepDown, sign * dist, angle, last);
     }
     else{
-      var referencePosition = new THREE.Vector3();
-      this.boxReference.getWorldPosition(referencePosition);
+      referencePosition.copy(referencePositionAnimal);
       if (keyWDown){
         //check su checkTrees
         referencePosition.z += 3.42;

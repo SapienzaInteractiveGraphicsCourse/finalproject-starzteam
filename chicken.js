@@ -15,6 +15,8 @@ var legRotation = 0;
 var oldPos = 0;
 var goingFastChicken = 2.2;
 
+var referencePosition = new THREE.Vector3();
+
 class Chicken{
   constructor(){
     this.group = new THREE.Group();
@@ -231,13 +233,13 @@ class Chicken{
       if(asse=='x') this.group.position.x =oldPos + 3.75*sign;
   }
 }
-  actionOnPressKey() {
+  actionOnPressKey(referencePositionAnimal) {
     if(inMotion){
       this.jump(speedDown, sign * dist, last);
     }
     else{
-      var referencePosition = new THREE.Vector3();
-      this.boxReference.getWorldPosition(referencePosition);
+      referencePosition.copy(referencePositionAnimal);
+
       if (keyWDown){
         //check su checkTrees
 

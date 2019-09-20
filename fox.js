@@ -12,6 +12,9 @@ var highestScore = 0;
 var legRotation = 0;
 var oldPos = 0;
 var goingFastFox = 2;
+
+var referencePosition = new THREE.Vector3();
+
 class Fox{
   constructor(){
     this.group = new THREE.Group();
@@ -373,15 +376,15 @@ jump(speed, direction) {
     }
   }
 
-actionOnPressKey() {
+actionOnPressKey(referencePositionAnimal) {
 
     //document.getElementById("demo").innerHTML = 5 + 6;
     if(inMotion){
       this.jump(0.06, state);  //keep it going till the jump is complete, we don't want the animation to stop mid-air, neither the user to press too many buttons together
     }
     else{
-      var referencePosition = new THREE.Vector3();
-      this.boxReference.getWorldPosition(referencePosition);
+      referencePosition.copy(referencePositionAnimal);
+      
       if (keyWDown){
         referencePosition.z += 3.42;
         if( !checkTrees(referencePosition) ){
