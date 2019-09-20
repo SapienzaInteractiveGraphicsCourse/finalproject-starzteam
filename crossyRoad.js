@@ -290,7 +290,7 @@ function render() {
       }
 
     }
-    //camera.position.set(0, 15, tot); //TO UNCOMMENT
+    camera.position.set(0, 15, tot); //TO UNCOMMENT
 
     if(referencePositionAnimal.z > limitMax){
       actualTrack++;
