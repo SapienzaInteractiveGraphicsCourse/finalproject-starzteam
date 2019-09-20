@@ -52,6 +52,7 @@ function startGame(chosedAnimal, dayNight, difficult){
   init();
   animate();
   if(night != false){
+    night = false;
     toggleNight();
   }
 }
@@ -101,18 +102,21 @@ function init() {
 }
 
 function addLights() {
-  const light = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.9);
-  scene.add(light);
-
-  const directLight1 = new THREE.DirectionalLight(0xffd798, 0.8);
-  directLight1.castShadow = true;
-  directLight1.position.set(9.5, 8.2, 8.3);
-  scene.add(directLight1);
-
-  const directLight2 = new THREE.DirectionalLight(0xc9ceff, 0.5);
-  directLight2.castShadow = true;
-  directLight2.position.set(-15.8, 5.2, 8);
-  scene.add(directLight2);
+  var ambient = new THREE.AmbientLight( 0xffffff, 1.1 );
+  scene.add( ambient );
+  
+  var spotLight = new THREE.SpotLight( 0xffffff, 1 );
+  spotLight.position.set( 60, 30, 80 );
+  spotLight.angle = Math.PI / 4;
+  spotLight.penumbra = 0.05;
+  spotLight.decay = 2;
+  spotLight.distance = 500;
+  spotLight.castShadow = true;
+  spotLight.shadow.mapSize.width = 1024;
+  spotLight.shadow.mapSize.height = 1024;
+  spotLight.shadow.camera.near = 10;
+  spotLight.shadow.camera.far = 200;
+  scene.add( spotLight );
 }
 
 function drawAnimal() {
@@ -397,14 +401,14 @@ class Sky {
       shading: THREE.FlatShading
     });
 
-    for (let i = 0; i < 3; i ++) {
-      const light = new THREE.PointLight(0xF55889, 2, 30);
+    for (let i = 0; i < 1; i ++) {
+      const light = new THREE.PointLight(0xF55889, 3, 150);
       const mesh = new THREE.Mesh(geometry, material);
       light.add(mesh);
 
-      light.position.set((Math.random() - 2) * 6,
-                         -(Math.random() - 2) * 10,
-                         (Math.random() - 2) * 10);
+      light.position.set((Math.random() - 2) * 15,
+                         -(Math.random() - 2) * 20,
+                         (Math.random() - 2) * 20);
       light.updateMatrix();
       light.matrixAutoUpdate = false;
 
