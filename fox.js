@@ -328,7 +328,6 @@ jump(speed, direction) {
     contatore+=2;
 
     this.leftFrontLeg.rotation.x += legRotation;
-    console.log(this.leftFrontLeg.rotation.x);
     this.leftFrontDownLeg.rotation.x += legRotation;
 
     this.rightFrontLeg.rotation.x += legRotation;

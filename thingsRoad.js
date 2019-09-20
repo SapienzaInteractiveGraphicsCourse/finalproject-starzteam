@@ -226,7 +226,6 @@ class River{
     var dir = 1;
 
     for(var i = 0; i < numWood; i++){
-      console.log(i, pos);
       var trunk = new Wood(1.2, -dir);
       trunk.group.position.z = -pos+posRand;
       this.vehicles.push(trunk);
@@ -463,7 +462,6 @@ class GrassStart {
     this.trees = [];
     var prev = null;
     for(var i=0; i<2; i++){
-      console.log(i);
       this.middleGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( 2*widthGrass, highGrass, depthGrass), this.materialMiddle);
       if(i==0) this.middleGrass.position.x = widthGrass/2;
       else this.middleGrass.position.x = -(2*widthGrass-widthGrass/2.25);
@@ -598,7 +596,6 @@ class Bush{
 
     var texture = new THREE.TextureLoader().load( 'texture/bush.jpg' );
     this.material = new THREE.MeshBasicMaterial( { map: texture });
-    console.log("texture loaded");
 
     this.vAngle = 0;
 
