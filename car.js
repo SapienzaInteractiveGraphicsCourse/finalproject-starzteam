@@ -36,7 +36,7 @@ class Car {
     this.sideY = 1.5*boxReferenceHeight/2;
     this.sideX = 1.5*boxReferenceDepth/2;
 
-    this.boxReference.visible = true;
+    this.boxReference.visible = false;
 
     this.whiteMaterial = new THREE.MeshStandardMaterial({
       color: 0xffffff,
