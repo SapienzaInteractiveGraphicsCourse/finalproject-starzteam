@@ -124,7 +124,7 @@ function getNewTerrain(posZ = -1){
   var track;
   var pos;
   var numLanes = [1,2,3,4];
-  
+
   if(posZ == 0){
     track = new GrassStart(posAtt);
   }
@@ -161,7 +161,6 @@ function drawTerrain() {
   tracks.push(track);
   mappingTracks.push(posAtt);
   limitMax = posAtt;
-  actualListTracks = tracks.slice(0, 2);
 
   for(i = 1; i < numLevels; i++){
     values = getNewTerrain();
@@ -171,14 +170,14 @@ function drawTerrain() {
     tracks.push(track);
     mappingTracks.push(posAtt);
   }
-  
+
   values = getNewTerrain(1);
   track = values.track;
   posAtt += values.pos;
   scene.add(track.group);
   tracks.push(track);
   mappingTracks.push(posAtt);
-  
+
   actualListTracks = tracks.slice(0, 2);
 }
 

@@ -84,7 +84,7 @@ class Road {
     var j = 0;
 
     var listSpeed = [0.02, 0.05, 0.1, 0.2];
-    var listInitial = [-10, -20, -30, -40];
+    var listInitial = [-20, -30, -40, -45];
     var listDistance = [5, 10, 15];
     var newSpeed;
     var newInitial;
@@ -472,19 +472,19 @@ class GrassStart {
       if(prev != null) prev.add(this.middleGrass);
       else this.group.add(this.middleGrass);
       prev = this.middleGrass;
-      
+
       this.leftGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( 2*widthGrass, highGrass, depthGrass), this.materialLeft);
       this.leftGrass.position.z = - distGrass;
       this.middleGrass.receiveShadow = true;
       this.middleGrass.add(this.leftGrass);
-      
+
       this.rightGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( 2*widthGrass, highGrass, depthGrass), this.materialLeft);
       this.rightGrass.position.z = distGrass;
       this.middleGrass.receiveShadow = true;
       this.middleGrass.add(this.rightGrass);
-      
+
       this.occupiedSpace += widthGrass;
-      
+
       var now = -depthGrass*2-(depthGrass-1.8)/2;
       var tree = null;
       while(now < (depthGrass-1.5)/2){
@@ -511,36 +511,36 @@ class GrassEnd {
     this.group.position.y = -1.35;
     this.group.position.z = positionZ;
     this.group.scale.set(1.5, 1.5, 1.5);
-    
+
     this.materialMiddle = new THREE.MeshPhongMaterial({
       color: 0xbaf455,
       flatShading: true
     });
-    
+
     this.materialLeft = new THREE.MeshPhongMaterial({
       color: 0x99C846,
       flatShading: true
     });
-    
+
     this.vAngle = 0;
-    
+
     this.drawParts();
-    
+
     this.group.traverse((part) => {
       part.castShadow = true;
       part.receiveShadow = true;
     });
-    
+
     // load a texture, set wrap mode to repeat
     /*
      *   var texture = new THREE.TextureLoader().load( "grass.jpg" );
      *   texture.wrapS = THREE.RepeatWrapping;
      *   texture.wrapT = THREE.RepeatWrapping;
      *   texture.repeat.set( 4, 4 );*/
-    
+
     this.vehicles = [];
   }
-  
+
   drawParts() {
     this.trees = [];
     var prev = null;
@@ -553,19 +553,19 @@ class GrassEnd {
       if(prev != null) prev.add(this.middleGrass);
       else this.group.add(this.middleGrass);
       prev = this.middleGrass;
-      
+
       this.leftGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( 2*widthGrass, highGrass, depthGrass), this.materialLeft);
       this.leftGrass.position.z = - distGrass;
       this.middleGrass.receiveShadow = true;
       this.middleGrass.add(this.leftGrass);
-      
+
       this.rightGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( 2*widthGrass, highGrass, depthGrass), this.materialLeft);
       this.rightGrass.position.z = distGrass;
       this.middleGrass.receiveShadow = true;
       this.middleGrass.add(this.rightGrass);
-      
+
       this.occupiedSpace += widthGrass;
-      
+
       var now = -depthGrass*2-(depthGrass-1.8)/2;
       var tree = null;
       while(now < (depthGrass-1.5)/2){
@@ -578,9 +578,9 @@ class GrassEnd {
       }
     }
   }
-  
+
   doCheck(){
-    
+
   }
 }
 
@@ -609,7 +609,7 @@ class Bush{
 
   drawParts() {
     this.height = bushHeights[Math.floor(Math.random()*bushHeights.length)];
-    
+
     this.sideX = ((this.height+1)/3)*1.5; //lato box / 2
     this.sideZ = ((this.height+1)/3)*1.5;
 

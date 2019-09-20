@@ -20,10 +20,9 @@ class Sheep {
     this.group.position.y = 0.4;
     this.group.position.z = -6;
 
-    const boxReferenceGeometry = new THREE.BoxGeometry(2.2, 2.4, 2.5);
+    const boxReferenceGeometry = new THREE.BoxGeometry(2.2, 2.4, 2.7);
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
     this.boxReference = new THREE.Mesh(boxReferenceGeometry, material);
-    this.boxReference.position.set(0, 0, 0.15);
     this.group.add(this.boxReference);
 
     this.boxReference.visible = false;
