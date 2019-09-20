@@ -124,7 +124,15 @@ function getNewTerrain(posZ = -1){
   var track;
   var pos;
   var numLanes = [1,2,3,4];
-  if(posZ == -1){
+  
+  if(posZ == 0){
+    track = new GrassStart(posAtt);
+    numberOfJumps+=1;
+  }
+  else if(posZ == 1){
+    track = new GrassEnd(posAtt);
+    numberOfJumps+=1;
+  } else {
     if(Math.floor(Math.random()*2) == 0){
       var n = Math.floor(Math.random()*numLanes.length);
       track = new Road(posAtt, numLanes[n]);
@@ -134,10 +142,6 @@ function getNewTerrain(posZ = -1){
       track = new River(posAtt);
       numberOfJumps+=3;
     }
-  }
-  else {
-    track = new GrassStart(posAtt);
-    numberOfJumps+=1;
   }
   pos = track.occupiedSpace*1.5;
   return {
@@ -169,6 +173,14 @@ function drawTerrain() {
     tracks.push(track);
     mappingTracks.push(posAtt);
   }
+  
+  values = getNewTerrain(1);
+  track = values.track;
+  posAtt += values.pos;
+  scene.add(track.group);
+  tracks.push(track);
+  mappingTracks.push(posAtt);
+  
   actualListTracks = tracks.slice(0, 2);
 }
 
