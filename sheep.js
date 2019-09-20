@@ -33,7 +33,7 @@ class Sheep {
     this.boxReference = new THREE.Mesh(boxReferenceGeometry, material);
     this.group.add(this.boxReference);
 
-    this.boxReference.visible = true;
+    this.boxReference.visible = false;
 
     this.sideX = boxReferenceWidth/2; //lato box / 2
     this.sideY = boxReferenceHeight/2;
