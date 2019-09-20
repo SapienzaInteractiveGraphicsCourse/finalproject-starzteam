@@ -290,7 +290,6 @@ class Car {
         (Math.abs(referencePosition.y - referencePositionAnimal.y) <= this.sideY + this.animalReference.sideY) &&
         (Math.abs(referencePosition.z - referencePositionAnimal.z) <= this.sideZ + this.animalReference.sideZ) ){
           crash = true;
-          window.alert("CRASH");
         }
   }
 }
