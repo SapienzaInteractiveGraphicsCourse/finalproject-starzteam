@@ -3,7 +3,7 @@
 //#######################
 const speedUp = 0.12;
 const speedDown = 0.16;
-var last = 'x';
+var last = 'z';
 var sign = +1;
 var inMotion = false;
 var descending = false;
@@ -23,21 +23,20 @@ class Chicken{
     this.group.position.y = -0.55; //x++ right with respect of the camera, y++ height to the high, z++ front closer to the camera (x, y, z)
     this.group.position.z = -6;
 
-    const boxReferenceGeometry = new THREE.BoxGeometry(0.8, 1.2, 1);
+    const boxReferenceWidth = 0.8;
+    const boxReferenceHeight = 1.2;
+    const boxReferenceDepth = 1;
+
+    const boxReferenceGeometry = new THREE.BoxBufferGeometry(boxReferenceWidth, boxReferenceHeight, boxReferenceDepth);
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
     this.boxReference = new THREE.Mesh(boxReferenceGeometry, material);
     this.group.add(this.boxReference);
 
     this.boxReference.visible = false;
 
-    this.referenceX = 0;
-    this.referenceY = -0.5;
-    this.referenceZ = 0.05;
-
-    this.sideX = this.boxReference.geometry.parameters.width/2;
-    this.sideY = this.boxReference.geometry.parameters.width/2;
-    this.sideZ = this.boxReference.geometry.parameters.width/2;
-
+    this.sideX = boxReferenceWidth/2;
+    this.sideY = boxReferenceHeight/2;
+    this.sideZ = boxReferenceDepth/2;
 
     this.skinMaterial = new THREE.MeshStandardMaterial({
       color: 0xffffff,
@@ -68,20 +67,20 @@ class Chicken{
     this.drawLegs();
   }
   drawBody() {
-    const bodyGeometry = new THREE.BoxGeometry(0.7, 0.5, 1);
+    const bodyGeometry = new THREE.BoxBufferGeometry(0.7, 0.5, 1);
     const body = new THREE.Mesh(bodyGeometry, this.skinMaterial);
     body.castShadow = true;
     body.receiveShadow = true;
     this.group.add(body);
 
-    const leftWingGeometry = new THREE.BoxGeometry(0.23, 0.16, 0.33);
+    const leftWingGeometry = new THREE.BoxBufferGeometry(0.23, 0.16, 0.33);
     this.leftWing = new THREE.Mesh(leftWingGeometry, this.skinMaterial);
     this.leftWing.castShadow = true;
     this.leftWing.receiveShadow = true;
     this.leftWing.position.set(0.4, 0, 0);
     body.add(this.leftWing);
 
-    const rightWingGeometry = new THREE.BoxGeometry(0.23, 0.16, 0.33);
+    const rightWingGeometry = new THREE.BoxBufferGeometry(0.23, 0.16, 0.33);
     this.rightWing = new THREE.Mesh(rightWingGeometry, this.skinMaterial);
     this.rightWing.castShadow = true;
     this.rightWing.receiveShadow = true;
@@ -90,42 +89,42 @@ class Chicken{
 
   }
   drawHead() {
-    const headGeometry = new THREE.BoxGeometry(0.7, 0.5, 0.5);
+    const headGeometry = new THREE.BoxBufferGeometry(0.7, 0.5, 0.5);
     const head = new THREE.Mesh(headGeometry, this.skinMaterial);
     //head.castShadow = true;
     head.receiveShadow = true;
     head.position.set(0, 0.5, 0.25);
     this.group.add(head);
 
-    const noseGeometry = new THREE.BoxGeometry(0.17, 0.17, 0.24);
+    const noseGeometry = new THREE.BoxBufferGeometry(0.17, 0.17, 0.24);
     const nose = new THREE.Mesh(noseGeometry, this.orangeMaterial);
     //head.castShadow = true;
     nose.receiveShadow = true;
     nose.position.set(0, 0, 0.37);
     head.add(nose);
 
-    const wattlesGeometry = new THREE.BoxGeometry(0.17, 0.17, 0.17);
+    const wattlesGeometry = new THREE.BoxBufferGeometry(0.17, 0.17, 0.17);
     const wattles = new THREE.Mesh(wattlesGeometry, this.redMaterial);
     //wattles.castShadow = true;
     wattles.receiveShadow = true;
     wattles.position.set(0, -0.17, 0.335);
     head.add(wattles);
 
-    const leftEyeGeometry = new THREE.BoxGeometry(0.05, 0.05, 0.05);
+    const leftEyeGeometry = new THREE.BoxBufferGeometry(0.05, 0.05, 0.05);
     const leftEye = new THREE.Mesh(leftEyeGeometry, this.eyeMaterial);
     //leftEye.castShadow = true;
     leftEye.receiveShadow = true;
     leftEye.position.set(0.37, 0.1, 0.1);
     head.add(leftEye);
 
-    const rightEyeGeometry = new THREE.BoxGeometry(0.05, 0.05, 0.05);
+    const rightEyeGeometry = new THREE.BoxBufferGeometry(0.05, 0.05, 0.05);
     const rightEye = new THREE.Mesh(rightEyeGeometry, this.eyeMaterial);
     //rightEye.castShadow = true;
     rightEye.receiveShadow = true;
     rightEye.position.set(-0.37, 0.1, 0.1);
     head.add(rightEye);
 
-    const crestGeometry = new THREE.BoxGeometry(0.14, 0.14, 0.3);
+    const crestGeometry = new THREE.BoxBufferGeometry(0.14, 0.14, 0.3);
     const crest = new THREE.Mesh(crestGeometry, this.redMaterial);
     //crest.castShadow = true;
     crest.receiveShadow = true;
@@ -133,56 +132,56 @@ class Chicken{
     head.add(crest);
   }
   drawLegs() {
-    const leftLegGeometry = new THREE.CylinderGeometry(0.06, 0.06, 0.35, 16);
+    const leftLegGeometry = new THREE.CylinderBufferGeometry(0.06, 0.06, 0.35, 16);
     this.leftLeg = new THREE.Mesh(leftLegGeometry, this.orangeMaterial);
     //leftLeg.castShadow = true;
     this.leftLeg.receiveShadow = true;
     this.leftLeg.position.set(0.175, -0.425, 0);
     this.group.add(this.leftLeg);
 
-    const leftPawGeometry = new THREE.BoxGeometry(0.27, 0.07, 0.2);
+    const leftPawGeometry = new THREE.BoxBufferGeometry(0.27, 0.07, 0.2);
     const leftPaw = new THREE.Mesh(leftPawGeometry, this.orangeMaterial);
     //leftPaw.castShadow = true;
     leftPaw.receiveShadow = true;
     leftPaw.position.set(0, -0.2125, 0);
     this.leftLeg.add(leftPaw);
 
-    const leftNail1Geometry = new THREE.BoxGeometry(0.0675, 0.07, 0.1);
+    const leftNail1Geometry = new THREE.BoxBufferGeometry(0.0675, 0.07, 0.1);
     const leftNail1 = new THREE.Mesh(leftNail1Geometry, this.orangeMaterial);
     //leftNail1.castShadow = true;
     leftNail1.receiveShadow = true;
     leftNail1.position.set(0.10125, 0, 0.15);
     leftPaw.add(leftNail1);
 
-    const leftNail2Geometry = new THREE.BoxGeometry(0.0675, 0.07, 0.1);
+    const leftNail2Geometry = new THREE.BoxBufferGeometry(0.0675, 0.07, 0.1);
     const leftNail2 = new THREE.Mesh(leftNail2Geometry, this.orangeMaterial);
     //leftNail2.castShadow = true;
     leftNail2.receiveShadow = true;
     leftNail2.position.set(-0.10125, 0, 0.15);
     leftPaw.add(leftNail2);
 
-    const rightLegGeometry = new THREE.CylinderGeometry(0.06, 0.06, 0.35, 16);
+    const rightLegGeometry = new THREE.CylinderBufferGeometry(0.06, 0.06, 0.35, 16);
     this.rightLeg = new THREE.Mesh(rightLegGeometry, this.orangeMaterial);
     //rightLeg.castShadow = true;
     this.rightLeg.receiveShadow = true;
     this.rightLeg.position.set(-0.175, -0.425, 0);
     this.group.add(this.rightLeg);
 
-    const rightPawGeometry = new THREE.BoxGeometry(0.27, 0.07, 0.2);
+    const rightPawGeometry = new THREE.BoxBufferGeometry(0.27, 0.07, 0.2);
     const rightPaw = new THREE.Mesh(rightPawGeometry, this.orangeMaterial);
     //rightPaw.castShadow = true;
     rightPaw.receiveShadow = true;
     rightPaw.position.set(0, -0.2125, 0);
     this.rightLeg.add(rightPaw);
 
-    const rightNail1Geometry = new THREE.BoxGeometry(0.0675, 0.07, 0.1);
+    const rightNail1Geometry = new THREE.BoxBufferGeometry(0.0675, 0.07, 0.1);
     const rightNail1 = new THREE.Mesh(rightNail1Geometry, this.orangeMaterial);
     //rightNail1.castShadow = true;
     rightNail1.receiveShadow = true;
     rightNail1.position.set(0.10125, 0, 0.15);
     rightPaw.add(rightNail1);
 
-    const rightNail2Geometry = new THREE.BoxGeometry(0.0675, 0.07, 0.1);
+    const rightNail2Geometry = new THREE.BoxBufferGeometry(0.0675, 0.07, 0.1);
     const rightNail2 = new THREE.Mesh(rightNail2Geometry, this.orangeMaterial);
     //rightNail2.castShadow = true;
     rightNail2.receiveShadow = true;
@@ -243,7 +242,7 @@ class Chicken{
       if (keyWDown){
         //check su checkTrees
 
-        referencePosition.z += 3.42;
+        referencePosition.z += 3.75;
         if( !checkTrees(referencePosition) ){
           currentScore++;
           document.getElementById("cScore").innerHTML = currentScore;
@@ -253,6 +252,11 @@ class Chicken{
           }
           //Resetting stuff and preparing s.t. when going to inMotion i can keep on doing what i was doing till i'm done (shish)
           inMotion = true;
+          if(last != 'z'){
+            var temp = this.sideX;
+            this.sideX = this.sideZ;
+            this.sideZ = temp;
+          }
           last = 'z';
           sign = 1;
           this.vAngle = 0;
@@ -264,11 +268,16 @@ class Chicken{
       else if (keySDown){
         //check su checkTrees
 
-        referencePosition.z -= 3.72;
+        referencePosition.z -= 3.75;
         if( !checkTrees(referencePosition) ){
           currentScore--;
           document.getElementById("cScore").innerHTML = currentScore;
           inMotion = true;
+          if(last != 'z'){
+            var temp = this.sideX;
+            this.sideX = this.sideZ;
+            this.sideZ = temp;
+          }
           last = 'z';
           sign = -1;
           this.vAngle = 0;
@@ -279,9 +288,14 @@ class Chicken{
       }
       else if (keyADown) {
         //check su checkTrees
-        referencePosition.x += 3.57;
+        referencePosition.x += 3.75;
         if( !checkTrees(referencePosition) ){
           inMotion = true;
+          if(last != 'x'){
+            var temp = this.sideX;
+            this.sideX = this.sideZ;
+            this.sideZ = temp;
+          }
           last = 'x';
           sign = 1;
           this.vAngle = 0;
@@ -293,9 +307,14 @@ class Chicken{
       else if (keyDDown) {
         //check su checkTrees
 
-        referencePosition.x -= 3.57;
+        referencePosition.x -= 3.75;
         if( !checkTrees(referencePosition) ){
           inMotion = true;
+          if(last != 'x'){
+            var temp = this.sideX;
+            this.sideX = this.sideZ;
+            this.sideZ = temp;
+          }
           last = 'x';
           sign = -1;
           this.vAngle = 0;

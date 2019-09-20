@@ -22,7 +22,11 @@ class Fox{
     this.group.position.z = -6;
     this.restHeight = this.group.position.y;
 
-    const boxReferenceGeometry = new THREE.BoxGeometry(0.6*size, 1*size, 2*size);
+    const boxReferenceWidth = 0.6*size;
+    const boxReferenceHeight = 1*size;
+    const boxReferenceDepth = 2*size;
+
+    const boxReferenceGeometry = new THREE.BoxBufferGeometry(boxReferenceWidth, boxReferenceHeight, boxReferenceDepth);
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
     this.boxReference = new THREE.Mesh(boxReferenceGeometry, material);
     this.boxReference.position.set(0, -0.2, 0);
@@ -30,9 +34,9 @@ class Fox{
 
     this.boxReference.visible = false;
 
-    this.sideX = this.boxReference.geometry.parameters.width/2; //lato box / 2
-    this.sideY = this.boxReference.geometry.parameters.height/2;
-    this.sideZ = this.boxReference.geometry.parameters.depth/2;
+    this.sideX = boxReferenceWidth/2; //lato box / 2
+    this.sideY = boxReferenceHeight/2;
+    this.sideZ = boxReferenceDepth/2;
 
     this.skinMaterial = new THREE.MeshStandardMaterial({
       color: 0xff4500,
@@ -59,13 +63,13 @@ class Fox{
     this.drawLegs();
   }
   drawBody() {
-    const bodyGeometry = new THREE.BoxGeometry(0.5*size, 0.5*size, 1.2  *size);
+    const bodyGeometry = new THREE.BoxBufferGeometry(0.5*size, 0.5*size, 1.2  *size);
     this.body = new THREE.Mesh(bodyGeometry, this.skinMaterial);
     this.body.castShadow = true;
     this.body.receiveShadow = true;
     this.group.add(this.body);
 
-    const tailGeometry = new THREE.BoxGeometry(0.23*size, 0.23*size, 0.7*size);
+    const tailGeometry = new THREE.BoxBufferGeometry(0.23*size, 0.23*size, 0.7*size);
     this.tail = new THREE.Mesh(tailGeometry, this.skinMaterial);
     this.tail.receiveShadow = true;
     this.tail.castShadow = true;
@@ -74,7 +78,7 @@ class Fox{
     this.tail.rotation.set(rad(-15), 0, 0);
     this.group.add(this.tail);
 
-    const tailEndGeometry = new THREE.BoxGeometry(0.23*size, 0.23*size, 0.2*size);
+    const tailEndGeometry = new THREE.BoxBufferGeometry(0.23*size, 0.23*size, 0.2*size);
     const tailEnd = new THREE.Mesh(tailEndGeometry, this.whiteMaterial);
     tailEnd.receiveShadow = true;
     tailEnd.castShadow = true;
@@ -84,7 +88,7 @@ class Fox{
 
   }
   drawHead() {
-    const headGeometry = new THREE.BoxGeometry(0.6*size, 0.4*size, 0.4*size);
+    const headGeometry = new THREE.BoxBufferGeometry(0.6*size, 0.4*size, 0.4*size);
     const head = new THREE.Mesh(headGeometry, this.skinMaterial);
     head.receiveShadow = true;
     head.castShadow = true;
@@ -92,21 +96,21 @@ class Fox{
     head.position.set(0*size, 0.1*size,0.8*size);
     this.group.add(head);
 
-    const noseGeometry = new THREE.BoxGeometry(0.35*size, 0.15*size, 0.2*size);
+    const noseGeometry = new THREE.BoxBufferGeometry(0.35*size, 0.15*size, 0.2*size);
     const nose = new THREE.Mesh(noseGeometry, this.skinMaterial);
     nose.receiveShadow = true;
     nose.castShadow = true;
     nose.position.set(0*size, -0.1*size, 0.25*size);
     head.add(nose);
 
-    const noseEndGeometry = new THREE.BoxGeometry(0.2*size, 0.05*size, 0.01*size);
+    const noseEndGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.05*size, 0.01*size);
     const noseEnd = new THREE.Mesh(noseEndGeometry, this.blackMaterial);
     noseEnd.receiveShadow = true;
     noseEnd.position.set(0, 0.05*size, 0.1*size);
     nose.add(noseEnd);
 
     //Ears
-    const leftEarGeometry = new THREE.BoxGeometry(0.2*size, 0.2*size, 0.05*size);
+    const leftEarGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.2*size, 0.05*size);
     const leftEar = new THREE.Mesh(leftEarGeometry, this.whiteMaterial);
     leftEar.receiveShadow = true;
     leftEar.castShadow = true;
@@ -114,14 +118,14 @@ class Fox{
     leftEar.rotation.set(0, rad(15), 0);
     head.add(leftEar);
 
-    const additionalLeftEarGeometry = new THREE.BoxGeometry(0.06*size, 0.24*size, 0.06*size);
+    const additionalLeftEarGeometry = new THREE.BoxBufferGeometry(0.06*size, 0.24*size, 0.06*size);
     const additionalLeftEar = new THREE.Mesh(additionalLeftEarGeometry, this.skinMaterial);
     additionalLeftEar.receiveShadow = true;
     additionalLeftEar.castShadow = true;
     additionalLeftEar.position.set(-0.08*size, 0*size, 0);
     leftEar.add(additionalLeftEar);
 
-    const additionalLeftEar2Geometry = new THREE.BoxGeometry(0.05*size, 0.2*size, 0.05*size);
+    const additionalLeftEar2Geometry = new THREE.BoxBufferGeometry(0.05*size, 0.2*size, 0.05*size);
     const additionalLeftEar2 = new THREE.Mesh(additionalLeftEar2Geometry, this.skinMaterial);
     additionalLeftEar2.receiveShadow = true;
     additionalLeftEar2.castShadow = true;
@@ -129,7 +133,7 @@ class Fox{
     additionalLeftEar2.rotation.set(0, 0, rad(90));
     additionalLeftEar.add(additionalLeftEar2);
 
-    const rightEarGeometry = new THREE.BoxGeometry(0.2*size, 0.2*size, 0.05*size);
+    const rightEarGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.2*size, 0.05*size);
     const rightEar = new THREE.Mesh(rightEarGeometry, this.whiteMaterial);
     rightEar.receiveShadow = true;
     rightEar.castShadow = true;
@@ -137,14 +141,14 @@ class Fox{
     rightEar.rotation.set(0, rad(-15), 0);
     head.add(rightEar);
 
-    const additionalRightEarGeometry = new THREE.BoxGeometry(0.06*size, 0.24*size, 0.06*size);
+    const additionalRightEarGeometry = new THREE.BoxBufferGeometry(0.06*size, 0.24*size, 0.06*size);
     const additionalRightEar = new THREE.Mesh(additionalRightEarGeometry, this.skinMaterial);
     additionalRightEar.receiveShadow = true;
     additionalRightEar.castShadow = true;
     additionalRightEar.position.set(+0.08*size, 0.0*size, 0);
     rightEar.add(additionalRightEar);
 
-    const additionalRightEar2Geometry = new THREE.BoxGeometry(0.06*size, 0.2*size, 0.06*size);
+    const additionalRightEar2Geometry = new THREE.BoxBufferGeometry(0.06*size, 0.2*size, 0.06*size);
     const additionalRightEar2 = new THREE.Mesh(additionalRightEar2Geometry, this.skinMaterial);
     additionalRightEar2.receiveShadow = true;
     additionalRightEar2.castShadow = true;
@@ -153,13 +157,13 @@ class Fox{
     additionalRightEar.add(additionalRightEar2);
 
     //Eyes
-    const leftEyeGeometry =new THREE.BoxGeometry(0.05*size, 0.05*size, 0.05*size);
+    const leftEyeGeometry =new THREE.BoxBufferGeometry(0.05*size, 0.05*size, 0.05*size);
     const leftEye = new THREE.Mesh(leftEyeGeometry, this.blackMaterial);
     leftEye.receiveShadow = true;
     leftEye.position.set(0.15*size, 0.1*size, 0.2*size);
     head.add(leftEye);
 
-    const rightEyeGeometry = new THREE.BoxGeometry(0.05*size, 0.05*size, 0.05*size)
+    const rightEyeGeometry = new THREE.BoxBufferGeometry(0.05*size, 0.05*size, 0.05*size)
     const rightEye = new THREE.Mesh(rightEyeGeometry, this.blackMaterial);
     rightEye.receiveShadow = true;
     rightEye.position.set(-0.15*size, 0.1*size, 0.2*size);
@@ -168,21 +172,21 @@ class Fox{
   drawLegs() {
 
     //Right Front Leg
-    const rightBackLegGeometry = new THREE.BoxGeometry(0.2*size, 0.4*size, 0.2*size);
+    const rightBackLegGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.4*size, 0.2*size);
     this.rightBackLeg = new THREE.Mesh(rightBackLegGeometry, this.skinMaterial);
     this.rightBackLeg.receiveShadow = true;
     this.rightBackLeg.castShadow = true;
     this.rightBackLeg.position.set(-0.25*size, -0.3*size, -0.45*size);
     this.group.add(this.rightBackLeg);
 
-    const rightBackDownLegGeometry = new THREE.BoxGeometry(0.2*size, 0.4*size, 0.2*size);
+    const rightBackDownLegGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.4*size, 0.2*size);
     this.rightBackDownLeg = new THREE.Mesh(rightBackDownLegGeometry, this.blackMaterial);
     this.rightBackDownLeg.receiveShadow = true;
     this.rightBackDownLeg.castShadow = true;
     this.rightBackDownLeg.position.set(0, -0.4*size, 0);
     this.rightBackLeg.add(this.rightBackDownLeg);
 
-    const rightBackPawGeometry = new THREE.BoxGeometry(0.2*size, 0.1*size, 0.2*size);
+    const rightBackPawGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.1*size, 0.2*size);
     const rightBackPaw = new THREE.Mesh(rightBackPawGeometry, this.whiteMaterial);
     rightBackPaw.receiveShadow = true;
     rightBackPaw.castShadow = true;
@@ -190,21 +194,21 @@ class Fox{
     this.rightBackDownLeg.add(rightBackPaw);
 
     //rightFrontLeg
-    const rightFrontLegGeometry = new THREE.BoxGeometry(0.2*size, 0.4*size, 0.2*size);
+    const rightFrontLegGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.4*size, 0.2*size);
     this.rightFrontLeg = new THREE.Mesh(rightFrontLegGeometry, this.skinMaterial);
     this.rightFrontLeg.receiveShadow = true;
     this.rightFrontLeg.castShadow = true;
     this.rightFrontLeg.position.set(-0.25*size, -0.3*size, +0.45*size);
     this.group.add(this.rightFrontLeg);
 
-    const rightFrontDownLegGeometry = new THREE.BoxGeometry(0.2*size, 0.4*size, 0.2*size);
+    const rightFrontDownLegGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.4*size, 0.2*size);
     this.rightFrontDownLeg = new THREE.Mesh(rightFrontDownLegGeometry, this.blackMaterial);
     this.rightFrontDownLeg.receiveShadow = true;
     this.rightFrontDownLeg.castShadow = true;
     this.rightFrontDownLeg.position.set(0.0*size, -0.4*size, 0.0*size);
     this.rightFrontLeg.add(this.rightFrontDownLeg);
 
-    const rightFrontPawGeometry = new THREE.BoxGeometry(0.2*size, 0.1*size, 0.2*size);
+    const rightFrontPawGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.1*size, 0.2*size);
     const rightFrontPaw = new THREE.Mesh(rightFrontPawGeometry, this.whiteMaterial);
     rightFrontPaw.receiveShadow = true;
     rightFrontPaw.castShadow = true;
@@ -212,21 +216,21 @@ class Fox{
     this.rightFrontDownLeg.add(rightFrontPaw);
 
     //Left Back Leg
-    const leftBackLegGeometry = new THREE.BoxGeometry(0.2*size, 0.4*size, 0.2*size);
+    const leftBackLegGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.4*size, 0.2*size);
     this.leftBackLeg = new THREE.Mesh(leftBackLegGeometry, this.skinMaterial);
     this.leftBackLeg.receiveShadow = true;
     this.leftBackLeg.castShadow = true;
     this.leftBackLeg.position.set(0.25*size, -0.3*size, -0.45*size);
     this.group.add(this.leftBackLeg);
 
-    const leftBackDownLegGeometry = new THREE.BoxGeometry(0.2*size, 0.4*size, 0.2*size);
+    const leftBackDownLegGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.4*size, 0.2*size);
     this.leftBackDownLeg = new THREE.Mesh(leftBackDownLegGeometry, this.blackMaterial);
     this.leftBackDownLeg.receiveShadow = true;
     this.leftBackDownLeg.castShadow = true;
     this.leftBackDownLeg.position.set(0*size, -0.4*size, -0.0*size);
     this.leftBackLeg.add(this.leftBackDownLeg);
 
-    const leftBackPawGeometry = new THREE.BoxGeometry(0.2*size, 0.1*size, 0.2*size);
+    const leftBackPawGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.1*size, 0.2*size);
     const leftBackPaw = new THREE.Mesh(leftBackPawGeometry, this.whiteMaterial);
     leftBackPaw.receiveShadow = true;
     leftBackPaw.castShadow = true;
@@ -234,21 +238,21 @@ class Fox{
     this.leftBackDownLeg.add(leftBackPaw);
 
     //Left Front Leg
-    const leftFrontLegGeometry = new THREE.BoxGeometry(0.2*size, 0.4*size, 0.2*size);
+    const leftFrontLegGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.4*size, 0.2*size);
     this.leftFrontLeg = new THREE.Mesh(leftFrontLegGeometry, this.skinMaterial);
     this.leftFrontLeg.receiveShadow = true;
     this.leftFrontLeg.castShadow = true;
     this.leftFrontLeg.position.set(0.25*size, -0.3*size, +0.45*size);
     this.group.add(this.leftFrontLeg);
 
-    const leftFrontDownLegGeometry = new THREE.BoxGeometry(0.2*size, 0.4*size, 0.2*size);
+    const leftFrontDownLegGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.4*size, 0.2*size);
     this.leftFrontDownLeg = new THREE.Mesh(leftFrontDownLegGeometry, this.blackMaterial);
     this.leftFrontDownLeg.receiveShadow = true;
     this.leftFrontDownLeg.castShadow = true;
     this.leftFrontDownLeg.position.set(0.0*size, -0.4*size, 0.0*size);
     this.leftFrontLeg.add(this.leftFrontDownLeg);
 
-    const leftFrontPawGeometry = new THREE.BoxGeometry(0.2*size, 0.1*size, 0.2*size);
+    const leftFrontPawGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.1*size, 0.2*size);
     const leftFrontPaw = new THREE.Mesh(leftFrontPawGeometry, this.whiteMaterial);
     leftFrontPaw.receiveShadow = true;
     leftFrontPaw.castShadow = true;
@@ -384,9 +388,9 @@ actionOnPressKey(referencePositionAnimal) {
     }
     else{
       referencePosition.copy(referencePositionAnimal);
-      
+
       if (keyWDown){
-        referencePosition.z += 3.42;
+        referencePosition.z += 3.75;
         if( !checkTrees(referencePosition) ){
 
         currentScore++;
@@ -397,6 +401,11 @@ actionOnPressKey(referencePositionAnimal) {
         }
         inMotion = true;
         this.group.rotation.y = 0;
+        if(state != 'ahead' && state != 'behind'){
+          var temp = this.sideX;
+          this.sideX = this.sideZ;
+          this.sideZ = temp;
+        }
         state = "ahead";
         contatore = 0;
         oldPos = this.group.position.z;
@@ -404,8 +413,13 @@ actionOnPressKey(referencePositionAnimal) {
         }
       }
       else if (keyDDown){
-        referencePosition.x -= 3.57;
+        referencePosition.x -= 3.75;
         if( !checkTrees(referencePosition) ){
+          if(state != 'left' && state != 'right'){
+            var temp = this.sideX;
+            this.sideX = this.sideZ;
+            this.sideZ = temp;
+          }
           state = "right";
           inMotion = true;
           this.group.rotation.y = Math.PI*3/2;
@@ -415,9 +429,14 @@ actionOnPressKey(referencePositionAnimal) {
         }
       }
       else if (keyADown){
-        referencePosition.x += 3.57;
+        referencePosition.x += 3.75;
         if( !checkTrees(referencePosition) ){
           inMotion = true;
+          if(state != 'left' && state != 'right'){
+            var temp = this.sideX;
+            this.sideX = this.sideZ;
+            this.sideZ = temp;
+          }
           state = "left";
           this.group.rotation.y = Math.PI/2;
           contatore = 0;
@@ -426,12 +445,17 @@ actionOnPressKey(referencePositionAnimal) {
         }
       }
     else if (keySDown){
-      referencePosition.z -= 3.72;
+      referencePosition.z -= 3.75;
       if( !checkTrees(referencePosition) ){
         currentScore--;
         document.getElementById("cScore").innerHTML = currentScore;
         inMotion = true;
         this.group.rotation.y = Math.PI;
+        if(state != 'ahead' && state != 'behind'){
+          var temp = this.sideX;
+          this.sideX = this.sideZ;
+          this.sideZ = temp;
+        }
         state = "behind";
         contatore = 0;
         oldPos = this.group.position.z;

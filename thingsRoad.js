@@ -127,7 +127,7 @@ class Road {
 
         totalDistance = 0;
       }else{
-        road = new THREE.Mesh(new THREE.PlaneGeometry(widthRoad/4, depthRoad),  this.materialLine);
+        road = new THREE.Mesh(new THREE.PlaneBufferGeometry(widthRoad/4, depthRoad),  this.materialLine);
         road.position.x = distRoad;
         road.position.y = 0.07;
         road.rotateX(rad(-90));
@@ -217,8 +217,8 @@ class River{
     this.middleGrass.add(this.river);
     this.occupiedSpace += widthRiver;
 
-    this.sideX = 1.5*this.river.geometry.parameters.depth/2;
-    this.sideZ = 1.5*this.river.geometry.parameters.width/2;
+    this.sideX = 1.5*depthRiver/2;
+    this.sideZ = 1.5*widthRiver/2;
 
     this.vehicles = [];
 
@@ -357,8 +357,8 @@ class Wood{
     this.trunk.receiveShadow = true;
     this.group.add(this.trunk);
 
-    this.sideX = 1.5*this.trunk.geometry.parameters.depth/2;
-    this.sideZ = 1.5*this.trunk.geometry.parameters.width/2;
+    this.sideX = 1.5*depthWood/2;
+    this.sideZ = 1.5*widthWood/2;
 
     this.isWood = false;
 
@@ -644,7 +644,7 @@ class Bush{
     this.sideX = ((this.height+1)/3)*1.5; //lato box / 2
     this.sideZ = ((this.height+1)/3)*1.5;
 
-    this.trunk = new THREE.Mesh( new THREE.DodecahedronGeometry(this.height/3, 1), this.material);
+    this.trunk = new THREE.Mesh( new THREE.DodecahedronBufferGeometry(this.height/3, 1), this.material);
     this.trunk.position.z = -this.height/2;
     this.trunk.castShadow = true;
     this.trunk.receiveShadow = false;
@@ -673,7 +673,7 @@ class splashParticles{
   }
 
   drawParts() {
-      const particleGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+      const particleGeometry = new THREE.BoxBufferGeometry(0.5, 0.5, 0.5);
       this.particle = new THREE.Mesh( particleGeometry, this.materialRiver );
       this.particle.position.z = this.signZ * Math.random()*3;
       this.particle.position.x = this.signX * Math.random()*3;

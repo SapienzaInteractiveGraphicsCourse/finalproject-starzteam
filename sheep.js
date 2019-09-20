@@ -24,16 +24,20 @@ class Sheep {
     this.group.position.y = 0.4;
     this.group.position.z = -6;
 
-    const boxReferenceGeometry = new THREE.BoxGeometry(2.2, 2.4, 2.7);
+    const boxReferenceWidth = 2.2;
+    const boxReferenceHeight = 2.4;
+    const boxReferenceDepth = 2.7;
+
+    const boxReferenceGeometry = new THREE.BoxBufferGeometry(boxReferenceWidth, boxReferenceHeight, boxReferenceDepth);
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
     this.boxReference = new THREE.Mesh(boxReferenceGeometry, material);
     this.group.add(this.boxReference);
 
-    this.boxReference.visible = false;
+    this.boxReference.visible = true;
 
-    this.sideX = this.boxReference.geometry.parameters.width/2; //lato box / 2
-    this.sideY = this.boxReference.geometry.parameters.height/2;
-    this.sideZ = this.boxReference.geometry.parameters.depth/2;
+    this.sideX = boxReferenceWidth/2; //lato box / 2
+    this.sideY = boxReferenceHeight/2;
+    this.sideZ = boxReferenceDepth/2;
 
     this.woolMaterial = new THREE.MeshStandardMaterial({
       color: 0xffffff,
@@ -60,7 +64,7 @@ class Sheep {
 
   }
   drawBody() {
-    const bodyGeometry = new THREE.IcosahedronGeometry(1.45, 1);
+    const bodyGeometry = new THREE.IcosahedronBufferGeometry(1.45, 1);
     const body = new THREE.Mesh(bodyGeometry, this.woolMaterial);
     body.castShadow = true;
     body.receiveShadow = true;
@@ -72,14 +76,14 @@ class Sheep {
     head.rotation.x = rad(-30);
     this.group.add(head);
 
-    const foreheadGeometry = new THREE.BoxGeometry(0.7, 0.6, 0.7);
+    const foreheadGeometry = new THREE.BoxBufferGeometry(0.7, 0.6, 0.7);
     const forehead = new THREE.Mesh(foreheadGeometry, this.skinMaterial);
     forehead.castShadow = true;
     forehead.receiveShadow = true;
     forehead.position.y = -0.15;
     head.add(forehead);
 
-    const faceGeometry = new THREE.CylinderGeometry(0.5, 0.15, 0.4, 4, 1);
+    const faceGeometry = new THREE.CylinderBufferGeometry(0.5, 0.15, 0.4, 4, 1);
     const face = new THREE.Mesh(faceGeometry, this.skinMaterial);
     face.castShadow = true;
     face.receiveShadow = true;
@@ -87,13 +91,13 @@ class Sheep {
     face.rotation.y = rad(45);
     head.add(face);
 
-    const woolGeometry = new THREE.BoxGeometry(0.80, 0.3, 0.9);
+    const woolGeometry = new THREE.BoxBufferGeometry(0.80, 0.3, 0.9);
     const wool = new THREE.Mesh(woolGeometry, this.woolMaterial);
     wool.position.set(0, 0.12, 0.07);
     wool.rotation.x = rad(20);
     head.add(wool);
 
-    const rightEyeGeometry = new THREE.CylinderGeometry(0.08, 0.1, 0.06, 6);
+    const rightEyeGeometry = new THREE.CylinderBufferGeometry(0.08, 0.1, 0.06, 6);
     const rightEye = new THREE.Mesh(rightEyeGeometry, this.darkMaterial);
     rightEye.castShadow = true;
     rightEye.receiveShadow = true;
@@ -106,7 +110,7 @@ class Sheep {
     leftEye.rotation.z = -rightEye.rotation.z;
     head.add(leftEye);
 
-    const rightEarGeometry = new THREE.BoxGeometry(0.12, 0.5, 0.3);
+    const rightEarGeometry = new THREE.BoxBufferGeometry(0.12, 0.5, 0.3);
     rightEarGeometry.translate(0, -0.25, 0);
     this.rightEar = new THREE.Mesh(rightEarGeometry, this.skinMaterial);
     this.rightEar.castShadow = true;
@@ -121,7 +125,7 @@ class Sheep {
     head.add(this.leftEar);
   }
   drawLegs() {
-    const legGeometry = new THREE.CylinderGeometry(0.3, 0.15, 1, 6);
+    const legGeometry = new THREE.CylinderBufferGeometry(0.3, 0.15, 1, 6);
     legGeometry.translate(0, -0.40, 0);
     this.frontRightLeg = new THREE.Mesh(legGeometry, this.darkMaterial);
     this.frontRightLeg.castShadow = true;
@@ -198,7 +202,7 @@ class Sheep {
       referencePosition.copy(referencePositionAnimal);
       if (keyWDown){
         //check su checkTrees
-        referencePosition.z += 3.42;
+        referencePosition.z += 3.75;
         if( !checkTrees(referencePosition) ){
 
           currentScore++;
@@ -226,7 +230,7 @@ class Sheep {
       else if (keySDown){
         //check su checkTrees
 
-        referencePosition.z -= 3.72;
+        referencePosition.z -= 3.75;
         if( !checkTrees(referencePosition) ){
 
           currentScore--;
@@ -248,7 +252,7 @@ class Sheep {
       else if (keyADown) {
         //check su checkTrees
 
-        referencePosition.x += 3.57;
+        referencePosition.x += 3.75;
         if( !checkTrees(referencePosition) ){
 
           inMotion = true;
@@ -268,7 +272,7 @@ class Sheep {
       else if (keyDDown) {
         //check su checkTrees
 
-        referencePosition.x -= 3.57;
+        referencePosition.x -= 3.75;
         if( !checkTrees(referencePosition) ){
 
 
