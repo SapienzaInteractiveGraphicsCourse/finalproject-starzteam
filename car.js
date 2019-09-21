@@ -36,6 +36,10 @@ class Car {
     this.sideY = 1.5*boxReferenceHeight/2;
     this.sideX = 1.5*boxReferenceDepth/2;
 
+    var hypotenuse = Math.sqrt( Math.pow(this.sideZ, 2) + Math.pow(this.sideX, 2) );
+    this.sin = this.sideZ / hypotenuse;
+    this.cos = this.sideX / hypotenuse;
+
     this.boxReference.visible = false;
 
     this.whiteMaterial = new THREE.MeshStandardMaterial({
@@ -275,6 +279,31 @@ class Car {
     if( (Math.abs(referencePosition.x - referencePositionAnimal.x) <= this.sideX + this.animalReference.sideX) &&
         (Math.abs(referencePosition.y - referencePositionAnimal.y) <= this.sideY + this.animalReference.sideY) &&
         (Math.abs(referencePosition.z - referencePositionAnimal.z) <= this.sideZ + this.animalReference.sideZ) ){
+
+          var newX = this.direction*(referencePosition.x - referencePositionAnimal.x);
+          var newZ = this.direction*(referencePositionAnimal.z - referencePosition.z);
+
+          console.log(newX);
+          console.log(newZ);
+          console.log(this.direction);
+
+          var hypotenuse = Math.sqrt( Math.pow( newX , 2) + Math.pow( newZ , 2) );
+          var sin = newZ / hypotenuse;
+          var cos = newX / hypotenuse;
+
+          if( (sin >= this.sin) ){
+            console.log("Sinistra");
+          }
+          else if(sin <= -this.sin){
+            console.log("Destra");
+          }
+          if(cos >= this.cos){
+            console.log("Avanti");
+          }
+          else if(cos <= -this.cos){
+            console.log("Dietro");
+          }
+
           crash = true;
         }
   }
