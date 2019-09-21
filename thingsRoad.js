@@ -690,8 +690,7 @@ class Bush{
     this.group.rotation.x = rad(-90);
 
     texture = new THREE.TextureLoader().load( 'texture/bush.jpg' );
-    //texture1 = new THREE.TextureLoader().load( 'texture/bushnormal.jpg' );
-    texture1 = new THREE.TextureLoader().load( 'texture/bushNormalTest.jpg' );
+    texture1 = new THREE.TextureLoader().load( 'texture/bushnormal.jpg' );
 
 
     this.material = new THREE.MeshStandardMaterial( { map: texture, normalMap: texture1 });
