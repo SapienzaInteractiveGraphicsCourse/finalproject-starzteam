@@ -309,7 +309,7 @@ function rad(degrees) {
 
 function animate() {
   idAnimFrame = requestAnimationFrame(animate);
-  if(!pause) render();
+  render();
 }
 
 function render() {
@@ -374,6 +374,9 @@ function render() {
         vehicles[j].goForward(referencePositionAnimal);
       }
     }
+  }
+  else if(pause){
+    //need to be before the other controls and then crash control
   }
   else if(!splash){
     if(!outrun) animal.crashAnimation();
@@ -461,10 +464,12 @@ function toggleMenu() {
   document.getElementById("menuBtn").style.display = "block";
   document.getElementById('toggle-menu').style.display="none";
   pause = !pause;
+  crash = !crash;
 }
 
 function resumeAnim() {
   pause = !pause;
+  crash = !crash;
   document.getElementById("resume").style.display = "none";
   document.getElementById("restart").style.display = "none";
   document.getElementById("menuBtn").style.display = "none";
@@ -475,6 +480,7 @@ function restartGame(){
   //cancelAnimationFrame(idAnimFrame);
   location.reload();
   pause = !pause;
+  crash = !crash;
   startGame(pickedAnimal, night, difficulty);
   document.getElementById("resume").style.display = "none";
   document.getElementById("restart").style.display = "none";
