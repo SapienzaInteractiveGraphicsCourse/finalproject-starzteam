@@ -8,6 +8,8 @@ var scene,
     keyADown = false,
     keySDown = false,
     keyDDown = false,
+    pause = false,
+    idAnimFrame = null,
     world,
     night = false,
     counter = 0,
@@ -55,7 +57,6 @@ var crash = false;
 function startGame(chosedAnimal, dayNight, difficulty){
   pickedAnimal = chosedAnimal;
   night = (dayNight == 'true');
-  console.log(pickedAnimal, night, difficulty);
   setDifficulty(difficulty);
   init();
   animate();
@@ -66,7 +67,6 @@ function startGame(chosedAnimal, dayNight, difficulty){
 }
 
 function init() {
-  console.log("init");
   width = window.innerWidth,
   height = window.innerHeight;
 
@@ -308,8 +308,8 @@ function rad(degrees) {
 }
 
 function animate() {
-  requestAnimationFrame(animate);
-  render();
+  idAnimFrame = requestAnimationFrame(animate);
+  if(!pause) render();
 }
 
 function render() {
@@ -325,7 +325,7 @@ function render() {
       referencePositionAnimal.x <-30){
       crash = true;
       outrun = true;
-      window.alert("Outrunned!");
+      eventMsg("Outrunned!");
     }
     else if(highestScore != 0){
       if((referencePositionAnimal.z - tot >= 0) && (highestScore < numberOfJumps)){
@@ -450,6 +450,45 @@ function toggleNight() {
     spotLight.castShadow = true;
     spotLight.angle = Math.PI / 4;
   }
+}
+
+var toggleMenuBtn = document.getElementById('toggle-menu');
+toggleMenuBtn.addEventListener('click', toggleMenu);
+
+function toggleMenu() {
+  document.getElementById("resume").style.display = "block";
+  document.getElementById("restart").style.display = "block";
+  document.getElementById("menuBtn").style.display = "block";
+  document.getElementById('toggle-menu').style.display="none";
+  pause = !pause;
+}
+
+function resumeAnim() {
+  pause = !pause;
+  document.getElementById("resume").style.display = "none";
+  document.getElementById("restart").style.display = "none";
+  document.getElementById("menuBtn").style.display = "none";
+  document.getElementById('toggle-menu').style.display="block";
+}
+
+function restartGame(){
+  //cancelAnimationFrame(idAnimFrame);
+  location.reload();
+  pause = !pause;
+  startGame(pickedAnimal, night, difficulty);
+  document.getElementById("resume").style.display = "none";
+  document.getElementById("restart").style.display = "none";
+  document.getElementById("menuBtn").style.display = "none";
+  document.getElementById('toggle-menu').style.display="block"
+}
+
+function eventMsg(msg) {
+  pause = !pause;
+  document.getElementById('toggle-menu').style.display="none";
+  document.getElementById("event").style.display = "inline-block";
+  document.getElementById("event").innerHTML = msg;
+  document.getElementById("restart").style.display = "block";
+  document.getElementById("menuBtn").style.display = "block";
 }
 
 function setDifficulty(diff){
