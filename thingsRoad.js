@@ -138,7 +138,6 @@ class Road {
         this.prec = road;
       }
     }
-
     this.trees = [];
 
 
@@ -165,10 +164,13 @@ class River{
     this.group.rotation.y = rad(90);
     this.group.position.z = positionZ;
 
-    this.materialRiver = new THREE.MeshPhongMaterial({
-      color: 0x33CCFF,
-      flatShading: true
-    });
+    texture = new THREE.TextureLoader().load( "texture/waterCartoon.png" );
+
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set( 1, 10 );
+    this.materialRiver = new THREE.MeshStandardMaterial( { map: texture } );
+
 
     this.materialMiddle = new THREE.MeshPhongMaterial({
       color: 0xbaf455,
@@ -334,11 +336,10 @@ class Wood{
     this.group.position.set(posX, 0, 0);
 
     texture = new THREE.TextureLoader().load( 'texture/sidelog.jpg' );
-    //texture1 = new THREE.TextureLoader().load( 'texture/sidelognormal.jpg' );
     texture1 = new THREE.TextureLoader().load( 'texture/sidelognormal.jpg' );
     var texture2 = new THREE.TextureLoader().load( 'texture/sidelogao.jpg' );
 
-    this.materialLog = new THREE.MeshStandardMaterial( { map: texture, normalMap: texture1, aoMap : texture2 } );
+    this.materialLog = new THREE.MeshPhongMaterial({ map: texture, normalMap: texture1, aoMap : texture2} );
 
 
     this.vAngle = 0;
@@ -432,10 +433,38 @@ class Tree {
         })
      ];
 
-    this.materialCrown = new THREE.MeshLambertMaterial({
-      color: 0x7aa21d,
-      flatShading: true
-    });
+     texture1 = new THREE.TextureLoader().load( 'texture/bush.jpg' );
+     texture1n = new THREE.TextureLoader().load( 'texture/bushnormal.jpg' );
+     texture2 = new THREE.TextureLoader().load( 'texture/bush2.jpg' );
+     texture2n = new THREE.TextureLoader().load( 'texture/bush2normal.jpg' );
+
+     //load texture for the tree
+     this.materialCrown = [
+         new THREE.MeshStandardMaterial({
+             map: texture2,
+             normalMap : texture2n
+         }),
+         new THREE.MeshStandardMaterial({
+             map: texture2,
+             normalMap : texture2n
+         }),
+         new THREE.MeshStandardMaterial({
+             map: texture1,
+             normalMap : texture1n
+         }),
+         new THREE.MeshStandardMaterial({
+             map: texture1,
+             normalMap : texture1n
+         }),
+         new THREE.MeshStandardMaterial({
+             map: texture2,
+             normalMap : texture2n
+         }),
+         new THREE.MeshStandardMaterial({
+             map: texture2,
+             normalMap : texture2n
+         })
+      ];
 
     this.vAngle = 0;
 
@@ -453,12 +482,15 @@ class Tree {
     this.sideZ = 0.5*1.5;
 
     this.height = treeHeights[Math.floor(Math.random()*treeHeights.length)];
-
-    this.crown = new THREE.Mesh( new THREE.BoxBufferGeometry( 1.5, 1.5, this.height), this.materialCrown);
-    this.crown.position.z = (this.height/2-0.5);
-    this.crown.castShadow = true;
-    this.crown.receiveShadow = false;
-    this.group.add(this.crown);
+    var i = 0;
+    while(i < this.height){
+      this.crown = new THREE.Mesh( new THREE.BoxBufferGeometry( 1.5, 1.5, 1.5), this.materialCrown);
+      this.crown.position.z = i;
+      this.crown.castShadow = true;
+      this.crown.receiveShadow = false;
+      this.group.add(this.crown);
+      i+=1.5;
+    }
 
     /*
     this.worldPosition = new THREE.Vector3();
@@ -727,7 +759,8 @@ class splashParticles{
 
     this.group.scale.set(1.5, 1.5, 1.5);
     this.materialRiver = new THREE.MeshPhongMaterial({
-      color: 0x33CCFF,
+      color: 0xF7E7C,
+
       flatShading: true
     });
 

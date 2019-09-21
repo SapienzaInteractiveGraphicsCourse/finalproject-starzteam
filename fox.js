@@ -6,12 +6,29 @@ const size = 1;
 var inMotion = false;
 var descending = false;
 var state = "ahead";
-var contatore = 0;
+var counter = 0;
 var currentScore = 0;
 var highestScore = 0;
 var legRotation = 0;
 var oldPos = 0;
-var goingFastFox = 2;
+var goingFastFcrashAnimation(){
+    this.group.position.y+=3*crashSpeed;
+    crashSpeed+=(1/8)*crashSpeed;
+    this.group.rotation.y += rad(20);
+    this.group.rotation.z += rad(25);
+    if(this.group.position.y > 30){
+      window.alert("Hit by a car!\n GAME OVER!");
+    }
+  }
+  sunkAnimation(){
+    this.group.position.y-=4*crashSpeed;
+    if(this.group.position.y < -35){
+      window.alert("Felt in the river!\n GAME OVER!");
+    }
+  }
+
+}
+ox = 2;
 
 var referencePosition = new THREE.Vector3();
 
@@ -270,12 +287,12 @@ jump(speed, direction) {
     }
 
     if(direction == "ahead"){
-      if(contatore == 0|| contatore == 34){
+      if(counter == 0|| counter == 34){
         this.group.rotation.x = 0;
         this.group.rotation.z = 0;
         legRotation = 0;
       }
-      else if (contatore <=16){
+      else if (counter <=16){
         this.group.rotation.x-=Math.PI*(goingFastFox/8)*(1/16) ;
       }
       else if(this.group.rotation.x < 0) {
@@ -283,13 +300,13 @@ jump(speed, direction) {
       }
     }
     else if (direction == "behind"){
-      if(contatore == 0|| contatore == 34){
+      if(counter == 0|| counter == 34){
         this.group.rotation.x = 0;
         this.group.rotation.z = 0;
 
         legRotation = 0;
       }
-      else if (contatore <=16){
+      else if (counter <=16){
         this.group.rotation.x+=Math.PI*(goingFastFox/8)*(1/16) ;
       }
       else if(this.group.rotation.x > 0) {
@@ -297,12 +314,12 @@ jump(speed, direction) {
       }
     }
     else if (direction == "right" || direction == "left"){
-      if(contatore == 0|| contatore == 34){
+      if(counter == 0|| counter == 34){
         this.group.rotation.z = 0;
         this.group.rotation.x = 0;
         legRotation = 0;
       }
-      else if (contatore <=16){
+      else if (counter <=16){
         this.group.rotateOnAxis(new THREE.Vector3(1,0,0) , -Math.PI*(goingFastFox/8)*(1/16));
       }
       else if(this.group.rotation.x < 0) {
@@ -310,7 +327,7 @@ jump(speed, direction) {
       }
     }
 
-    if(contatore == 0 || contatore >=33){
+    if(counter == 0 || counter >=33){
       legRotation = 0;
       //Since javascript despites floats, gotta reset manually
       this.leftFrontLeg.rotation.x = 0;
@@ -325,14 +342,14 @@ jump(speed, direction) {
       this.leftBackLeg.rotation.x = 0;
       this.leftBackDownLeg.rotation.x = 0;
     }
-    else if(contatore <=16){
+    else if(counter <=16){
       legRotation = Math.PI*(1/4)*(1/16) * goingFastFox;
     }
     else{
       legRotation = (-1)*Math.PI*(1/4)*(1/16) * goingFastFox;
     }
 
-    contatore+=2;
+    counter+=2;
 
     this.leftFrontLeg.rotation.x += legRotation;
     this.leftFrontDownLeg.rotation.x += legRotation;
@@ -407,7 +424,7 @@ actionOnPressKey(referencePositionAnimal) {
           this.sideZ = temp;
         }
         state = "ahead";
-        contatore = 0;
+        counter = 0;
         oldPos = this.group.position.z;
         this.jump(0.06, state);
         }
@@ -423,7 +440,7 @@ actionOnPressKey(referencePositionAnimal) {
           state = "right";
           inMotion = true;
           this.group.rotation.y = Math.PI*3/2;
-          contatore = 0;
+          counter = 0;
           oldPos = this.group.position.x;
           this.jump(0.06, state);
         }
@@ -439,7 +456,7 @@ actionOnPressKey(referencePositionAnimal) {
           }
           state = "left";
           this.group.rotation.y = Math.PI/2;
-          contatore = 0;
+          counter = 0;
           oldPos = this.group.position.x;
           this.jump(0.06, state);
         }
@@ -457,7 +474,7 @@ actionOnPressKey(referencePositionAnimal) {
           this.sideZ = temp;
         }
         state = "behind";
-        contatore = 0;
+        counter = 0;
         oldPos = this.group.position.z;
         this.jump(0.06, state);
       }
@@ -465,11 +482,11 @@ actionOnPressKey(referencePositionAnimal) {
   }
 }
 crashAnimation(){
-  this.group.position.y+=crashSpeed;
+  this.group.position.y+=3*crashSpeed;
   crashSpeed+=(1/8)*crashSpeed;
-  this.group.rotation.y += rad(15 );
-  this.group.rotation.z += rad(10);
-  if(this.group.position.y > 20){
+  this.group.rotation.y += rad(20);
+  this.group.rotation.z += rad(25);
+  if(this.group.position.y > 30){
     window.alert("Hit by a car!\n GAME OVER!");
   }
 }
@@ -479,4 +496,5 @@ sunkAnimation(){
     window.alert("Felt in the river!\n GAME OVER!");
   }
 }
+
 }

@@ -293,11 +293,11 @@ class Sheep {
     }
   }
   crashAnimation(){
-    this.group.position.y+=crashSpeed;
+    this.group.position.y+=3*crashSpeed;
     crashSpeed+=(1/8)*crashSpeed;
-    this.group.rotation.y += rad(15 );
-    this.group.rotation.z += rad(10);
-    if(this.group.position.y > 20){
+    this.group.rotation.y += rad(20);
+    this.group.rotation.z += rad(25);
+    if(this.group.position.y > 30){
       window.alert("Hit by a car!\n GAME OVER!");
     }
   }
