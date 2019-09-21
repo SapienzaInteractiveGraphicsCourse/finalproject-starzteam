@@ -11,24 +11,7 @@ var currentScore = 0;
 var highestScore = 0;
 var legRotation = 0;
 var oldPos = 0;
-var goingFastFcrashAnimation(){
-    this.group.position.y+=3*crashSpeed;
-    crashSpeed+=(1/8)*crashSpeed;
-    this.group.rotation.y += rad(20);
-    this.group.rotation.z += rad(25);
-    if(this.group.position.y > 30){
-      window.alert("Hit by a car!\n GAME OVER!");
-    }
-  }
-  sunkAnimation(){
-    this.group.position.y-=4*crashSpeed;
-    if(this.group.position.y < -35){
-      window.alert("Felt in the river!\n GAME OVER!");
-    }
-  }
-
-}
-ox = 2;
+var goingFastFox = 2;
 
 var referencePosition = new THREE.Vector3();
 
@@ -484,9 +467,9 @@ actionOnPressKey(referencePositionAnimal) {
 crashAnimation(){
   this.group.position.y+=3*crashSpeed;
   crashSpeed+=(1/8)*crashSpeed;
-  this.group.rotation.y += rad(20);
-  this.group.rotation.z += rad(25);
-  if(this.group.position.y > 30){
+  this.group.rotation.y += rad(15 );
+  this.group.rotation.z += rad(10);
+  if(this.group.position.y > 20){
     window.alert("Hit by a car!\n GAME OVER!");
   }
 }
@@ -496,5 +479,4 @@ sunkAnimation(){
     window.alert("Felt in the river!\n GAME OVER!");
   }
 }
-
 }
