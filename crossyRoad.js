@@ -245,6 +245,7 @@ function drawTerrain() {
     mappingTracks.push(posAtt);
   }
 
+  addLayers(track);
   values = getNewTerrain(1);
   track = values.track;
   addLayers(track);
