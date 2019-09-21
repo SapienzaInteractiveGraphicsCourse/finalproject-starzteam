@@ -467,6 +467,63 @@ class Tree {
   }
 }
 
+class PoleLight {
+
+  constructor(){
+
+    this.materialPole = new THREE.MeshPhongMaterial({
+      color: 0x808080,
+      flatShading: true
+    });
+
+    const heightPole = 5.0;
+    const sidePole = 0.2;
+
+    this.pole = new THREE.Mesh( new THREE.BoxBufferGeometry( sidePole, heightPole, sidePole ), this.materialPole );
+    this.pole.position.set(-5, heightPole/2, -8);
+    this.pole.castShadow = true;
+    this.pole.receiveShadow = true;
+    this.pole.rotation.set(0, rad(-90), 0)
+    this.pole.scale.set(1.5, 1.5, 1.5);
+    scene.add(this.pole);
+
+    this.poleHead = new THREE.Mesh( new THREE.BoxBufferGeometry( 0.8, 0.3, 0.5 ), this.materialPole );
+    this.poleHead.position.set(sidePole/2 + 0.3/2, heightPole/2, 0);
+    this.poleHead.castShadow = true;
+    this.poleHead.receiveShadow = true;
+    this.pole.add(this.poleHead);
+
+    this.spotLight = new THREE.SpotLight( 0xffffff, 0.6 );
+    this.spotLight.position.set( 0, 0, 0 );
+    this.spotLight.angle = Math.PI / 4;
+    this.spotLight.penumbra = 0.05;
+    this.spotLight.decay = 2;
+    this.spotLight.distance = 500;
+    this.spotLight.castShadow = true;
+    this.spotLight.shadow.mapSize.width = 1024;
+    this.spotLight.shadow.mapSize.height = 1024;
+    this.spotLight.shadow.camera.near = 10;
+    this.spotLight.shadow.camera.far = 200;
+    this.poleHead.add( this.spotLight );
+
+    scene.add(this.spotLight.target);
+    this.spotLight.target.position.set(-5, 0, 0);
+
+  }
+
+  turnOff(){
+    //this.spotLight.color = 0x000000;
+    this.spotLight.visible = false;
+    this.spotLight.castShadow = false;
+    this.spotLight.angle = 0;
+  }
+  turnOn(){
+    this.spotLight.visible = true;
+    this.spotLight.castShadow = true;
+    this.spotLight.angle = Math.PI / 4;
+  }
+}
+
 class GrassStart {
   constructor(positionZ) {
     this.occupiedSpace = 0;

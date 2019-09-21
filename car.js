@@ -123,27 +123,6 @@ class Car {
     leftBackHandle.position.set(0.8, 0.2, -0.7);
     body.add(leftBackHandle);
 
-    /*
-    var spotLight = new THREE.SpotLight( 0xffffff );
-    spotLight.position.set( 0, 0, 3 );
-
-    //spotLight.decay = 2;
-
-    //spotLight.castShadow = true;
-
-    spotLight.angle = Math.PI / 100;
-
-    spotLight.shadow.mapSize.width = 1;
-    spotLight.shadow.mapSize.height = 1;
-
-    spotLight.shadow.camera.near = 0.1;
-    spotLight.shadow.camera.far = 1;
-    spotLight.shadow.camera.fov = 1;
-
-    body.add( spotLight );
-
-    */
-
     const frontFenderGeometry = new THREE.BoxBufferGeometry(bodyWidth + 0.1, 0.2, 0.2);
     const frontFender = new THREE.Mesh(frontFenderGeometry, this.blackMaterial);
     frontFender.castShadow = true;

@@ -26,6 +26,10 @@ var scene,
     listSpeed = [],
     speedListWood = [];
 
+var poleLight,
+    ambientLight,
+    spotLight;
+
 var numOfLevelVisible = 4,
     numOfLevelPrec = 1,
     indexRenderMax = numOfLevelPrec,
@@ -95,7 +99,6 @@ function init() {
 
   addLights();
   drawAnimal();
-  drawSky();
   drawTerrain();
 
   world = document.querySelector('.world');
@@ -107,10 +110,9 @@ function init() {
 }
 
 function addLights() {
-  var ambient = new THREE.AmbientLight( 0xffffff, 1.1 );
-  scene.add( ambient );
+  poleLight = new PoleLight();
 
-  var spotLight = new THREE.SpotLight( 0xffffff, 1 );
+  spotLight = new THREE.SpotLight( 0xffffff, 1 );
   spotLight.position.set( 60, 30, 80 );
   spotLight.angle = Math.PI / 4;
   spotLight.penumbra = 0.05;
@@ -122,6 +124,28 @@ function addLights() {
   spotLight.shadow.camera.near = 10;
   spotLight.shadow.camera.far = 200;
   scene.add( spotLight );
+
+  if(night){
+    ambientLight = new THREE.AmbientLight( 0xffffff, 0.6 );
+    scene.add( ambientLight );
+
+    poleLight.turnOn();
+
+    spotLight.visible = false;
+    spotLight.castShadow = false;
+    spotLight.angle = 0;
+
+  }
+  else{
+    ambientLight = new THREE.AmbientLight( 0xffffff, 1.1 );
+    scene.add( ambientLight );
+
+    poleLight.turnOff();
+
+    spotLight.visible = true;
+    spotLight.castShadow = true;
+    spotLight.angle = Math.PI / 4;
+  }
 }
 
 function drawAnimal() {
@@ -213,7 +237,6 @@ function drawTerrain() {
       indexRenderMin++;
       indexRenderMin = indexRenderMin % 32;
     }
-    console.log(indexRenderMin);
     indexRenderMax++;
     indexRenderMax = indexRenderMax % 32;
     posAtt += values.pos;
@@ -231,12 +254,6 @@ function drawTerrain() {
   mappingTracks.push(posAtt);
 
   actualListTracks = tracks.slice(0, 2);
-}
-
-function drawSky() {
-  sky = new Sky();
-  sky.showNightSky(night);
-  scene.add(sky.group);
 }
 
 function onResize() {
@@ -411,55 +428,6 @@ function checkTrees(position){
 
 }
 
-class Sky {
-  constructor() {
-    this.group = new THREE.Group();
-
-    this.daySky = new THREE.Group();
-    this.nightSky = new THREE.Group();
-
-    this.group.add(this.daySky);
-    this.group.add(this.nightSky);
-
-    this.colors = {
-      day: [0xFFFFFF, 0xEFD2DA, 0xC1EDED, 0xCCC9DE],
-      night: [0x5DC7B5, 0xF8007E, 0xFFC363, 0xCDAAFD, 0xDDD7FE],
-    };
-    this.drawNightLights();
-  }
-  drawNightLights() {
-    const geometry = new THREE.SphereGeometry(0.1, 5, 5);
-    const material = new THREE.MeshStandardMaterial({
-      color: 0xFF51B6,
-      roughness: 1,
-      shading: THREE.FlatShading
-    });
-
-    for (let i = 0; i < 1; i ++) {
-      const light = new THREE.PointLight(0xF55889, 3, 150);
-      const mesh = new THREE.Mesh(geometry, material);
-      light.add(mesh);
-
-      light.position.set((Math.random() - 2) * 15,
-                         -(Math.random() - 2) * 20,
-                         (Math.random() - 2) * 20);
-      light.updateMatrix();
-      light.matrixAutoUpdate = false;
-
-      this.nightSky.add(light);
-    }
-  }
-  showNightSky(condition) {
-    if (condition) {
-      this.daySky.position.set(100, 100, 100);
-      this.nightSky.position.set(0, 0, 0);
-    } else {
-      this.daySky.position.set(0, 0, 0);
-      this.nightSky.position.set(100, 100, 100);
-    }
-  }
-}
-
 const toggleBtn = document.querySelector('.toggle');
 toggleBtn.addEventListener('click', toggleNight);
 
@@ -467,7 +435,20 @@ function toggleNight() {
   night = !night;
   toggleBtn.classList.toggle('toggle-night');
   world.classList.toggle('world-night');
-  sky.showNightSky(night);
+  if(night){
+    poleLight.turnOn();
+    ambientLight.intensity = 0.6;
+    spotLight.visible = false;
+    spotLight.castShadow = false;
+    spotLight.angle = 0;
+  }
+  else{
+    poleLight.turnOff();
+    ambientLight.intensity = 1.1;
+    spotLight.visible = true;
+    spotLight.castShadow = true;
+    spotLight.angle = Math.PI / 4;
+  }
 }
 
 function setDifficulty(diff){
