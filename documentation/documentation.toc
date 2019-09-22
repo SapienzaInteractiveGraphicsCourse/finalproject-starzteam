@@ -1,0 +1,23 @@
+\contentsline {section}{\numberline {1}Introduction}{2}
+\contentsline {section}{\numberline {2}User Manual}{3}
+\contentsline {subsection}{\numberline {2.1}Commands and User Interface elements}{3}
+\contentsline {subsection}{\numberline {2.2}How to play}{4}
+\contentsline {section}{\numberline {3}Development environment}{4}
+\contentsline {subsection}{\numberline {3.1}Developing}{4}
+\contentsline {subsection}{\numberline {3.2}Library and tools}{4}
+\contentsline {section}{\numberline {4}Technical Solutions}{5}
+\contentsline {subsection}{\numberline {4.1}Hierarchical models}{5}
+\contentsline {subsubsection}{\numberline {4.1.1}Animals}{5}
+\contentsline {subsection}{\numberline {4.2}Levels}{7}
+\contentsline {subsubsection}{\numberline {4.2.1}Trees}{7}
+\contentsline {subsection}{\numberline {4.3}Car}{7}
+\contentsline {subsection}{\numberline {4.4}Lights and Shadows}{8}
+\contentsline {subsection}{\numberline {4.5}Texture}{10}
+\contentsline {subsection}{\numberline {4.6}Animals animations}{11}
+\contentsline {subsection}{\numberline {4.7}Vehicles animation and object detection}{12}
+\contentsline {subsection}{\numberline {4.8}Vehicles animation and object detection}{13}
+\contentsline {subsection}{\numberline {4.9}Optimizations}{15}
+\contentsline {section}{\numberline {5}User-game interactions}{16}
+\contentsline {subsection}{\numberline {5.1}Movement}{16}
+\contentsline {subsection}{\numberline {5.2}Camera}{18}
+\contentsline {subsection}{\numberline {5.3}difficulty}{18}
