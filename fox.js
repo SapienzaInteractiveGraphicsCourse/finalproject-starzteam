@@ -364,6 +364,10 @@ jump(speed, direction) {
       this.group.position.y = -0.31;
       if(direction == "ahead"){
         this.group.position.z = oldPos + 3.75;
+        document.getElementById("cScore").innerHTML = currentScore;
+        if(currentScore > highestScore){
+          highestScore = currentScore;
+          document.getElementById("hScore").innerHTML = highestScore;}
       }
       else if (direction == "behind"){
         this.group.position.z = oldPos - 3.75;
@@ -393,10 +397,7 @@ actionOnPressKey(referencePositionAnimal) {
         if( !checkTrees(referencePosition) ){
 
         currentScore++;
-        if(currentScore > highestScore){
-          highestScore = currentScore;
-          document.getElementById("hScore").innerHTML = highestScore;
-        }
+
         inMotion = true;
         this.group.rotation.y = 0;
         if(state != 'ahead' && state != 'behind'){
@@ -446,6 +447,7 @@ actionOnPressKey(referencePositionAnimal) {
       referencePosition.z -= 3.75;
       if( !checkTrees(referencePosition) ){
         currentScore--;
+        document.getElementById("cScore").innerHTML = currentScore;
         inMotion = true;
         this.group.rotation.y = Math.PI;
         if(state != 'ahead' && state != 'behind'){

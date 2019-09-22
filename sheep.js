@@ -187,7 +187,18 @@ class Sheep {
       descending = false;
       this.group.position.y = 0.4;
       if(asse=='z') {
-        this.group.position.z =oldPos + 3.75*sign;
+        if(sign == 1){
+          this.group.position.z =oldPos + 3.75*sign;
+
+          document.getElementById("cScore").innerHTML = currentScore;
+          if(currentScore > highestScore){
+            highestScore = currentScore;
+            document.getElementById("hScore").innerHTML = highestScore;
+          }
+        }
+        else{
+          this.group.position.z =oldPos + 3.75*sign;
+        }
       }
       if(asse=='x') {
         this.group.position.x =oldPos + 3.75*sign;
@@ -206,10 +217,7 @@ class Sheep {
         if( !checkTrees(referencePosition) ){
 
           currentScore++;
-          if(currentScore > highestScore){
-            highestScore = currentScore;
-            document.getElementById("hScore").innerHTML = highestScore;
-          }
+
           //Resetting stuff and preparing s.t. when going to inMotion i can keep on doing what i was doing till i'm done (shish)
           inMotion = true;
           if(last != 'z'){
@@ -233,6 +241,7 @@ class Sheep {
         if( !checkTrees(referencePosition) ){
 
           currentScore--;
+          document.getElementById("cScore").innerHTML = currentScore;
           inMotion = true;
           if(last != 'z'){
             var temp = this.sideX;

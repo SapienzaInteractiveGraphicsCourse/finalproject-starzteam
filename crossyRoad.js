@@ -318,14 +318,18 @@ function render() {
   scene.updateMatrixWorld();
   var referencePositionAnimal = new THREE.Vector3();
   animal.boxReference.getWorldPosition(referencePositionAnimal);
-
+  if(highestScore == numberOfJumps){
+    eventMsg("You Win!");
+    crash = true;
+    pause = true;
+  }
   if(!crash){
 
     if ((tot > referencePositionAnimal.z + 1.5 ) ||
       referencePositionAnimal.x >33 ||
       referencePositionAnimal.x <-33){
       crash = true;
-      outrun = true;
+      pause = true;
       eventMsg("Outrunned!");
     }
     else if(highestScore != 0){

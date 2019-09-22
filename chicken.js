@@ -228,7 +228,20 @@ class Chicken{
       this.leftWing.rotation.z = 0;
       this.rightLeg.rotation.x = 0;
       this.leftLeg.rotation.x = 0;
-      if(asse=='z') this.group.position.z =oldPos + 3.75*sign;
+      if(asse=='z') {
+        if(sign == 1){
+          this.group.position.z =oldPos + 3.75*sign;
+
+          document.getElementById("cScore").innerHTML = currentScore;
+          if(currentScore > highestScore){
+            highestScore = currentScore;
+            document.getElementById("hScore").innerHTML = highestScore;
+          }
+        }
+        else{
+          this.group.position.z =oldPos + 3.75*sign;
+        }
+      }
       if(asse=='x') this.group.position.x =oldPos + 3.75*sign;
   }
 }
@@ -245,6 +258,7 @@ class Chicken{
         referencePosition.z += 3.75;
         if( !checkTrees(referencePosition) ){
           currentScore++;
+          document.getElementById("cScore").innerHTML = currentScore;
           if(currentScore > highestScore){
             highestScore = currentScore;
             document.getElementById("hScore").innerHTML = highestScore;
@@ -270,6 +284,7 @@ class Chicken{
         referencePosition.z -= 3.75;
         if( !checkTrees(referencePosition) ){
           currentScore--;
+          document.getElementById("cScore").innerHTML = currentScore;
           inMotion = true;
           if(last != 'z'){
             var temp = this.sideX;
