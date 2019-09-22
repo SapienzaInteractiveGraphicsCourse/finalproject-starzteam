@@ -206,7 +206,6 @@ class Sheep {
         if( !checkTrees(referencePosition) ){
 
           currentScore++;
-          document.getElementById("cScore").innerHTML = currentScore;
           if(currentScore > highestScore){
             highestScore = currentScore;
             document.getElementById("hScore").innerHTML = highestScore;
@@ -234,7 +233,6 @@ class Sheep {
         if( !checkTrees(referencePosition) ){
 
           currentScore--;
-          document.getElementById("cScore").innerHTML = currentScore;
           inMotion = true;
           if(last != 'z'){
             var temp = this.sideX;

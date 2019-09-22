@@ -245,7 +245,6 @@ class Chicken{
         referencePosition.z += 3.75;
         if( !checkTrees(referencePosition) ){
           currentScore++;
-          document.getElementById("cScore").innerHTML = currentScore;
           if(currentScore > highestScore){
             highestScore = currentScore;
             document.getElementById("hScore").innerHTML = highestScore;
@@ -271,7 +270,6 @@ class Chicken{
         referencePosition.z -= 3.75;
         if( !checkTrees(referencePosition) ){
           currentScore--;
-          document.getElementById("cScore").innerHTML = currentScore;
           inMotion = true;
           if(last != 'z'){
             var temp = this.sideX;

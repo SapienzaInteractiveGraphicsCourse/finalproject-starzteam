@@ -382,7 +382,6 @@ jump(speed, direction) {
 
 actionOnPressKey(referencePositionAnimal) {
 
-    //document.getElementById("demo").innerHTML = 5 + 6;
     if(inMotion){
       this.jump(0.06, state);  //keep it going till the jump is complete, we don't want the animation to stop mid-air, neither the user to press too many buttons together
     }
@@ -394,7 +393,6 @@ actionOnPressKey(referencePositionAnimal) {
         if( !checkTrees(referencePosition) ){
 
         currentScore++;
-        document.getElementById("cScore").innerHTML = currentScore;
         if(currentScore > highestScore){
           highestScore = currentScore;
           document.getElementById("hScore").innerHTML = highestScore;
@@ -448,7 +446,6 @@ actionOnPressKey(referencePositionAnimal) {
       referencePosition.z -= 3.75;
       if( !checkTrees(referencePosition) ){
         currentScore--;
-        document.getElementById("cScore").innerHTML = currentScore;
         inMotion = true;
         this.group.rotation.y = Math.PI;
         if(state != 'ahead' && state != 'behind'){

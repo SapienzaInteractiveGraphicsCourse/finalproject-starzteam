@@ -322,8 +322,8 @@ function render() {
   if(!crash){
 
     if ((tot > referencePositionAnimal.z + 1.5 ) ||
-      referencePositionAnimal.x >30 ||
-      referencePositionAnimal.x <-30){
+      referencePositionAnimal.x >33 ||
+      referencePositionAnimal.x <-33){
       crash = true;
       outrun = true;
       eventMsg("Outrunned!");
@@ -517,7 +517,7 @@ function setDifficulty(diff){
     numLevels = 16;
     listNumCar = [2,3,4];
     listSpeed = [0.15, 0.18, 0.25];
-    speedListWood = [0.05, 0.6, 0.13];
+    speedListWood = [0.05, 0.06, 0.13];
     diffModifier = 0.05;
   }
 }
