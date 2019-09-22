@@ -465,7 +465,7 @@ toggleMenuBtn.addEventListener('click', toggleMenu);
 
 function toggleMenu() {
   document.getElementById("resume").style.display = "block";
-  document.getElementById("restart").style.display = "block";
+  //document.getElementById("restart").style.display = "block";
   document.getElementById("menuBtn").style.display = "block";
   document.getElementById('toggle-menu').style.display="none";
   pause = !pause;
@@ -476,7 +476,7 @@ function resumeAnim() {
   pause = !pause;
   crash = !crash;
   document.getElementById("resume").style.display = "none";
-  document.getElementById("restart").style.display = "none";
+  //document.getElementById("restart").style.display = "none";
   document.getElementById("menuBtn").style.display = "none";
   document.getElementById('toggle-menu').style.display="block";
 }
@@ -488,7 +488,7 @@ function restartGame(){
   crash = !crash;
   startGame(pickedAnimal, night, difficulty);
   document.getElementById("resume").style.display = "none";
-  document.getElementById("restart").style.display = "none";
+  //document.getElementById("restart").style.display = "none";
   document.getElementById("menuBtn").style.display = "none";
   document.getElementById('toggle-menu').style.display="block"
 }
@@ -498,7 +498,7 @@ function eventMsg(msg) {
   document.getElementById('toggle-menu').style.display="none";
   document.getElementById("event").style.display = "inline-block";
   document.getElementById("event").innerHTML = msg;
-  document.getElementById("restart").style.display = "block";
+  //document.getElementById("restart").style.display = "block";
   document.getElementById("menuBtn").style.display = "block";
 }
 
