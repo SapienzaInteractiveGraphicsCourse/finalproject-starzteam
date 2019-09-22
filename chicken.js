@@ -75,14 +75,14 @@ class Chicken{
 
     const leftWingGeometry = new THREE.BoxBufferGeometry(0.23, 0.16, 0.33);
     this.leftWing = new THREE.Mesh(leftWingGeometry, this.skinMaterial);
-    this.leftWing.castShadow = true;
+    //this.leftWing.castShadow = true;
     this.leftWing.receiveShadow = true;
     this.leftWing.position.set(0.4, 0, 0);
     body.add(this.leftWing);
 
     const rightWingGeometry = new THREE.BoxBufferGeometry(0.23, 0.16, 0.33);
     this.rightWing = new THREE.Mesh(rightWingGeometry, this.skinMaterial);
-    this.rightWing.castShadow = true;
+    //this.rightWing.castShadow = true;
     this.rightWing.receiveShadow = true;
     this.rightWing.position.set(-0.4, 0, 0);
     body.add(this.rightWing);
@@ -91,7 +91,7 @@ class Chicken{
   drawHead() {
     const headGeometry = new THREE.BoxBufferGeometry(0.7, 0.5, 0.5);
     const head = new THREE.Mesh(headGeometry, this.skinMaterial);
-    //head.castShadow = true;
+    head.castShadow = true;
     head.receiveShadow = true;
     head.position.set(0, 0.5, 0.25);
     this.group.add(head);
@@ -134,7 +134,7 @@ class Chicken{
   drawLegs() {
     const leftLegGeometry = new THREE.CylinderBufferGeometry(0.06, 0.06, 0.35, 16);
     this.leftLeg = new THREE.Mesh(leftLegGeometry, this.orangeMaterial);
-    //leftLeg.castShadow = true;
+    this.leftLeg.castShadow = true;
     this.leftLeg.receiveShadow = true;
     this.leftLeg.position.set(0.175, -0.425, 0);
     this.group.add(this.leftLeg);
@@ -162,7 +162,7 @@ class Chicken{
 
     const rightLegGeometry = new THREE.CylinderBufferGeometry(0.06, 0.06, 0.35, 16);
     this.rightLeg = new THREE.Mesh(rightLegGeometry, this.orangeMaterial);
-    //rightLeg.castShadow = true;
+    this.rightLeg.castShadow = true;
     this.rightLeg.receiveShadow = true;
     this.rightLeg.position.set(-0.175, -0.425, 0);
     this.group.add(this.rightLeg);

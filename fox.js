@@ -99,7 +99,7 @@ class Fox{
     const noseGeometry = new THREE.BoxBufferGeometry(0.35*size, 0.15*size, 0.2*size);
     const nose = new THREE.Mesh(noseGeometry, this.skinMaterial);
     nose.receiveShadow = true;
-    nose.castShadow = true;
+    //nose.castShadow = true;
     nose.position.set(0*size, -0.1*size, 0.25*size);
     head.add(nose);
 
@@ -113,7 +113,7 @@ class Fox{
     const leftEarGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.2*size, 0.05*size);
     const leftEar = new THREE.Mesh(leftEarGeometry, this.whiteMaterial);
     leftEar.receiveShadow = true;
-    leftEar.castShadow = true;
+    //leftEar.castShadow = true;
     leftEar.position.set(0.15*size, 0.3*size, 0.1*size);
     leftEar.rotation.set(0, rad(15), 0);
     head.add(leftEar);
@@ -121,14 +121,14 @@ class Fox{
     const additionalLeftEarGeometry = new THREE.BoxBufferGeometry(0.06*size, 0.24*size, 0.06*size);
     const additionalLeftEar = new THREE.Mesh(additionalLeftEarGeometry, this.skinMaterial);
     additionalLeftEar.receiveShadow = true;
-    additionalLeftEar.castShadow = true;
+    //additionalLeftEar.castShadow = true;
     additionalLeftEar.position.set(-0.08*size, 0*size, 0);
     leftEar.add(additionalLeftEar);
 
     const additionalLeftEar2Geometry = new THREE.BoxBufferGeometry(0.05*size, 0.2*size, 0.05*size);
     const additionalLeftEar2 = new THREE.Mesh(additionalLeftEar2Geometry, this.skinMaterial);
     additionalLeftEar2.receiveShadow = true;
-    additionalLeftEar2.castShadow = true;
+    //additionalLeftEar2.castShadow = true;
     additionalLeftEar2.position.set(0.09*size, 0.12*size, 0);
     additionalLeftEar2.rotation.set(0, 0, rad(90));
     additionalLeftEar.add(additionalLeftEar2);
@@ -136,7 +136,7 @@ class Fox{
     const rightEarGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.2*size, 0.05*size);
     const rightEar = new THREE.Mesh(rightEarGeometry, this.whiteMaterial);
     rightEar.receiveShadow = true;
-    rightEar.castShadow = true;
+    //rightEar.castShadow = true;
     rightEar.position.set(-0.15*size, 0.3*size, 0.1*size);
     rightEar.rotation.set(0, rad(-15), 0);
     head.add(rightEar);
@@ -144,14 +144,14 @@ class Fox{
     const additionalRightEarGeometry = new THREE.BoxBufferGeometry(0.06*size, 0.24*size, 0.06*size);
     const additionalRightEar = new THREE.Mesh(additionalRightEarGeometry, this.skinMaterial);
     additionalRightEar.receiveShadow = true;
-    additionalRightEar.castShadow = true;
+    //additionalRightEar.castShadow = true;
     additionalRightEar.position.set(+0.08*size, 0.0*size, 0);
     rightEar.add(additionalRightEar);
 
     const additionalRightEar2Geometry = new THREE.BoxBufferGeometry(0.06*size, 0.2*size, 0.06*size);
     const additionalRightEar2 = new THREE.Mesh(additionalRightEar2Geometry, this.skinMaterial);
     additionalRightEar2.receiveShadow = true;
-    additionalRightEar2.castShadow = true;
+    //additionalRightEar2.castShadow = true;
     additionalRightEar2.position.set(-0.09*size, 0.12*size, 0);
     additionalRightEar2.rotation.set(0, 0, rad(90));
     additionalRightEar.add(additionalRightEar2);
@@ -189,7 +189,7 @@ class Fox{
     const rightBackPawGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.1*size, 0.2*size);
     const rightBackPaw = new THREE.Mesh(rightBackPawGeometry, this.whiteMaterial);
     rightBackPaw.receiveShadow = true;
-    rightBackPaw.castShadow = true;
+    //rightBackPaw.castShadow = true;
     rightBackPaw.position.set(0, -0.25*size, 0);
     this.rightBackDownLeg.add(rightBackPaw);
 
@@ -211,7 +211,7 @@ class Fox{
     const rightFrontPawGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.1*size, 0.2*size);
     const rightFrontPaw = new THREE.Mesh(rightFrontPawGeometry, this.whiteMaterial);
     rightFrontPaw.receiveShadow = true;
-    rightFrontPaw.castShadow = true;
+    //rightFrontPaw.castShadow = true;
     rightFrontPaw.position.set(0, -0.25*size, 0);
     this.rightFrontDownLeg.add(rightFrontPaw);
 
@@ -233,7 +233,7 @@ class Fox{
     const leftBackPawGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.1*size, 0.2*size);
     const leftBackPaw = new THREE.Mesh(leftBackPawGeometry, this.whiteMaterial);
     leftBackPaw.receiveShadow = true;
-    leftBackPaw.castShadow = true;
+    //leftBackPaw.castShadow = true;
     leftBackPaw.position.set(0, -0.25*size, 0);
     this.leftBackDownLeg.add(leftBackPaw);
 
@@ -255,7 +255,7 @@ class Fox{
     const leftFrontPawGeometry = new THREE.BoxBufferGeometry(0.2*size, 0.1*size, 0.2*size);
     const leftFrontPaw = new THREE.Mesh(leftFrontPawGeometry, this.whiteMaterial);
     leftFrontPaw.receiveShadow = true;
-    leftFrontPaw.castShadow = true;
+    //leftFrontPaw.castShadow = true;
     leftFrontPaw.position.set(0, -0.25*size, 0);
     this.leftFrontDownLeg.add(leftFrontPaw);
 }

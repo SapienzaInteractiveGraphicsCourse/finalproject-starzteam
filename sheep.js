@@ -99,7 +99,7 @@ class Sheep {
 
     const rightEyeGeometry = new THREE.CylinderBufferGeometry(0.08, 0.1, 0.06, 6);
     const rightEye = new THREE.Mesh(rightEyeGeometry, this.darkMaterial);
-    rightEye.castShadow = true;
+    //rightEye.castShadow = true;
     rightEye.receiveShadow = true;
     rightEye.position.set(0.35, -0.48, 0.35);
     rightEye.rotation.set(rad(130.8), 0, rad(-45));
@@ -113,7 +113,7 @@ class Sheep {
     const rightEarGeometry = new THREE.BoxBufferGeometry(0.12, 0.5, 0.3);
     rightEarGeometry.translate(0, -0.25, 0);
     this.rightEar = new THREE.Mesh(rightEarGeometry, this.skinMaterial);
-    this.rightEar.castShadow = true;
+    //this.rightEar.castShadow = true;
     this.rightEar.receiveShadow = true;
     this.rightEar.position.set(0.35, -0.12, -0.07);
     this.rightEar.rotation.set(rad(20), 0, rad(50));

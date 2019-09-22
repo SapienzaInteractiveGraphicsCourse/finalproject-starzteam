@@ -56,10 +56,6 @@ class Road {
 
     this.drawParts(numLanes);
 
-    this.group.traverse((part) => {
-      part.castShadow = true;
-      part.receiveShadow = true;
-    });
   }
 
   drawParts(num) {
@@ -69,12 +65,12 @@ class Road {
 
     this.leftGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( widthGrass, highGrass, depthGrass), this.materialLeft);
     this.leftGrass.position.z = - distGrass;
-    this.middleGrass.receiveShadow = true;
+    this.leftGrass.receiveShadow = true;
     this.middleGrass.add(this.leftGrass);
 
     this.rightGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( widthGrass, highGrass, depthGrass), this.materialRight);
     this.rightGrass.position.z = distGrass;
-    this.middleGrass.receiveShadow = true;
+    this.rightGrass.receiveShadow = true;
     this.middleGrass.add(this.rightGrass);
 
     this.occupiedSpace += widthGrass;
@@ -191,10 +187,6 @@ class River{
 
     this.drawParts();
 
-    this.group.traverse((part) => {
-      part.castShadow = true;
-      part.receiveShadow = true;
-    });
   }
 
   drawParts() {
@@ -204,12 +196,12 @@ class River{
 
     this.leftGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( widthGrass, highGrass, depthGrass), this.materialLeft);
     this.leftGrass.position.z = - distGrass;
-    this.middleGrass.receiveShadow = true;
+    this.leftGrass.receiveShadow = true;
     this.middleGrass.add(this.leftGrass);
 
     this.rightGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( widthGrass, highGrass, depthGrass), this.materialRight);
     this.rightGrass.position.z = distGrass;
-    this.middleGrass.receiveShadow = true;
+    this.rightGrass.receiveShadow = true;
     this.middleGrass.add(this.rightGrass);
 
     this.occupiedSpace += widthGrass;
@@ -354,7 +346,7 @@ class Wood{
   drawParts() {
 
     this.trunk = new THREE.Mesh( new THREE.BoxBufferGeometry( widthWood, highWood, depthWood ), this.materialLog );
-    this.trunk.castShadow = true;
+    //this.trunk.castShadow = true;
     this.trunk.receiveShadow = true;
     this.group.add(this.trunk);
 
@@ -521,7 +513,7 @@ class PoleLight {
 
     this.poleHead = new THREE.Mesh( new THREE.BoxBufferGeometry( 0.8, 0.3, 0.5 ), this.materialPole );
     this.poleHead.position.set(sidePole/2 + 0.3/2, heightPole/2, 0);
-    this.poleHead.castShadow = true;
+    //this.poleHead.castShadow = true; //occhio, se è attivo spegni la luce!!!
     this.poleHead.receiveShadow = true;
     this.pole.add(this.poleHead);
 
@@ -534,12 +526,12 @@ class PoleLight {
     this.spotLight.castShadow = true;
     this.spotLight.shadow.mapSize.width = 1024;
     this.spotLight.shadow.mapSize.height = 1024;
-    this.spotLight.shadow.camera.near = 10;
+    this.spotLight.shadow.camera.near = 0.1;
     this.spotLight.shadow.camera.far = 200;
     this.poleHead.add( this.spotLight );
 
     scene.add(this.spotLight.target);
-    this.spotLight.target.position.set(-5, 0, 0);
+    this.spotLight.target.position.set(-5, -2, 0);
 
   }
 
@@ -579,10 +571,6 @@ class GrassStart {
 
     this.drawParts();
 
-    this.group.traverse((part) => {
-      part.castShadow = true;
-      part.receiveShadow = true;
-    });
 
     // load a texture, set wrap mode to repeat
     /*
@@ -608,12 +596,12 @@ class GrassStart {
 
       this.leftGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( 2*widthGrass, highGrass, depthGrass), this.materialLeft);
       this.leftGrass.position.z = - distGrass;
-      this.middleGrass.receiveShadow = true;
+      this.leftGrass.receiveShadow = true;
       this.middleGrass.add(this.leftGrass);
 
       this.rightGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( 2*widthGrass, highGrass, depthGrass), this.materialLeft);
       this.rightGrass.position.z = distGrass;
-      this.middleGrass.receiveShadow = true;
+      this.rightGrass.receiveShadow = true;
       this.middleGrass.add(this.rightGrass);
 
       this.occupiedSpace += widthGrass;
@@ -654,10 +642,6 @@ class GrassEnd {
 
     this.drawParts();
 
-    this.group.traverse((part) => {
-      part.castShadow = true;
-      part.receiveShadow = true;
-    });
 
     // load a texture, set wrap mode to repeat
     /*
@@ -683,12 +667,12 @@ class GrassEnd {
 
       this.leftGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( 2*widthGrass, highGrass, depthGrass), this.materialMiddle);
       this.leftGrass.position.z = - distGrass;
-      this.middleGrass.receiveShadow = true;
+      this.leftGrass.receiveShadow = true;
       this.middleGrass.add(this.leftGrass);
 
       this.rightGrass = new THREE.Mesh(new THREE.BoxBufferGeometry( 2*widthGrass, highGrass, depthGrass), this.materialMiddle);
       this.rightGrass.position.z = distGrass;
-      this.middleGrass.receiveShadow = true;
+      this.rightGrass.receiveShadow = true;
       this.middleGrass.add(this.rightGrass);
 
       this.occupiedSpace += widthGrass;
@@ -740,7 +724,7 @@ class Bush{
 
     this.trunk = new THREE.Mesh( new THREE.DodecahedronBufferGeometry(this.height/3, 1), this.material);
     this.trunk.position.z = -this.height/2;
-    this.trunk.castShadow = true;
+    //this.trunk.castShadow = true;
     this.trunk.receiveShadow = false;
     this.group.add(this.trunk);
   }

@@ -33,9 +33,7 @@ var poleLight,
     spotLight;
 
 var numOfLevelVisible = 4,
-    numOfLevelPrec = 1,
-    indexRenderMax = numOfLevelPrec,
-    indexRenderMin = 0,
+    numOfLevelPrec = 1, //so you will render numOfLevelVisible + numOfLevelPrec tracks
     actualLevelCamera = 0;
 
 var mappingTracks = [];
@@ -114,11 +112,9 @@ function addLights() {
 
   spotLight = new THREE.SpotLight( 0xffffff, 1 );
   spotLight.position.set( 60, 30, 80 );
-  spotLight.angle = Math.PI / 4;
   spotLight.penumbra = 0.05;
   spotLight.decay = 2;
   spotLight.distance = 500;
-  spotLight.castShadow = true;
   spotLight.shadow.mapSize.width = 1024;
   spotLight.shadow.mapSize.height = 1024;
   spotLight.shadow.camera.near = 10;
@@ -198,11 +194,15 @@ function enableAllLevelObject(object){ //need a group or scene as parameter, obj
   } );
 }
 
-function addLayers(track){
-  track.group.traverse( function( child ) {
-    child.layers.disable(0);
-    for(var i = indexRenderMin; i <= indexRenderMax; i++)
-      child.layers.enable( i );
+function disableLevelToChildren(object, level){ //need a group
+  object.traverse( function( child ) {
+    child.layers.disable( level );
+  } );
+}
+
+function enableLevelToChildren(object, level){ //need a group
+  object.traverse( function( child ) {
+    child.layers.enable( level );
   } );
 }
 
@@ -215,46 +215,46 @@ function drawTerrain() {
 
   values = getNewTerrain(0);
   track = values.track;
-  addLayers(track);
-  indexRenderMax++;
-  indexRenderMax = indexRenderMax % 32;
   posAtt += values.pos;
   scene.add(track.group);
   tracks.push(track);
   mappingTracks.push(posAtt);
   limitMax = posAtt;
 
-  var indexForInitialLeves = 0;
-
   for(i = 1; i < numLevels; i++){
     values = getNewTerrain();
     track = values.track;
-    addLayers(track);
-    if(indexForInitialLeves < numOfLevelVisible - 1){
-      indexForInitialLeves++;
-    }
-    else{
-      indexRenderMin++;
-      indexRenderMin = indexRenderMin % 32;
-    }
-    indexRenderMax++;
-    indexRenderMax = indexRenderMax % 32;
     posAtt += values.pos;
     scene.add(track.group);
     tracks.push(track);
     mappingTracks.push(posAtt);
   }
 
-  addLayers(track);
   values = getNewTerrain(1);
   track = values.track;
-  addLayers(track);
   posAtt += values.pos;
   scene.add(track.group);
   tracks.push(track);
   mappingTracks.push(posAtt);
 
   actualListTracks = tracks.slice(0, 2);
+
+  //THIS DOEN'T WORK UP TO 32 LEVELS!
+
+  var initialValue = 0;
+
+  for(var i = 0; i < numOfLevelVisible && i < tracks.length; i++){
+    disableLevelToChildren(tracks[i].group, 0);
+    for(var j = initialValue; j < i + numOfLevelPrec + 1; j++)
+      enableLevelToChildren(tracks[i].group, j);
+  }
+  for(; i < tracks.length; i++){
+    initialValue++;
+    disableLevelToChildren(tracks[i].group, 0);
+    for(var j = initialValue; j < initialValue + numOfLevelPrec + numOfLevelVisible; j++)
+      enableLevelToChildren(tracks[i].group, j);
+  }
+
 }
 
 function onResize() {
