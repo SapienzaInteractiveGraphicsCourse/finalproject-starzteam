@@ -517,7 +517,7 @@ function setDifficulty(diff){
     numLevels = 16;
     listNumCar = [2,3,4];
     listSpeed = [0.15, 0.18, 0.25];
-    speedListWood = [0.05, 0.1, 0.2];
+    speedListWood = [0.05, 0.6, 0.13];
     diffModifier = 0.05;
   }
 }

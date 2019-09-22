@@ -218,7 +218,7 @@ class River{
 
     this.vehicles = [];
 
-    var listInitial = [10];
+    var listInitial = [20];
     var listDistance = [6, 7, 8, 9, 10, 11, 12];
     var newSpeed;
     var newInitial;
