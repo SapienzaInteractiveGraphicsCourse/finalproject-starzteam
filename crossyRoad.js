@@ -330,6 +330,7 @@ function render() {
       referencePositionAnimal.x <-33){
       crash = true;
       pause = true;
+      outrun = true;
       eventMsg("Outrunned!");
     }
     else if(highestScore != 0){

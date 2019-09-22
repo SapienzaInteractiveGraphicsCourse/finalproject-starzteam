@@ -475,7 +475,7 @@ crashAnimation(){
 sunkAnimation(){
   this.group.position.y-=4*crashSpeed;
   if(this.group.position.y < -35){
-    eventMsg("Felt in the river!\n GAME OVER!");
+    eventMsg("Fallen in the river!\n GAME OVER!");
   }
 }
 }
