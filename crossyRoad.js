@@ -95,6 +95,7 @@ function init() {
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableZoom = false;
   controls.enableKeys = false;
+  controls.enabled = false;
 
   addLights();
   drawAnimal();
