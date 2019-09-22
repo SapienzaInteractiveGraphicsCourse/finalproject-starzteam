@@ -1,6 +1,6 @@
 # CrossyRoads.clone()
 
-Project for the Interactive Course year 2018-2019, held by Marco Schaerf at Sapienza-University of Rome
+Project for the Interactive Graphics course year 2018-2019, held by Marco Schaerf at Sapienza-University of Rome
 
 ## Lore
 
