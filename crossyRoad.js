@@ -41,6 +41,7 @@ var actualTrack = 0;
 var actualListTracks = [];
 var limitMax = -6;
 var limitMin = -6;
+var numOfFrontActiveLevels = 2;
 
 var animal,
     sky;
@@ -237,7 +238,7 @@ function drawTerrain() {
   tracks.push(track);
   mappingTracks.push(posAtt);
 
-  actualListTracks = tracks.slice(0, 2);
+  actualListTracks = tracks.slice(0, numOfFrontActiveLevels + 1);
 
   //THIS DOEN'T WORK UP TO 32 LEVELS!
 
@@ -342,7 +343,7 @@ function render() {
       actualTrack++;
       limitMin = limitMax;
       limitMax = mappingTracks[actualTrack];
-      actualListTracks = tracks.slice(actualTrack - 1, actualTrack + 2);
+      actualListTracks = tracks.slice(actualTrack - 1, actualTrack + numOfFrontActiveLevels + 1);
       actualLevelCamera++;
       actualLevelCamera = actualLevelCamera % 32;
       camera.layers.set(actualLevelCamera);
@@ -352,9 +353,9 @@ function render() {
       limitMax = limitMin;
       limitMin = mappingTracks[actualTrack - 1];
       if(actualTrack == 0)
-        actualListTracks = tracks.slice(actualTrack, actualTrack + 2);
+        actualListTracks = tracks.slice(actualTrack, actualTrack + numOfFrontActiveLevels + 1);
       else
-        actualListTracks = tracks.slice(actualTrack - 1, actualTrack + 2);
+        actualListTracks = tracks.slice(actualTrack - 1, actualTrack + numOfFrontActiveLevels + 1);
 
       actualLevelCamera--;
       actualLevelCamera = actualLevelCamera % 32;
